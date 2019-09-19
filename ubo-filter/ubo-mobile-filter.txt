@@ -1,0 +1,8 @@
+! Title: yobukodori mobile filter
+! Description: for personal use.
+
+! ad
+||popin.cc^$third-party
+||taxel.jp^$third-party
+||gsspcln.jp^$third-party
+

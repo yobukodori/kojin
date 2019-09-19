@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>個人的な</title>
+<style type="text/css">
+#container {
+	display: flex;
+	flex-wrap: wrap
+}
+.item {
+	width: 30%;
+	margin: 0.3rem;
+}
+.item-name {
+}
+img.favicon {
+	width: 70%;
+}
+</style>
+</head>
+<body>
+<div id="container">
+</div>
+<script type='text/javascript'>
+(function(){
+	"use strict";
+	let d = document;
+	[
+	{name: "ニュース", url: "news-sites.html", icon: "icon/na.png"},
+	{name: "Firefoxアドオン", url: "firefox-addon.html", icon: "icon/na.png"},
+	{name: "androidアプリ", url: "android-app.html", icon: "icon/na.png"},
+	{name: "ブックマークレット", url: "bookmarklet.html", icon: "icon/na.png"},
+	{name: "uboフィルタ", url: "https://github.com/yobukodori/kojin/ubo-filter/", icon: "icon/na.png"},
+	].forEach(item=>{
+			let e = d.createElement("div");
+			e.innerHTML = '<a href="' + item.url + '"><div><img class="favicon" src="' + item.icon + '"><div class="item-name">' + item.name + '</div></div></a>';
+			e.className = "item";
+			d.getElementById("container").appendChild(e);
+	});
+})();
+</script>
+</body></html>

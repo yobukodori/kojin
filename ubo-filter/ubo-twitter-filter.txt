@@ -1,0 +1,44 @@
+! Title: yobukodori twitter filter
+! Description: for personal use.
+
+! primaryColumn のプロモーションを消す 言語依存個別版
+! twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
+! twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
+! twitter.com##div[aria-label="タイムライン: タイムラインを検索"] > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
+! twitter.com##div[aria-label="タイムライン: 話題を検索"] > div > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
+! twitter.com##div[aria-label="タイムライン: トレンド"] > div > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
+! twitter.com##div[aria-label="タイムライン: いまどうしてる？"] > div > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
+! primaryColumn のプロモーションを消す 一括版
+twitter.com##div[data-testid="primaryColumn"] h1[aria-level="1"] + div > div:first-child > div:first-child > div:has(path[d^="M20.75 2H3.25C2.007"])
+
+! sidebarColumn のおすすめトレンド内プロモーションを消す
+twitter.com##div[data-testid="sidebarColumn"] h1[aria-level="1"] + div > div > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
+
+! primaryColumn のおすすめユーザーを消す
+twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(h2[role="heading"])
+twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(div[data-testid="UserCell"])
+twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href^="/i/related_users/"])
+twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href^="/who_to_follow/"])
+twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(h2[role="heading"])
+twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(div[data-testid="UserCell"])
+twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/related_users/"])
+twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/who_to_follow/"])
+
+! 検索文字列の先読み補完がもたつくのでブロック
+||api.twitter.com/*/search/typeahead.json$xmlhttprequest,first-party
+
+! トレンドの更新をブロック
+! ||api.twitter.com/*/guide.json$xmlhttprequest,first-party
+
+! 閲覧に支障がないと思われる余分な通信はブロック
+||api.twitter.com/*/jot/client_event.json$xmlhttprequest,first-party
+||api.twitter.com/*/live_pipeline/update_subscriptions$xmlhttprequest,first-party
+||twitter.com/i/csp_report$xmlhttprequest,first-party
+!||api.twitter.com/*/jot/error_log.json$xmlhttprequest,first-party
+
+!#if env_mobile
+
+! アプリのダウンロードを勧めてくるのを消す（href未確認のため保留）
+! twitter.com##div[data-testid="primaryColumn"] h1[aria-level="1"] + div > div:first-child > div:first-child > div:has(a[href^="https://play.google.com/store/apps/details?id=com.twitter.android"][role="button"])
+
+!#endif

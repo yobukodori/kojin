@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ニュースサイト</title>
+<style type="text/css">
+#container {
+	display: flex;
+	flex-wrap: wrap
+}
+.item {
+	width: 30%;
+	margin: 0.3rem;
+}
+.item-name {
+}
+img.favicon {
+	width: 70%;
+}
+</style>
+</head>
+<body>
+<div id="container">
+</div>
+<script type='text/javascript'>
+(function(){
+	"use strict";
+	let d = document;
+	[
+	{name: "時事ドットコム", url: "https://www.jiji.com/", icon: "https://www.jiji.com/img/top_logo_square.png"},
+	{name: "毎日新聞", url: "https://mainichi.jp", icon: "https://cdn.mainichi.jp/vol1/images/icon/mainichi/apple-touch.png"},
+	{name:"読売新聞", url: "https://mainichi.jp", icon: "https://www.yomiuri.co.jp/apple-touch-icon.png"},
+	{name: "47news", url: "https://www.47news.jp/", icon: "https://www.47news.jp/apple-touch-icon.png"},
+	{name: "gooニュース", url: "https://news.goo.ne.jp/", icon: "https://news.goo.ne.jp/apple-touch-icon.png"},
+	{name: "Yahoo!ニュース", url: "https://news.yahoo.co.jp/", icon: "https://s.yimg.jp/c/icon/s/bsc/2.0/news120.png"},
+	{name: "ロイター", url: "https://jp.mobile.reuters.com/", icon: "https://s3.reutersmedia.net/resources_v3/images/favicon/favicon-96x96.png"},
+	{name: "CNNニュース", url: "https://www.cnn.co.jp/", icon: "https://www.cnn.co.jp/apple-touch-icon-120x120.png"},
+	{name: "BBCニュース", url: "https://www.bbc.com/japanese", icon: "https://static.bbc.co.uk/news/1.290.03379/apple-touch-icon-114x114-precomposed.png"},
+	].forEach(item=>{
+			let e = d.createElement("div");
+			e.innerHTML = '<a href="' + item.url + '" target="_blank"><div><img class="favicon" src="' + item.icon + '"><div class="item-name">' + item.name + '</div></div></a>';
+			e.className = "item";
+			d.getElementById("container").appendChild(e);
+	});
+})();
+</script>
+</body></html>
