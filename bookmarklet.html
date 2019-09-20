@@ -4,40 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Firefoxアドオン</title>
-<style type="text/css">
-#container {
-	display: flex;
-	flex-wrap: wrap
-}
-.item {
-	width: 30%;
-	margin: 0.3rem;
-}
-.item-name {
-}
-img.favicon {
-	width: 70%;
-}
-</style>
+<link href="css/iconic.menu.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<div id="container">
+<div id="iconic-menu-container">
 </div>
 <script type='text/javascript'>
-(function(){
-	"use strict";
-	let d = document;
-	[
+var iconicMenu = {
+	items: [
 	{name: "にりふ new link fix", url: 'javascript:(function(url,e){e=document.createElement("script");e.src=url;document.body.appendChild(e);})("https://yobukodori.github.io/kojin/script/news-link-fix.js");', icon: "icon/na.png"},
 	{name: "ぼいえ body.innerHTML", url: 'javascript:(function(url,e){e=document.createElement("script");e.src=url;document.body.appendChild(e);})("https://yobukodori.github.io/kojin/script/show-body-innerhtml.js");', icon: "icon/na.png"},
 	{name: "自由を！", url: 'javascript:(function(url,e){e=document.createElement("script");e.src=url;document.body.appendChild(e);})("https://yobukodori.github.io/freedom/enable_disabled.user.js");', icon: "icon/na.png"},
 	{name: "簡潔に！", url: 'javascript:(function(url,e){e=document.createElement("script");e.src=url;document.body.appendChild(e);})("https://yobukodori.github.io/freedom/print_chord.user.js");', icon: "icon/na.png"},
-	].forEach(item=>{
-			let e = d.createElement("div");
-			e.innerHTML = '<a href="' + item.url + '"><div><img class="favicon" src="' + item.icon + '"><div class="item-name">' + item.name + '</div></div></a>';
-			e.className = "item";
-			d.getElementById("container").appendChild(e);
-	});
-})();
+	],
+};
 </script>
+<script type="text/javascript" src ="script/iconic.menu.js"></script>
 </body></html>
