@@ -78,8 +78,10 @@
 						return response.text();
 					})
 					.then(function(html) {
-						let r, i = html.indexOf('id="topics_1_more"');
+						let r, sig = 'id="topics_1_more"', i = html.indexOf(sig);
 						i != -1 && (r = html.substring(html.lastIndexOf('<', i), i).match('href="(.+?)"')) && (e.href = r[1]);
+						let parent = e.firstElementChild, src, elem;
+						parent && (sig = '<a href="/publisher/') && (i = html.indexOf(sig)) != -1 && (src = html.substring(html.indexOf('>', i+sig.length)+1,html.indexOf('</a>', i+sig.length))) && (elem = d.createElement("div")) && (elem.innerText = src) && (elem.class = 'list-news-source') && parent.appendChild(elem);
 					});			
 				}
 			}
