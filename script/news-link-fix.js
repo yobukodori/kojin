@@ -72,7 +72,7 @@
 			},
 			fixLink: function(e){
 				'use strict';
-				if (/\/(article|topstories)\/.+\.html/.test(e.href)){
+				if (/\/topstories\/.+\.html/.test(e.href)){
 					fetch(e.href)
 					.then(function(response) {
 						return response.text();
