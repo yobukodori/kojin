@@ -16,4 +16,5 @@
 }
 img.item-icon {
 	width: 70%;
+	min-height: 70px;
 }
