@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>個人的な</title>
+<link rel="icon" type="image/png" href="https://yobukodori.github.io/kojin/icon/na.png">
 <link href="css/iconic.menu.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -15,29 +16,10 @@ var iconicMenu = {
 		{name: "Twitter", url: "https://mobile.twitter.com/", icon: "icon/twitter.png"},
 		{name: "Google", url: "google.html", icon: "icon/google.png"},
 		{name: "GitHub", url: "https://github.com/", icon: "icon/github.png"},
-		{name: "ニュース", url: "news-sites.html", icon: "icon/na.png"},
-		{name: "Firefoxアドオン", url: "firefox-addon.html", icon: "icon/na.png"},
-		{name: "androidアプリ", url: "https://drive.google.com/open?id=1NDfZHkbq4DEYNLBr58NjJQP7fzj1dc0y", icon: "icon/na.png"},
-		{name: "ブックマークレット", url: "bookmarklet.html", icon: "icon/na.png"},
-		{name: "uboフィルタ", url: "ubo-filter.html", icon: "icon/na.png"},
+		{name: "ニュース", url: "news-sites.html", icon: "icon/news.png"},
+		{name: "各種設定", url: "settings.html", icon: "icon/settings.png"},
 	],
 };
-(function(){
-	if (location.search){
-		let m = {};
-		iconicMenu.items.forEach(item=>{
-			m[item.name.toLowerCase()] = item;
-		});
-		location.search.substring(1).split("&").forEach(item=>{
-			let r = item.match(/([^\.=]+)\.([^\.=]+)=(.*)/);
-			if (r){
-				let itemName = r[1].toLowerCase();
-				if (m[itemName])
-					m[itemName][r[2]] = r[3];
-			}
-		});
-	}
-})();
 </script>
 <script type="text/javascript" src ="script/iconic.menu.js"></script>
 </body></html>
