@@ -85,8 +85,8 @@ reuters.com##div.GetTheAppBanner_get-the-app-banner
 
 ! weather.nifty.com
 weather.nifty.com###weeklyWeather tbody > tr > th:nth-child(1)
-weather.nifty.com##div[id] > h3:nth-child(-n+5)
-weather.nifty.com##td:style(line-height:1.1!important;padding:4px 0!important)
-weather.nifty.com##th:style(line-height:1.1!importantt;padding:4px 0!important)
+weather.nifty.com###mainPinPoint div[id] > h3:nth-child(-n+5)
+weather.nifty.com###mainPinPoint td:style(line-height:1.1!important;padding:4px 0!important)
+weather.nifty.com###mainPinPoint th:style(line-height:1.1!importantt;padding:4px 0!important)
+weather.nifty.com###mainPinPoint div.module[id]:style(margin:0 0 10px!important)
 weather.nifty.com###middleAd
-weather.nifty.com##div.module[id]:style(margin:0 0 10px!important)
