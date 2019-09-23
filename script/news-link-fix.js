@@ -1,15 +1,11 @@
 /*
- * title: news link fix v.0.1.4
+ * title: news link fix v.0.1.5
  * name: news-link-fix.js
  * author: yobukodori
 */
 
 (function(){
 	'use strict';
-	if (window.ybkdrNewsLinkFix)
-		return;
-	window.ybkdrNewsLinkFix = true;
-
 	function newtab(e)
 	{
 		e.setAttribute("target", "_blank");
@@ -26,7 +22,7 @@
 	let siteData = {
 		"www.jiji.com": {
 			isTarget: function(e){
-				return true; // /\/sp\/(article|v\d|d\d|c|tokushu)\?/.test(e.href);
+				return true;
 			},
 			fixLink: function(e){
 				'use strict';
@@ -37,17 +33,17 @@
 		},
 		"mainichi.jp": {
 			isTarget: function(e){
-				return true; // /\/articles\/\d{8}\//.test(e.href);
+				return true;
 			}
 		},
 		"www.yomiuri.co.jp": {
 			isTarget: function(e){
-				return true; // /\/\d{8}-/.test(e.href);
+				return true;
 			}
 		},
 		"www.47news.jp": {
 			isTarget: function(e){
-				return true; // /\/\d+\.html/.test(e.href);
+				return true;
 			},
 			fixLink: function(e){
 				'use strict';
@@ -68,7 +64,7 @@
 		},
 		"news.goo.ne.jp": {
 			isTarget: function(e){
-				return true; // /\/\d+\.html/.test(e.href);
+				return true;
 			},
 			fixLink: function(e){
 				'use strict';
@@ -88,7 +84,7 @@
 		},
 		"news.yahoo.co.jp": {
 			isTarget: function(e){
-				return true; // /\/\d+\.html/.test(e.href);
+				return true;
 			},
 			fixLink: function(e){
 				'use strict';
@@ -113,7 +109,12 @@
 							if (m.type === "childList"){
 								for (let i = 0 ; i < m.addedNodes.length ; i++){
 									let e = m.addedNodes[i];
-									e.querySelector && (e = e.querySelector('a')) && (newtab(e), underline(e), fixLink(e));
+									if (e.querySelector && (e = e.querySelector('a'))){
+										if (! e.classList.contains(fixedSig)){
+											e.classList.add(fixedSig);
+											(newtab(e), underline(e), fixLink(e));
+										}
+									}
 								}
 							}
 						});
@@ -133,17 +134,20 @@
 			}
 		},
 	};
-	let d = document;
+	let d = document, fixedSig = "ybkdr-link-fixed";
 	let sd = siteData[d.location.hostname.toLowerCase()];
 	let ee = d.getElementsByTagName("a");
 	for (let i = 0 ; i < ee.length ; i++){
 		let e = ee[i];
-		if (! sd || ! sd.isTarget || sd.isTarget(e)){
-			newtab(e);
-			underline(e);
+		if (! e.classList.contains(fixedSig)){
+			e.classList.add(fixedSig);
+			if (! sd || ! sd.isTarget || sd.isTarget(e)){
+				newtab(e);
+				underline(e);
+			}
+			if (sd && sd.fixLink)
+				sd.fixLink(e);
 		}
-		if (sd && sd.fixLink)
-			sd.fixLink(e);
 	}
 	if (sd && sd.postprocess)
 		sd.postprocess();
