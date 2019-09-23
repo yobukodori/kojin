@@ -90,3 +90,20 @@ weather.nifty.com###mainPinPoint td:style(line-height:1.1!important;padding:4px 
 weather.nifty.com###mainPinPoint th:style(line-height:1.1!importantt;padding:4px 0!important)
 weather.nifty.com###mainPinPoint div.module[id]:style(margin:0 0 5px!important)
 weather.nifty.com###middleAd
+
+! tenki.jp
+tenki.jp##tr.entry + tr.entry-index
+tenki.jp###forecast-point-1h-today:style(margin-bottom:0!important)
+tenki.jp###tenki-ad-SM_mid
+tenki.jp###forecast-point-1h-tomorrow:style(margin-bottom:0!important)
+tenki.jp##section.section-wrap > h2
+tenki.jp##section.section-wrap > time.date-time
+tenki.jp##section.section-wrap > div.contentsBox
+tenki.jp###tenki-ad-SM_north
+tenki.jp##.tenki-ad-lite-overlay
+tenki.jp##nav.lite-sns-box-buttons2
+tenki.jp###tenki-ad-SM_mid1
+tenki.jp###tenki-ad-SM_PD
+tenki.jp##section.section-wrap > section.section-wrap
+tenki.jp###forecast-point-3h-today:style(margin-bottom:0!important)
+tenki.jp###forecast-point-3h-tomorrow:style(margin-bottom:0!important)
