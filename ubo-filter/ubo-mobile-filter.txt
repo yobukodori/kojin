@@ -107,3 +107,9 @@ tenki.jp###tenki-ad-SM_PD
 tenki.jp##section.section-wrap > section.section-wrap
 tenki.jp###forecast-point-3h-today:style(margin-bottom:0!important)
 tenki.jp###forecast-point-3h-tomorrow:style(margin-bottom:0!important)
+
+! weathernews.jp
+weathernews.jp###app_dl
+
+! weather.yahoo.co.jp
+weather.yahoo.co.jp###stcftw2a
