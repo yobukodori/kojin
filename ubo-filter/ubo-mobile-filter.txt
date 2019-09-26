@@ -110,6 +110,18 @@ tenki.jp###forecast-point-3h-tomorrow:style(margin-bottom:0!important)
 
 ! weathernews.jp
 weathernews.jp###app_dl
+weathernews.jp##section.global-search
+weathernews.jp###main > section:has(.youtube)
 
 ! weather.yahoo.co.jp
 weather.yahoo.co.jp###stcftw2a
+weather.yahoo.co.jp###mhd_header_sp
+weather.yahoo.co.jp###headNav
+weather.yahoo.co.jp###header
+weather.yahoo.co.jp###disasterrpt
+weather.yahoo.co.jp###anime_w2a
+weather.yahoo.co.jp###radarmd
+weather.yahoo.co.jp###radarmd + div.doubleImage
+weather.yahoo.co.jp##article:has(.imaten)
+weather.yahoo.co.jp##aside + section:has(#index2days)
+weather.yahoo.co.jp###wthimg
