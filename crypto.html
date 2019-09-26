@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>テキスト暗号化</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<style type="text/css">
+</style>
+</head>
+<body>
+<h3>テキスト暗号化</h3>
+Passphrase (128/196/256 bits):<input type="text" id="passphrase" size="64" /><br />
+Initailization vector (IV 128 bits):<input type="text" id="iv" size="64" /><br />
+<textarea id="plaintext" rows="5" cols="80"></textarea><br />
+<input type="button" id="encrypt" value="Encrypt" /><br />
+Chipper text:<br />
+<textarea id="chipper-text" class="text-string" rows="8" cols="80"></textarea><br />
+Decrypted text<br />
+<textarea id="decrypted-text" class="text-string" rows="5" cols="80"></textarea><br />
+<script type='text/javascript'>
+
+(function (){
+	let d = document;
+	d.getElementById("encrypt").addEventListener("click", function(){
+		let passphrase = CryptoJS.enc.Utf8.parse(d.getElementById("passphrase").value),
+			iv = CryptoJS.enc.Utf8.parse(d.getElementById("iv").value),
+			plaintext = CryptoJS.enc.Utf8.parse(d.getElementById("plaintext").value);
+		/*
+		if (passphrase.sigBytes === 0 || iv.sigBytes === 0 || plaintext.sigBytes === 0){
+			alert("最初の３項目はすべて入力してください");
+			return;
+		}
+		*/
+		let option = {iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7},
+			encrypted = CryptoJS.AES.encrypt(plaintext, passphrase, option);
+		d.getElementById("chipper-text").value = encrypted.toString();
+		// decrypt
+		let chipperText = d.getElementById("chipper-text").value,
+			decrypted = CryptoJS.AES.decrypt(chipperText, passphrase, option);
+			console.log("chipperText="+chipperText);
+		d.getElementById("decrypted-text").value = decrypted.toString(CryptoJS.enc.Utf8);
+	});
+})();
+
+</script>
+</body>
+</html>
