@@ -1,5 +1,5 @@
 /*
- * title: iconic menu v.0.1.1
+ * title: iconic menu v.0.1.2
  * name: iconic.menu.js
  * author: yobukodori
 */
@@ -7,6 +7,28 @@
 (function(){
 	"use strict";
 	let d = document;
+	let pp = "", iv = "";
+	if (window.CryptoJS){
+		location.search.substring(1).split("&").forEach(param=>{
+			let i = param.indexOf("="), 
+				name = (i !== -1 ? param.substring(0, i) : ""), 
+				val = (i !== -1 ? decodeURIComponent(param.substring(i+1)) : null);
+			if (name === "pp")
+				pp = val;
+			else if (name === "iv")
+				iv = val;
+		});
+		let passphrase = CryptoJS.enc.Utf8.parse(pp);
+		let option = {iv: CryptoJS.enc.Utf8.parse(iv), mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7};
+		iconicMenu.items.forEach(item=>{
+				["name", "url", "icon"].forEach(prop=>{
+					if (! item[prop] && item["aes-"+prop]){
+						let decrypted = CryptoJS.AES.decrypt(item["aes-"+prop], passphrase, option);
+						item[prop] = decrypted.toString(CryptoJS.enc.Utf8);
+					}
+				});
+		});
+	}
 	if (location.search){
 		let m = {};
 		iconicMenu.items.forEach(item=>{
@@ -51,8 +73,17 @@
 	let targetBlank = iconicMenu.options && iconicMenu.options.targetBlank;
 	iconicMenu.items.forEach(item=>{
 			let e = d.createElement("div");
-			e.innerHTML = '<a href="' + (item.url ? item.url : '') + '" '+((targetBlank || item.targetBlank) ? 'target="_blank"':'') + '><div><img class="item-icon" src="' + (item.icon ? item.icon : 'icon/na.png') + '"><div class="item-name">' + item.name + '</div></div></a>';
+			e.innerHTML = '<a class="item-url" href="' + (item.url ? item.url : '') + '" '+((targetBlank || item.targetBlank) ? 'target="_blank"':'') + '><div><img class="item-icon" src="' + (item.icon ? item.icon : 'icon/na.png') + '"><div class="item-name">' + item.name + '</div></div></a>';
 			e.className = "item";
 			d.getElementById("iconic-menu-container").appendChild(e);
 	});
+	if (pp || iv){
+		let qs = "?pp=" + encodeURIComponent(pp) + "&iv=" + encodeURIComponent(iv);
+		let ee = d.querySelectorAll("a.item-url");
+		for (let i = 0 ; i < ee.length ; i++){
+			let a = ee[i], href = a.getAttribute("href");
+			if (/^[\w\-]+\.html$/.test(href))
+				a.setAttribute("href", href + qs)
+		}
+	}
 })();
