@@ -5,9 +5,11 @@
 ||popin.cc^$third-party
 ||taxel.jp^$third-party
 ||gsspcln.jp^$third-party
+||caprofitx.com^$third-party
 
 ! sns
-||connect.facebook.net^$script,third-party
+||connect.facebook.net^$third-party
+||platform.twitter.com^$third-party
 
 ! jiji.com
 ||appspot.com^$subdocument,domain=jiji.com
@@ -73,6 +75,9 @@ news.google.com##article > figure
 ||play.google.com/log$xmlhttprequest,domain=news.google.com
 ||news.google.com/_/*$image,domain=news.google.com
 ||googleusercontent.com^$image,domain=news.google.com
+
+! lite-ra.com
+lite-ra.com##div.ad
 
 ! www.cnn.co.jp
 www.cnn.co.jp###gdpr_area
