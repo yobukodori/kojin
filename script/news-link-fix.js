@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.5
+ * title: news link fix v.0.1.6
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -145,13 +145,13 @@
 		},
 		"news.infoseek.co.jp": {
 			isTarget: function(e){
-				return true;
+				let href = e.getAttribute("href");
+				return !(href && href.charAt(0) === "#");
 			},
 			fixLink: function(e){
 				'use strict';
-				let sctag = e.getAttribute('sctag');
-				if (sctag && sctag.indexOf("TopTopicsTitle_all_") === 0){
-					console.log(e.innerText.replace(/\s+/g," "));
+				let href = e.getAttribute("href");
+				if (href.indexOf("/topics/") === 0 && /\/topics\/\w/.test(e.href)){
 					fetch(e.href)
 					.then(function(response) {
 						return response.text();
@@ -159,7 +159,8 @@
 					.then(function(html) {
 						let b = str_find_block(html, '<p class="article_head">', '</p>'), s, r, div;
 						!b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/">(.+)<(.|\n)+>(\d.+)</)) && (s = r[1]+r[3]) && (div = d.createElement("div")) && (div.style.fontSize = "1.1rem") && (div.innerText = s) && e.firstElementChild.appendChild(div);
-					});			
+					});		
+					e.setAttribute("href", "/article" + href.substring(7));					
 				}
 			}
 		},
