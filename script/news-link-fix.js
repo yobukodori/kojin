@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.6
+ * title: news link fix v.0.1.7
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -31,7 +31,9 @@
 	
 	function underline(e)
 	{
-		e.setAttribute("style", "text-decoration: underline;");
+		//let style = e.getAttribute("style");
+		//e.setAttribute("style", (style ? style + ";" : "") + "text-decoration: underline;");
+		e.style.textDecoration = "underline";
 		let e2 = e.querySelector('dd') || e.querySelector('p');
 		if (e2)
 			e2.setAttribute("style", "text-decoration: underline;");
@@ -102,7 +104,7 @@
 		},
 		"news.yahoo.co.jp": {
 			isTarget: function(e){
-				return true;
+				return e.getAttribute("href");
 			},
 			fixLink: function(e){
 				'use strict';
@@ -120,14 +122,14 @@
 				}
 			},
 			postprocess: function(){
-				let fixLink = this.fixLink, ul = d.querySelector('ul.newsFeed_list');
-				if (ul){
+				let fixLink = this.fixLink, contents = d.getElementById('contents');
+				if (contents){
 					(new MutationObserver(function(mutations, observer){
 						mutations.forEach(m=>{
 							if (m.type === "childList"){
 								for (let i = 0 ; i < m.addedNodes.length ; i++){
 									let e = m.addedNodes[i];
-									if (e.querySelector && (e = e.querySelector('a'))){
+									if (e.querySelector && (e = e.querySelector('a')) && e.getAttribute("href")){
 										if (! e.classList.contains(fixedSig)){
 											e.classList.add(fixedSig);
 											(newtab(e), underline(e), fixLink(e));
@@ -136,11 +138,19 @@
 								}
 							}
 						});
-					})).observe(ul, {childList:true});
+					})).observe(contents, {childList:true, subtree:true});
 				}
 				else {
-					console.log("ul not found");
+					console.log("contents not found");
 				}
+			}
+		},
+		"jp.mobile.reuters.com": {
+			isTarget: function(e){
+				return true;
+			},
+			postprocess: function(){
+				$("a").each(function(){$(this).off('click')});
 			}
 		},
 		"news.infoseek.co.jp": {
@@ -160,16 +170,21 @@
 						let b = str_find_block(html, '<p class="article_head">', '</p>'), s, r, div;
 						!b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/">(.+)<(.|\n)+>(\d.+)</)) && (s = r[1]+r[3]) && (div = d.createElement("div")) && (div.style.fontSize = "1.1rem") && (div.innerText = s) && e.firstElementChild.appendChild(div);
 					});		
-					e.setAttribute("href", "/article" + href.substring(7));					
+					e.setAttribute("href", "/article" + href.substring(7));
 				}
 			}
 		},
-		"jp.mobile.reuters.com": {
+		"news.livedoor.com": {
 			isTarget: function(e){
 				return true;
 			},
-			postprocess: function(){
-				$("a").each(function(){$(this).off('click')});
+			fixLink: function(e){
+				'use strict';
+				if (e.onclick)
+					e.onclick = null;
+				let r = e.href.match(/^(https:\/\/news\.livedoor\.com\/lite\/)topics_detail(\/\d+\/)$/);
+				if (r)
+					e.href = r[1] + "article_detail" + r[2];
 			}
 		},
 	};
