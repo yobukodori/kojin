@@ -6,6 +6,8 @@
 ||taxel.jp^$third-party
 ||gsspcln.jp^$third-party
 ||caprofitx.com^$third-party
+||popincdn.com^$third-party
+||cheqzone.com^$third-party
 
 ! sns
 ||connect.facebook.net^$third-party
@@ -75,6 +77,12 @@ news.google.com##article > figure
 ||play.google.com/log$xmlhttprequest,domain=news.google.com
 ||news.google.com/_/*$image,domain=news.google.com
 ||googleusercontent.com^$image,domain=news.google.com
+
+! new.infoseek.co.jp
+||rpaas.net^$script,domain=news.infoseek.co.jp
+||rakuten.co.jp^$xmlhttprequest,domain=news.infoseek.co.jp
+||r10s.jp^$script,domain=news.infoseek.co.jp
+||r10s.to^$script,domain=news.infoseek.co.jp
 
 ! lite-ra.com
 lite-ra.com##div.ad
