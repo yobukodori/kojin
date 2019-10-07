@@ -6,6 +6,24 @@
 
 (function(){
 	'use strict';
+	function str_find_block(str, sig1, sig2, from)
+	{
+		var ro = {error:"n/a", start:-1, first:-1, last:-1, next:from ? from:0};
+		ro.start = str.indexOf(sig1, ro.next);
+		if (ro.start === -1){
+			ro.error = "str_find_block() can't find sig1 '" + sig1 + "'";
+			return ro;
+		}
+		ro.first = ro.start + sig1.length;
+		ro.last = str.indexOf(sig2, ro.first);
+		if (ro.last === -1){
+			ro.error = "str_find_block() can't find sig2 '" + sig2 + "'";
+			return ro;
+		}
+		ro.next = ro.last + sig2.length;
+		ro.error = "";
+		return ro;
+	}
 	function newtab(e)
 	{
 		e.setAttribute("target", "_blank");
@@ -122,6 +140,26 @@
 				}
 				else {
 					console.log("ul not found");
+				}
+			}
+		},
+		"news.infoseek.co.jp": {
+			isTarget: function(e){
+				return true;
+			},
+			fixLink: function(e){
+				'use strict';
+				let sctag = e.getAttribute('sctag');
+				if (sctag && sctag.indexOf("TopTopicsTitle_all_") === 0){
+					console.log(e.innerText.replace(/\s+/g," "));
+					fetch(e.href)
+					.then(function(response) {
+						return response.text();
+					})
+					.then(function(html) {
+						let b = str_find_block(html, '<p class="article_head">', '</p>'), s, r, div;
+						!b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/">(.+)<(.|\n)+>(\d.+)</)) && (s = r[1]+r[3]) && (div = d.createElement("div")) && (div.style.fontSize = "1.1rem") && (div.innerText = s) && e.firstElementChild.appendChild(div);
+					});			
 				}
 			}
 		},
