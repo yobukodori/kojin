@@ -10,6 +10,7 @@
 ||cheqzone.com^$third-party
 
 ! sns
+||facebook.com^$third-party
 ||connect.facebook.net^$third-party
 ||platform.twitter.com^$third-party
 
