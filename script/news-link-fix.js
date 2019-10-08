@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.7
+ * title: news link fix v.0.1.8
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -241,6 +241,34 @@
 				}
 			}
 		},
+		"www.excite.co.jp": {
+			isTarget: function(e){
+				return true;
+			},
+			fixLink: function(e){
+				'use strict';
+				if (e.href.includes('/news/article/')){
+					fetch(e.href)
+					.then(function(response) {
+						return response.text();
+					})
+					.then(function(html) {
+						let src = "n/a", s, r, b = str_find_block(html, '"author":{', '}');
+						!b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/"name": "(.+)"/)) && (src = r[1]);
+						let p, c;
+						if (p = e.querySelector('p.on-photo-text')){
+							(c = d.createElement("span")) && (c.innerText = src) && (c.style.fontSize = "small") && p.appendChild(d.createElement("br")) && p.appendChild(c);
+						}
+						else if (p = e.querySelector('p.title')){
+							(c = d.createElement("span")) && (c.innerText = " "+src) && (c.style.fontSize = "small") && p.appendChild(c);
+						}
+						else {
+							(p = e) && (c = d.createElement("div")) && (c.innerText = " "+src) && (c.style.fontSize = "small") && p.appendChild(c);
+						}
+					});	
+				}
+			}
+		}
 	};
 	let d = document, fixedSig = "ybkdr-link-fixed";
 	let sd = siteData[d.location.hostname.toLowerCase()];
