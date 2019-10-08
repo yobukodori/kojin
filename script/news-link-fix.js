@@ -243,7 +243,8 @@
 		},
 		"www.excite.co.jp": {
 			isTarget: function(e){
-				return true;
+				let href = e.getAttribute("href");
+				return !(href && href.charAt(0) === "#");
 			},
 			fixLink: function(e){
 				'use strict';
@@ -267,6 +268,55 @@
 						}
 					});	
 				}
+			}
+		},
+		"news.nifty.com": {
+			preprocess: function(){
+				let sliderSelector = "#sliderTop";
+				$("li a").off("click");
+				$(sliderSelector).off("touchmove touchend");
+			},
+			isTarget: function(e){
+				let href = e.getAttribute("href");
+				return ! (href && href.charAt(0) === "#");
+			},
+			fixLink: function(e){
+				'use strict';
+				let href = e.getAttribute("href");
+				if (! href)
+					return;
+				if (/^\/(topics|article)\/.+\/\d+(-\w+)?\/$/.test(href)){
+					fetch(e.href)
+					.then(function(response) {
+						return response.text();
+					})
+					.then(function(html) {
+						let s, r, b;
+						if (href.indexOf("/topics/") === 0){
+							(b = str_find_block_r(html, '<a ', 'class="article_btn">')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/href="(.+)"/)) && (e.href = r[1]);
+						}
+						if (! e.querySelector('span.data')){
+							let src = "n/a";
+							(b = str_find_block(html, '<a href="/vender/', '</a></p>')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/>(.+)/)) && (src = r[1]);
+							let p = e, c = d.createElement("div");
+							(c.innerText = " "+src) && (c.style.marginLeft = "0.5rem") && (c.style.fontSize = "small") && (p.appendChild(c));
+						}
+					});
+				}
+				else {
+					console.log(e.innerText.replace(/\s+/g," "));
+					console.log(href);
+				}
+			}
+		},
+		"template": {
+			isTarget: function(e){
+				return true;
+			},
+			fixLink: function(e){
+				'use strict';
+				console.log(e.innerText.replace(/\s+/g," "));
+				console.log(e.href);
 			}
 		}
 	};
