@@ -85,6 +85,10 @@ news.google.com##article > figure
 ||r10s.jp^$script,domain=news.infoseek.co.jp
 ||r10s.to^$script,domain=news.infoseek.co.jp
 
+! www.excite.co.jp/news/
+www.excite.co.jp##section.digest
+www.excite.co.jp##div.article-header > h1.article-title
+
 ! lite-ra.com
 lite-ra.com##div.ad
 
