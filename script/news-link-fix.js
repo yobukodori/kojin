@@ -24,6 +24,24 @@
 		ro.error = "";
 		return ro;
 	}
+	function str_find_block_r(str, sig1, sig2, from)
+	{
+		var ro = {error:"n/a", start:-1, first:-1, last:-1, next:from ? from:0};
+		ro.last = str.indexOf(sig2, ro.next);
+		if (ro.last === -1){
+			ro.error = "str_find_block_r() can't find sig2 '" + sig2 + "'";
+			return ro;
+		}
+		ro.next = ro.last + sig2.length;
+		ro.start = str.lastIndexOf(sig1, ro.last);
+		if (ro.start === -1){
+			ro.error = "str_find_block_r() can't find sig1 '" + sig1 + "'";
+			return ro;
+		}
+		ro.first = ro.start + sig1.length;
+		ro.error = "";
+		return ro;
+	}
 	function newtab(e)
 	{
 		e.setAttribute("target", "_blank");
@@ -183,13 +201,51 @@
 				if (e.onclick)
 					e.onclick = null;
 				let r = e.href.match(/^(https:\/\/news\.livedoor\.com\/lite\/)topics_detail(\/\d+\/)$/);
-				if (r)
+				if (r){
 					e.href = r[1] + "article_detail" + r[2];
+					fetch(e.href)
+					.then(function(response) {
+						return response.arrayBuffer();
+					})
+					.then(function(buffer) {
+						let html = new TextDecoder("utf-8").decode(buffer);
+						let src = "n/a", s, r, b = str_find_block(html, '<meta charset="', '"');
+						if (! b.error){
+							let charset = html.substring(b.first,b.last);
+							if (charset.toLowerCase() !== "utf-8"){
+								html = new TextDecoder(charset).decode(buffer);
+							}
+						}
+						if ((b = str_find_block(html, 'pubdate="pubdate">', '</time>')), !b.error){
+							src = html.substring(b.first,b.last);
+							if ((b = str_find_block(html, '<p class="venderLogo">', '</p>')), !b.error){
+								if (r = html.substring(b.first,b.last).match(/alt="(.+)"/))
+									src = r[1] + " " + src;
+							}
+							else if ((b = str_find_block(html, 'class="outer-link-vender">', '</span>')), !b.error){
+								src = html.substring(b.first,b.last)+" "+src;
+							}
+						}
+						if (src){
+							let p, c = d.createElement("div");
+							(c.innerText = " "+src) && (c.style.fontSize = "small") && ((p = e.querySelector('.article-list-headline-title')) || (p = e.querySelector('.article-title'))) && p.appendChild(c);
+						}
+					});
+				}
+			},
+			preprocess: function(){
+				'use strict';
+				let ee = d.querySelectorAll('div.swiper-slide');
+				for (let i = 0 ; i < ee.length ; i++){
+					ee[i].style.height = "";
+				}
 			}
 		},
 	};
 	let d = document, fixedSig = "ybkdr-link-fixed";
 	let sd = siteData[d.location.hostname.toLowerCase()];
+	if (sd && sd.preprocess)
+		sd.preprocess();
 	let ee = d.getElementsByTagName("a");
 	for (let i = 0 ; i < ee.length ; i++){
 		let e = ee[i];
