@@ -8,6 +8,7 @@
 ||caprofitx.com^$third-party
 ||popincdn.com^$third-party
 ||cheqzone.com^$third-party
+||lodeo.io^$third-party
 
 ! sns
 ||facebook.com^$third-party
@@ -88,6 +89,9 @@ news.google.com##article > figure
 ! www.excite.co.jp/news/
 www.excite.co.jp##section.digest
 www.excite.co.jp##div.article-header > h1.article-title
+
+! news.biglobe.ne.jp
+news.biglobe.ne.jp##div.boxImg02
 
 ! lite-ra.com
 lite-ra.com##div.ad
