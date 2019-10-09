@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.8
+ * title: news link fix v.0.1.9
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -49,8 +49,6 @@
 	
 	function underline(e)
 	{
-		//let style = e.getAttribute("style");
-		//e.setAttribute("style", (style ? style + ";" : "") + "text-decoration: underline;");
 		e.style.textDecoration = "underline";
 		let e2 = e.querySelector('dd') || e.querySelector('p');
 		if (e2)
@@ -59,31 +57,20 @@
 
 	let siteData = {
 		"www.jiji.com": {
-			isTarget: function(e){
-				return true;
-			},
-			fixLink: function(e){
+			fixLink: function(e, href){
 				'use strict';
-				if (/\/sp\/(article|v\d|d\d|c|tokushu)\?/.test(e.href)){
+				if (/\/sp\/(article|v\d|d\d|c|tokushu)\?/.test(href)){
 					e.setAttribute("onclick", "");
 				}
-			}
+			},
+			observee: '#Wrapper'
 		},
 		"mainichi.jp": {
-			isTarget: function(e){
-				return true;
-			}
 		},
 		"www.yomiuri.co.jp": {
-			isTarget: function(e){
-				return true;
-			}
 		},
 		"www.47news.jp": {
-			isTarget: function(e){
-				return true;
-			},
-			fixLink: function(e){
+			fixLink: function(e, href){
 				'use strict';
 				let attr = e.getAttribute("style");
 				attr = (attr ? attr + "; " : "") + "touch-action: initial";
@@ -101,10 +88,7 @@
 			}
 		},
 		"news.goo.ne.jp": {
-			isTarget: function(e){
-				return true;
-			},
-			fixLink: function(e){
+			fixLink: function(e, href){
 				'use strict';
 				if (/\/topstories\/.+\.html/.test(e.href)){
 					fetch(e.href)
@@ -121,10 +105,7 @@
 			}
 		},
 		"news.yahoo.co.jp": {
-			isTarget: function(e){
-				return e.getAttribute("href");
-			},
-			fixLink: function(e){
+			fixLink: function(e, href){
 				'use strict';
 				if (/\/pickup\/\d+/.test(e.href)){
 					fetch(e.href, {mode:"no-cors"})
@@ -139,46 +120,16 @@
 					});			
 				}
 			},
-			postprocess: function(){
-				let fixLink = this.fixLink, contents = d.getElementById('contents');
-				if (contents){
-					(new MutationObserver(function(mutations, observer){
-						mutations.forEach(m=>{
-							if (m.type === "childList"){
-								for (let i = 0 ; i < m.addedNodes.length ; i++){
-									let e = m.addedNodes[i];
-									if (e.querySelector && (e = e.querySelector('a')) && e.getAttribute("href")){
-										if (! e.classList.contains(fixedSig)){
-											e.classList.add(fixedSig);
-											(newtab(e), underline(e), fixLink(e));
-										}
-									}
-								}
-							}
-						});
-					})).observe(contents, {childList:true, subtree:true});
-				}
-				else {
-					console.log("contents not found");
-				}
-			}
+			observee: '#contents'
 		},
 		"jp.mobile.reuters.com": {
-			isTarget: function(e){
-				return true;
-			},
 			postprocess: function(){
 				$("a").each(function(){$(this).off('click')});
 			}
 		},
 		"news.infoseek.co.jp": {
-			isTarget: function(e){
-				let href = e.getAttribute("href");
-				return !(href && href.charAt(0) === "#");
-			},
-			fixLink: function(e){
+			fixLink: function(e, href){
 				'use strict';
-				let href = e.getAttribute("href");
 				if (href.indexOf("/topics/") === 0 && /\/topics\/\w/.test(e.href)){
 					fetch(e.href)
 					.then(function(response) {
@@ -193,10 +144,7 @@
 			}
 		},
 		"news.livedoor.com": {
-			isTarget: function(e){
-				return true;
-			},
-			fixLink: function(e){
+			fixLink: function(e, href){
 				'use strict';
 				if (e.onclick)
 					e.onclick = null;
@@ -242,11 +190,7 @@
 			}
 		},
 		"www.excite.co.jp": {
-			isTarget: function(e){
-				let href = e.getAttribute("href");
-				return !(href && href.charAt(0) === "#");
-			},
-			fixLink: function(e){
+			fixLink: function(e, href){
 				'use strict';
 				if (e.href.includes('/news/article/')){
 					fetch(e.href)
@@ -276,15 +220,8 @@
 				$("li a").off("click");
 				$(sliderSelector).off("touchmove touchend");
 			},
-			isTarget: function(e){
-				let href = e.getAttribute("href");
-				return ! (href && href.charAt(0) === "#");
-			},
-			fixLink: function(e){
+			fixLink: function(e, href){
 				'use strict';
-				let href = e.getAttribute("href");
-				if (! href)
-					return;
 				if (/^\/(topics|article)\/.+\/\d+(-\w+)?\/$/.test(href)){
 					fetch(e.href)
 					.then(function(response) {
@@ -309,34 +246,92 @@
 				}
 			}
 		},
+		"news.biglobe.ne.jp": {
+			isTarget: function(e){
+				return e.parentElement.tagName !== "H1";
+			},
+			fixLink: function(e, href){
+				'use strict';
+				if (e.querySelector('div.boxTxt'))
+					e.style.padding = "5px";
+				if (e.querySelector('span.cpn')){
+					fetch(e.href,{mode:"no-cors"})
+					.then(function(response) {
+						return response.text();
+					})
+					.then(function(html) {
+						let s, r, b = str_find_block_r(html, '<a ', '全文を読む');
+						!b.error && (r = html.substring(b.first, b.last).match(/href="(.+?)"/)) && (e.href = r[1]);
+					});
+				}
+			},
+			observee: 'div.viewport02'
+		},
 		"template": {
 			isTarget: function(e){
 				return true;
 			},
-			fixLink: function(e){
+			fixLink: function(e, href){
 				'use strict';
 				console.log(e.innerText.replace(/\s+/g," "));
 				console.log(e.href);
+				if (true){
+					fetch(e.href)
+					.then(function(response) {
+						return response.text();
+					})
+					.then(function(html) {
+						if (! window.printed){
+							window.printed = true;
+							console.log(html);
+						}
+					});
+				}
 			}
 		}
 	};
+	function fixLinks(ee, sd)
+	{
+		for (let i = 0 ; i < ee.length ; i++){
+			let e = ee[i];
+			if (! e.classList.contains(fixedSig)){
+				e.classList.add(fixedSig);
+				let href = e.getAttribute("href");
+				if (href && href.charAt(0) !== "#"){
+					if (! sd || ! sd.isTarget || sd.isTarget(e)){
+						newtab(e);
+						underline(e);
+					}
+					if (sd && sd.fixLink)
+						sd.fixLink(e, href);
+				}
+			}
+		}
+	}
 	let d = document, fixedSig = "ybkdr-link-fixed";
 	let sd = siteData[d.location.hostname.toLowerCase()];
 	if (sd && sd.preprocess)
 		sd.preprocess();
-	let ee = d.getElementsByTagName("a");
-	for (let i = 0 ; i < ee.length ; i++){
-		let e = ee[i];
-		if (! e.classList.contains(fixedSig)){
-			e.classList.add(fixedSig);
-			if (! sd || ! sd.isTarget || sd.isTarget(e)){
-				newtab(e);
-				underline(e);
-			}
-			if (sd && sd.fixLink)
-				sd.fixLink(e);
-		}
-	}
+	fixLinks(d.getElementsByTagName("a"), sd);
 	if (sd && sd.postprocess)
 		sd.postprocess();
+	if (sd && sd.observee){
+		let container = d.querySelector(sd.observee);
+		if (container){
+			(new MutationObserver(function(mutations, observer){
+				mutations.forEach(m=>{
+					if (m.type === "childList"){
+						for (let i = 0 ; i < m.addedNodes.length ; i++){
+							let n = m.addedNodes[i];
+							if (n.querySelector)
+								fixLinks(n.querySelectorAll('a'), sd);
+						}
+					}
+				});
+			})).observe(container, {childList:true, subtree:true});
+		}
+		else {
+			console.log("observee '"+sd.observee+"' not found");
+		}
+	}
 })()
