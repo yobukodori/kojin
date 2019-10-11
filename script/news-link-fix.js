@@ -99,7 +99,7 @@
 					})
 					.then(function(html) {
 						let b, s, r, p, c;
-						(b = str_find_block(html,'id="topics_1_title">','<')) && !b.error && (s = html.substring(b.first,b.last)) && (p = e.querySelector('.list-title-topics')) && (p.innerText = s);
+						(b = str_find_block(html,'id="topics_1_title">','<')) && !b.error && (s = html.substring(b.first,b.last)) && (p = e.querySelector('.list-title-topics')) && (p.innerText = s.replace(/\u3000/g," "));
 						p && (b = str_find_block(html,'<p class="topics-news-source','</p>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/<a .+>(.+)<\/a>/)) && (c = d.createElement("span")) && (c.innerText = r[1]) && (c.style.fontSize = "small") && (c.style.marginLeft = "1rem") && p.appendChild(c);
 						(b = str_find_block_r(html,'<a ','id="topics_1_more"')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/href="(.+?)"/)) && (e.href = r[1]);
 					});			
@@ -118,7 +118,7 @@
 						{
 							let title = "n/a";
 							let b, s, r, p, c;
-							(b = str_find_block(html,'id="tpcTitle">','</a>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/>(.+)/)) && (title=r[1]) && (p = e.querySelector('.topics_item_title')) && (p.innerText = title);
+							(b = str_find_block(html,'id="tpcTitle">','</a>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/>(.+)/)) && (title=r[1]) && (p = e.querySelector('.topics_item_title')) && (p.innerText = title.replace(/\u3000/g," "));
 						}
 						let sig = /\/pickup\/\d+/.test(e.href) ? 'id="dtlBtn">' : 'class="tpcNews_detailLink">', i = html.indexOf(sig), r;
 						i != -1 && (r = html.substring(i + sig.length, html.indexOf('>', i + sig.length)).match('href="(.+?)"')) && (e.href = r[1]);
@@ -144,7 +144,7 @@
 					})
 					.then(function(html) {
 						let b, s, r, c;
-						(b = str_find_block(html, '<h3 class="hdg_article">', '</a>')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/>(.+)/)) && (e.firstElementChild.innerText = r[1]);
+						(b = str_find_block(html, '<h3 class="hdg_article">', '</a>')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/>(.+)/)) && (e.firstElementChild.innerText = r[1].replace(/\u3000/g," "));
 						(b = str_find_block(html, '<p class="article_head">', '</p>')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/">(.+?)</)) && (c = d.createElement("span")) && (c.innerText = r[1].trim()) && (c.style.fontSize = "1.1rem") && (c.style.marginLeft = "1rem") && e.firstElementChild.appendChild(c);
 					});		
 					e.setAttribute("href", "/article" + href.substring(7));
@@ -175,7 +175,7 @@
 						{
 							let title = "n/a";
 							let b, s, r, p, c;
-							(b = str_find_block(html,'class="article-header-contents">','</p>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/<p.+>(.+)/)) && (title=r[1]) && (p = e.querySelector('.topics_item_title')) && (p.innerText = title);
+							(b = str_find_block(html,'class="article-header-contents">','</p>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/<p.+>(.+)/)) && (title=r[1]) && (p = e.querySelector('.topics_item_title')) && (p.innerText = title.replace(/\u3000/g," "));
 						}
 						if ((b = str_find_block(html, 'pubdate="pubdate">', '</time>')), !b.error){
 							src = html.substring(b.first,b.last);
@@ -214,7 +214,7 @@
 						{
 							let title = "n/a";
 							let b, s, r, p, c;
-							(b = str_find_block(html,'<h1 class="article-title">','</h1>')) && !b.error && (s = html.substring(b.first,b.last)) && (title = s) && (p = e.firstChild) && (p.data = title);
+							(b = str_find_block(html,'<h1 class="article-title">','</h1>')) && !b.error && (s = html.substring(b.first,b.last)) && (title = s) && (p = e.firstChild) && (p.data = title.replace(/\u3000/g," "));
 						}
 						let src = "n/a", s, r, b = str_find_block(html, '"author":{', '}');
 						!b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/"name": "(.+)"/)) && (src = r[1]);
@@ -254,7 +254,7 @@
 							{
 								let title = "n/a";
 								let b, s, r, p, c;
-								(b = str_find_block(html,'<h1 class="ttl fs">','</h1>')) && !b.error && (s = html.substring(b.first,b.last)) && (title = s) && (p = e.querySelector('p.ttl_list')) && (p.innerText = title);
+								(b = str_find_block(html,'<h1 class="ttl fs">','</h1>')) && !b.error && (s = html.substring(b.first,b.last)) && (title = s) && (p = e.querySelector('p.ttl_list')) && (p.innerText = title.replace(/\u3000/g," "));
 								p && (p.style.overflow = "initial") && (p.style.whiteSpace = "initial") && (p.style.fontSize = "14px") && (e.style.height = "auto");// && (e.style.padding = "5px");
 							}
 							let src = "n/a";
