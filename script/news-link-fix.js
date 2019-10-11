@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.9
+ * title: news link fix v.0.1.10
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -100,7 +100,7 @@
 					.then(function(html) {
 						let b, s, r, p, c;
 						(b = str_find_block(html,'id="topics_1_title">','<')) && !b.error && (s = html.substring(b.first,b.last)) && (p = e.querySelector('.list-title-topics')) && (p.innerText = s.replace(/\u3000/g," "));
-						p && (b = str_find_block(html,'<p class="topics-news-source','</p>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/<a .+>(.+)<\/a>/)) && (c = d.createElement("span")) && (c.innerText = r[1]) && (c.style.fontSize = "small") && (c.style.marginLeft = "1rem") && p.appendChild(c);
+						p && (b = str_find_block(html,'<p class="topics-news-source','</p>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/<a .+>(.+)<\/a>\)(.+)/)) && (c = d.createElement("div")) && (c.innerText = r[1]+r[2]) && (c.style.fontSize = "small", c.style.marginTop = "-5px", c.style.paddingBottom = "2px") && (e.style.display = "block", p = e) && p.appendChild(c);
 						(b = str_find_block_r(html,'<a ','id="topics_1_more"')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/href="(.+?)"/)) && (e.href = r[1]);
 					});			
 				}
@@ -175,7 +175,7 @@
 						{
 							let title = "n/a";
 							let b, s, r, p, c;
-							(b = str_find_block(html,'class="article-header-contents">','</p>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/<p.+>(.+)/)) && (title=r[1]) && (p = e.querySelector('.topics_item_title')) && (p.innerText = title.replace(/\u3000/g," "));
+							(b = str_find_block(html,'class="article-header-contents">','</div>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/>(.+?)</)) && (title = r[1]) && ((p = e.querySelector('.article-list-headline-title')) || (p = e.querySelector('.article-title'))) && (p.innerText = title.replace(/\u3000/g," "));
 						}
 						if ((b = str_find_block(html, 'pubdate="pubdate">', '</time>')), !b.error){
 							src = html.substring(b.first,b.last);
