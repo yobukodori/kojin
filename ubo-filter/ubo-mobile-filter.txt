@@ -88,7 +88,6 @@ news.google.com##article > figure
 
 ! www.excite.co.jp/news/
 www.excite.co.jp##section.digest
-www.excite.co.jp##div.article-header > h1.article-title
 
 ! news.biglobe.ne.jp
 news.biglobe.ne.jp##div.boxImg02
