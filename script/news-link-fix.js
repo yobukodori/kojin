@@ -91,15 +91,17 @@
 			fixLink: function(e, href){
 				'use strict';
 				if (/\/topstories\/.+\.html/.test(e.href)){
+					let im = e.querySelector('.news-list-item > .news-item-thumbs');
+					im && im.parentElement.remove();
 					fetch(e.href)
 					.then(function(response) {
 						return response.text();
 					})
 					.then(function(html) {
-						let r, sig = 'id="topics_1_more"', i = html.indexOf(sig);
-						i != -1 && (r = html.substring(html.lastIndexOf('<', i), i).match('href="(.+?)"')) && (e.href = r[1]);
-						let parent = e.firstElementChild, src, elem;
-						parent && (sig = '<a href="/publisher/') && (i = html.indexOf(sig)) != -1 && (src = html.substring(html.indexOf('>', i+sig.length)+1,html.indexOf('</a>', i+sig.length))) && (elem = d.createElement("div")) && (elem.innerText = src) && (elem.class = 'list-news-source') && parent.appendChild(elem);
+						let b, s, r, p, c;
+						(b = str_find_block(html,'id="topics_1_title">','<')) && !b.error && (s = html.substring(b.first,b.last)) && (p = e.querySelector('.list-title-topics')) && (p.innerText = s);
+						p && (b = str_find_block(html,'<p class="topics-news-source','</p>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/<a .+>(.+)<\/a>/)) && (c = d.createElement("span")) && (c.innerText = r[1]) && (c.style.fontSize = "small") && (c.style.marginLeft = "1rem") && p.appendChild(c);
+						(b = str_find_block_r(html,'<a ','id="topics_1_more"')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/href="(.+?)"/)) && (e.href = r[1]);
 					});			
 				}
 			}
@@ -113,6 +115,11 @@
 						return response.text();
 					})
 					.then(function(html) {
+						{
+							let title = "n/a";
+							let b, s, r, p, c;
+							(b = str_find_block(html,'id="tpcTitle">','</a>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/>(.+)/)) && (title=r[1]) && (p = e.querySelector('.topics_item_title')) && (p.innerText = title);
+						}
 						let sig = /\/pickup\/\d+/.test(e.href) ? 'id="dtlBtn">' : 'class="tpcNews_detailLink">', i = html.indexOf(sig), r;
 						i != -1 && (r = html.substring(i + sig.length, html.indexOf('>', i + sig.length)).match('href="(.+?)"')) && (e.href = r[1]);
 						let parent = e.querySelector('div.topics_item_sub'), src, span;
@@ -136,8 +143,9 @@
 						return response.text();
 					})
 					.then(function(html) {
-						let b = str_find_block(html, '<p class="article_head">', '</p>'), s, r, div;
-						!b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/">(.+)<(.|\n)+>(\d.+)</)) && (s = r[1]+r[3]) && (div = d.createElement("div")) && (div.style.fontSize = "1.1rem") && (div.innerText = s) && e.firstElementChild.appendChild(div);
+						let b, s, r, c;
+						(b = str_find_block(html, '<h3 class="hdg_article">', '</a>')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/>(.+)/)) && (e.firstElementChild.innerText = r[1]);
+						(b = str_find_block(html, '<p class="article_head">', '</p>')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/">(.+?)</)) && (c = d.createElement("span")) && (c.innerText = r[1].trim()) && (c.style.fontSize = "1.1rem") && (c.style.marginLeft = "1rem") && e.firstElementChild.appendChild(c);
 					});		
 					e.setAttribute("href", "/article" + href.substring(7));
 				}
@@ -163,6 +171,11 @@
 							if (charset.toLowerCase() !== "utf-8"){
 								html = new TextDecoder(charset).decode(buffer);
 							}
+						}
+						{
+							let title = "n/a";
+							let b, s, r, p, c;
+							(b = str_find_block(html,'class="article-header-contents">','</p>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/<p.+>(.+)/)) && (title=r[1]) && (p = e.querySelector('.topics_item_title')) && (p.innerText = title);
 						}
 						if ((b = str_find_block(html, 'pubdate="pubdate">', '</time>')), !b.error){
 							src = html.substring(b.first,b.last);
@@ -198,6 +211,11 @@
 						return response.text();
 					})
 					.then(function(html) {
+						{
+							let title = "n/a";
+							let b, s, r, p, c;
+							(b = str_find_block(html,'<h1 class="article-title">','</h1>')) && !b.error && (s = html.substring(b.first,b.last)) && (title = s) && (p = e.firstChild) && (p.data = title);
+						}
 						let src = "n/a", s, r, b = str_find_block(html, '"author":{', '}');
 						!b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/"name": "(.+)"/)) && (src = r[1]);
 						let p, c;
@@ -233,6 +251,12 @@
 							(b = str_find_block_r(html, '<a ', 'class="article_btn">')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/href="(.+)"/)) && (e.href = r[1]);
 						}
 						if (! e.querySelector('span.data')){
+							{
+								let title = "n/a";
+								let b, s, r, p, c;
+								(b = str_find_block(html,'<h1 class="ttl fs">','</h1>')) && !b.error && (s = html.substring(b.first,b.last)) && (title = s) && (p = e.querySelector('p.ttl_list')) && (p.innerText = title);
+								p && (p.style.overflow = "initial") && (p.style.whiteSpace = "initial") && (p.style.fontSize = "14px") && (e.style.height = "auto");// && (e.style.padding = "5px");
+							}
 							let src = "n/a";
 							(b = str_find_block(html, '<a href="/vender/', '</a></p>')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/>(.+)/)) && (src = r[1]);
 							let p = e, c = d.createElement("div");
