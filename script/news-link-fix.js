@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.10
+ * title: news link fix v.0.1.11
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -255,18 +255,18 @@
 								let title = "n/a";
 								let b, s, r, p, c;
 								(b = str_find_block(html,'<h1 class="ttl fs">','</h1>')) && !b.error && (s = html.substring(b.first,b.last)) && (title = s) && (p = e.querySelector('p.ttl_list')) && (p.innerText = title.replace(/\u3000/g," "));
-								p && (p.style.overflow = "initial") && (p.style.whiteSpace = "initial") && (p.style.fontSize = "14px") && (e.style.height = "auto");// && (e.style.padding = "5px");
+								p && (p.style.display = "initial", p.style.overflow = "initial", p.style.whiteSpace = "initial",p.style.fontSize = "14px",p.classList.remove("fs"), p.style.paddingLeft = "0", e.parentElement.style.padding = "3px 5px 3px 5px") && (e.style.height = "auto",e.style.display="initial") && e.parentElement.classList.contains("new") && (e.parentElement.classList.remove("new"), c = d.createElement("span"), c.innerText = "N", c.style.color = "red", p.appendChild(c));
 							}
 							let src = "n/a";
 							(b = str_find_block(html, '<a href="/vender/', '</a></p>')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/>(.+)/)) && (src = r[1]);
-							let p = e, c = d.createElement("div");
-							(c.innerText = " "+src) && (c.style.marginLeft = "0.5rem") && (c.style.fontSize = "small") && (p.appendChild(c));
+							let p = e, c = d.createElement("span");
+							(c.innerText = " " + src, c.style.fontSize = "small") && (p.appendChild(c));
 						}
 					});
 				}
 				else {
-					console.log(e.innerText.replace(/\s+/g," "));
-					console.log(href);
+					//console.log(e.innerText.replace(/\s+/g," "));
+					//console.log(href);
 				}
 			}
 		},
@@ -278,7 +278,7 @@
 				'use strict';
 				if (e.querySelector('div.boxTxt'))
 					e.style.padding = "5px";
-				if (e.querySelector('span.cpn')){
+				if (e.querySelector('p.boxTtl')){
 					fetch(e.href,{mode:"no-cors"})
 					.then(function(response) {
 						return response.text();
@@ -286,6 +286,13 @@
 					.then(function(html) {
 						let s, r, b = str_find_block_r(html, '<a ', '全文を読む');
 						!b.error && (r = html.substring(b.first, b.last).match(/href="(.+?)"/)) && (e.href = r[1]);
+						{
+							let title = "n/a";
+							let b, s, r, p, c, t="n/a";
+							(b = str_find_block(html,'<h1 class="nTitle">','</h1>')) && !b.error && (s = html.substring(b.first,b.last)) && (title = s) && (t="nTitle");
+							b.error && (b = str_find_block(html,"'topics_main','article_link'",'\n<div class="cpn">')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/>(.+)/)) && (title = r[1]);
+							(title = title.replace(/\u3000/g," ")) && (p = e.querySelector('p.boxTtl')) && (p.innerText = title);
+						}
 					});
 				}
 			},
