@@ -36,7 +36,7 @@
 		});
 		location.search.substring(1).split("&").forEach(param=>{
 			let i = param.indexOf("="), 
-				name = (i !== -1 ? param.substring(0, i) : ""), 
+				name = (i !== -1 ? decodeURIComponent(param.substring(0, i)) : ""), 
 				val = (i !== -1 ? decodeURIComponent(param.substring(i+1)) : null);
 				if (name === "title"){
 					d.title = val;
@@ -72,6 +72,8 @@
 	}
 	let targetBlank = iconicMenu.options && iconicMenu.options.targetBlank;
 	iconicMenu.items.forEach(item=>{
+			if (item.hide)
+				return;
 			let e = d.createElement("div");
 			e.innerHTML = '<a class="item-url" href="' + (item.url ? item.url : '') + '" '+((targetBlank || item.targetBlank) ? 'target="_blank"':'') + '><div><img class="item-icon" src="' + (item.icon ? item.icon : 'icon/na.png') + '"><div class="item-name">' + item.name + '</div></div></a>';
 			e.className = "item";
