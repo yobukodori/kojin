@@ -237,6 +237,10 @@
 				let sliderSelector = "#sliderTop";
 				$("li a").off("click");
 				$(sliderSelector).off("touchmove touchend");
+				let ee = d.querySelectorAll(".sp-mask");
+				for (let i = 0 ; i < ee.length ; i++){
+					ee[i].style.overflowY = "scroll";
+				}
 			},
 			fixLink: function(e, href){
 				'use strict';
