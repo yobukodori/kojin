@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.11
+ * title: news link fix v.0.1.12
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -103,10 +103,29 @@
 			}
 		},
 		"news.goo.ne.jp": {
+			observee: "#NR-main",
+			isTarget: function(e){
+				'use strict';
+				if (e.id.indexOf("lnav_") === 0){
+					e.addEventListener("click", function(){
+						event.preventDefault();
+						fetch(e.href)
+						.then(function(response) {
+							return response.text();
+						})
+						.then(function(html) {
+							let b, s, p, c;
+							(b = str_find_block(html, '<div id="NR-main">', '<!-- main --></div>')) && !b.error && (s = html.substring(b.start,b.next)) && (p = d.getElementById("NR-main")) && (p.innerHTML = s);
+						});
+					});
+					return false;
+				}
+				return true;
+			},
 			fixLink: function(e, href){
 				'use strict';
 				if (/\/topstories\/.+\.html/.test(e.href)){
-					let im = e.querySelector('.news-list-item > .news-item-thumbs');
+					let im = e.querySelector('.news-list-item > .news-item-thumbs') || e.querySelector('a > .news-item-thumbs');
 					im && im.parentElement.remove();
 					fetch(e.href)
 					.then(function(response) {
