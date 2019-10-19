@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.13
+ * title: news link fix v.0.1.14
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -295,7 +295,7 @@
 								let title = "n/a";
 								let b, s, r, p, c;
 								(b = str_find_block(html,'<h1 class="ttl fs">','</h1>')) && !b.error && (s = html.substring(b.first,b.last)) && (title = s) && (p = e.querySelector('p.ttl_list')) && (p.innerText = decodeEntities(title).replace(/\u3000/g," "));
-								p && (p.style.display = "initial", p.style.overflow = "initial", p.style.whiteSpace = "initial",p.style.fontSize = "14px",p.classList.remove("fs"), p.style.paddingLeft = "0", e.parentElement.style.padding = "3px 5px 3px 5px") && (e.style.height = "auto",e.style.display="initial") && e.parentElement.classList.contains("new") && (e.parentElement.classList.remove("new"), c = d.createElement("span"), c.innerText = "N", c.style.color = "red", p.appendChild(c));
+								p && (p.style.display = "initial", p.style.overflow = "initial", p.style.whiteSpace = "initial",p.style.fontSize = "16px",p.classList.remove("fs"), p.style.paddingLeft = "0", e.parentElement.style.padding = "3px 5px 3px 5px") && (e.style.height = "auto",e.style.display="initial") && e.parentElement.classList.contains("new") && (e.parentElement.classList.remove("new"), c = d.createElement("span"), c.innerText = "N", c.style.color = "red", p.appendChild(c));
 							}
 							let src = "n/a";
 							(b = str_find_block(html, '<a href="/vender/', '</a></p>')) && !b.error && (s = html.substring(b.first, b.last)) && (r = s.match(/>(.+)/)) && (src = r[1]);
