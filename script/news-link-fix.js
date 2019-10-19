@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.12
+ * title: news link fix v.0.1.13
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -275,6 +275,8 @@
 				for (let i = 0 ; i < ee.length ; i++){
 					ee[i].style.overflowY = "scroll";
 				}
+				$('ul.content-slide.top_content-slide > li:first-child').css("background-color","linen");
+				$('li:has(.more_btn)').prev().css("background-color","linen");
 			},
 			fixLink: function(e, href){
 				'use strict';
