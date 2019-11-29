@@ -24,6 +24,9 @@ twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(div[
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/related_users/"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/who_to_follow/"])
 
+! リストのヘッダ画像を消す
+twitter.com##div[aria-label="タイムライン: リスト"] > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)
+
 ! 検索文字列の先読み補完がもたつくのでブロック
 ||api.twitter.com/*/search/typeahead.json$xmlhttprequest,first-party
 
