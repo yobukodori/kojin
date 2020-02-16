@@ -19,6 +19,7 @@ twitter.com##div[aria-label="タイムライン: ホームタイムライン"] >
 twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(div[data-testid="UserCell"])
 twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href^="/i/related_users/"])
 twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href^="/who_to_follow/"])
+twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href="/i/connect_people"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(h2[role="heading"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(div[data-testid="UserCell"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/related_users/"])
