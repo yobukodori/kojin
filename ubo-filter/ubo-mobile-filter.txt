@@ -147,3 +147,8 @@ weather.yahoo.co.jp###radarmd + div.doubleImage
 weather.yahoo.co.jp##article:has(.imaten)
 weather.yahoo.co.jp##aside + section:has(#index2days)
 weather.yahoo.co.jp###wthimg
+
+! reddit.com
+reddit.com##body.scroll-disabled:style(overflow: visible!important; position: static!important;)
+reddit.com##.XPromoPopup
+reddit.com##.xPromoAppStoreFooter
