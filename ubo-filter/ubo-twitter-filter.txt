@@ -24,6 +24,7 @@ twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(h2[r
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(div[data-testid="UserCell"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/related_users/"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/who_to_follow/"])
+twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/connect_people"])
 
 ! リストのヘッダ画像を消す
 twitter.com##div[aria-label="タイムライン: リスト"] > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)
