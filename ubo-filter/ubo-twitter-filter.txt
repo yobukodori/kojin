@@ -28,8 +28,6 @@ twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[hr
 
 ! リストのヘッダ画像を消す
 twitter.com##div[aria-label="タイムライン: リスト"] > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)
-! 2020/3/21 上記が効かなくなったのでとりあえず
-twitter.com##.r-1phboty.r-qklmqi.r-my5ep6.css-1dbjc4n > .r-1udh08x.r-1adg3ll.css-1dbjc4n
 
 ! 検索文字列の先読み補完がもたつくのでブロック
 ||api.twitter.com/*/search/typeahead.json$xmlhttprequest,first-party
