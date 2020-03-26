@@ -49,6 +49,7 @@ news.goo.ne.jp##a[href^="intent:"]
 news.goo.ne.jp##a.web-link:style(font-size:x-large !important)
 news.goo.ne.jp##a[href*="pid=goo_news"]
 news.goo.ne.jp###topiarea_title img
+news.goo.ne.jp##^script:has-text($('#overlay_app_dl'))
 ||goo.ne.jp/b.js$script,domain=news.goo.ne.jp
 ||goo.ne.jp/*/insight_cce.js$script,domain=goo.ne.jp
 ||sports-digican.com^$stylesheet,domain=news.goo.ne.jp
