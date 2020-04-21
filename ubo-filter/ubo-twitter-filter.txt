@@ -9,7 +9,11 @@
 ! twitter.com##div[aria-label="タイムライン: トレンド"] > div > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
 ! twitter.com##div[aria-label="タイムライン: いまどうしてる？"] > div > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
 ! primaryColumn のプロモーションを消す 一括版
-twitter.com##div[data-testid="primaryColumn"] h1[aria-level="1"] + div > div:first-child > div:first-child > div:has(path[d^="M20.75 2H3.25C2.007"])
+! 2020/4/21 仕様変更で効かなくなる
+! twitter.com##div[data-testid="primaryColumn"] h1[aria-level="1"] + div > div:first-child > div:first-child > div:has(path[d^="M20.75 2H3.25C2.007"])
+
+! 2020/4/21 プロモツイートを消す
+twitter.com##div[data-testid="tweet"]:has(path[d^="M20.75 2H3.25C2.007"])
 
 ! sidebarColumn のおすすめトレンド内プロモーションを消す
 twitter.com##div[data-testid="sidebarColumn"] h1[aria-level="1"] + div > div > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
