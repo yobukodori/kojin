@@ -31,7 +31,8 @@ twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[hr
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/connect_people"])
 
 ! リストのヘッダ画像を消す
-twitter.com##div[aria-label="タイムライン: リスト"] > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)
+! 2020/4/22 モバイルでちらつくようになったので停止
+! twitter.com##div[aria-label="タイムライン: リスト"] > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)
 
 ! 検索文字列の先読み補完がもたつくのでブロック
 ||api.twitter.com/*/search/typeahead.json$xmlhttprequest,first-party
