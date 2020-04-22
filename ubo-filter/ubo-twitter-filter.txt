@@ -36,6 +36,8 @@ twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[hr
 ! リストのヘッダ画像を消す
 ! 2020/4/22 モバイルでちらつくようになったので停止
 ! twitter.com##div[aria-label="タイムライン: リスト"] > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)
+! 2020/4/22
+twitter.com##div[aria-label="タイムライン: リスト"] > div[style*="relative"] > div:first-child > div:first-child > div:first-child
 
 ! 検索文字列の先読み補完がもたつくのでブロック
 ||api.twitter.com/*/search/typeahead.json$xmlhttprequest,first-party
