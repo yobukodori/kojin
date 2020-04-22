@@ -15,6 +15,9 @@
 ! 2020/4/21 プロモツイートを消す
 twitter.com##div[data-testid="tweet"]:has(path[d^="M20.75 2H3.25C2.007"])
 
+! 2020/4/21 プロモユーザーを消す
+twitter.com##div[data-testid="UserCell"]:has(path[d^="M20.75 2H3.25C2.007"])
+
 ! sidebarColumn のおすすめトレンド内プロモーションを消す
 twitter.com##div[data-testid="sidebarColumn"] h1[aria-level="1"] + div > div > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
 
