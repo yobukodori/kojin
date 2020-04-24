@@ -33,6 +33,10 @@ twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[hr
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/who_to_follow/"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/connect_people"])
 
+! primaryColumn のトピックをフォローを消す
+twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(path[d^="M18.265 3.314c-3.45-3.45"])
+twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href="/i/flow/topics_selector"])
+
 ! リストのヘッダ画像を消す
 ! 2020/4/22 モバイルでちらつくようになったので停止
 ! twitter.com##div[aria-label="タイムライン: リスト"] > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)
