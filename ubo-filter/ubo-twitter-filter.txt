@@ -42,6 +42,8 @@ twitter.com##div[aria-label="タイムライン: ホームタイムライン"] >
 ! twitter.com##div[aria-label="タイムライン: リスト"] > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)
 ! 2020/4/22 これでもちらつく
 ! twitter.com##div[aria-label="タイムライン: リスト"] > div[style*="relative"] > div:first-child > div:first-child > div:first-child
+! 2020/4/24
+twitter.com##div[aria-label="タイムライン: リスト"] > div[style*="relative"] > div:first-child > div:first-child > div:first-child:style(height:0)
 
 ! 検索文字列の先読み補完がもたつくのでブロック
 ||api.twitter.com/*/search/typeahead.json$xmlhttprequest,first-party
