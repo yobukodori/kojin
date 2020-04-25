@@ -40,10 +40,10 @@ twitter.com##div[aria-label="タイムライン: ホームタイムライン"] >
 ! リストのヘッダ画像を消す
 ! 2020/4/22 モバイルでちらつくようになったので停止
 ! twitter.com##div[aria-label="タイムライン: リスト"] > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)
-! 2020/4/22 これでもちらつく
-! twitter.com##div[aria-label="タイムライン: リスト"] > div[style*="relative"] > div:first-child > div:first-child > div:first-child
-! 2020/4/24
+! 2020/4/24 新仕様版
 twitter.com##div[aria-label="タイムライン: リスト"] > div[style*="relative"] > div:first-child > div:first-child > div:first-child:style(height:0)
+! 2020/4/25 旧仕様版（現時点で新仕様と混在中）
+twitter.com##div[aria-label="タイムライン: リスト"] > div[style*="padding-bottom"] > div:first-child > div:first-child > div:first-child > div:first-child:style(height:0)
 
 ! 検索文字列の先読み補完がもたつくのでブロック
 ||api.twitter.com/*/search/typeahead.json$xmlhttprequest,first-party
