@@ -59,6 +59,9 @@ twitter.com##div[aria-label="タイムライン: リスト"] > div[style*="relat
 
 !#if env_mobile
 
+! TLトップのリアルタイムイベント（おすすめイベント）を非表示
+twitter.com##div[aria-label="タイムライン: Carousel"]
+
 ! アプリのダウンロードを勧めてくるのを消す（href未確認のため保留）
 ! twitter.com##div[data-testid="primaryColumn"] h1[aria-level="1"] + div > div:first-child > div:first-child > div:has(a[href^="https://play.google.com/store/apps/details?id=com.twitter.android"][role="button"])
 
