@@ -75,6 +75,9 @@ headlines.yahoo.co.jp##.thum
 headlines.yahoo.co.jp##.listModBoxWrapLarge div.yvpub-player
 ||c.yimg.jp^$image,domain=headlines.yahoo.co.jp
 ||yimg.jp^$script,domain=headlines.yahoo.co.jp
+! 2020/5/28
+news.yahoo.co.jp###comment-count
+||news.yahoo.co.jp/comment/*$xhr,domain=news.yahoo.co.jp
 
 ! google news
 news.google.com##article > figure
