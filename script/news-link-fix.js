@@ -1,11 +1,26 @@
 /*
- * title: news link fix v.0.1.15
+ * title: news link fix v.0.1.16
  * name: news-link-fix.js
  * author: yobukodori
 */
 
 (function(){
 	'use strict';
+	function sleep(ms) 
+	{
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+	
+	function timeout(ms, promise) 
+	{
+		return new Promise(function(resolve, reject) {
+			setTimeout(function() {
+				reject(new Error("timeout"))
+			}, ms);
+			promise.then(resolve, reject)
+		});
+	}
+	
 	function str_find_block(str, sig1, sig2, from)
 	{
 		var ro = {error:"n/a", start:-1, first:-1, last:-1, next:from ? from:0};
@@ -154,7 +169,7 @@
 							let b, s, r, p, c;
 							(b = str_find_block(html,'class="pickupMain_articleTitle">','<')) && !b.error && (title = html.substring(b.first,b.last)) && (p = e.querySelector('.topics_item_title')) && (p.innerText = decodeEntities(title).replace(/\u3000/g," "));
 						}
-						let sig = '<p class="pickupMain_detailLink', i = html.indexOf(sig), r;
+						let sig = 'class="pickupMain_detailLink', i = html.indexOf(sig), r;
 						i != -1 && (r = html.substring(i + sig.length, html.indexOf('data-ual-gotocontent', i + sig.length)).match('href="(.+?)"')) && (e.href = r[1]);
 						let parent = e.querySelector('div.topics_item_sub'), b, src, span;
 						(b = str_find_block(html,'class="pickupMain_media">','<')) && !b.error && (src = html.substring(b.first,b.last)) && parent &&  (span = d.createElement("span")) && (span.className = "newsFeed_item_media") && (span.setAttribute("style","vertical-align: bottom"),!0) && (span.innerText = src) && parent.appendChild(span);
@@ -186,6 +201,71 @@
 			}
 		},
 		"news.livedoor.com": {
+            queue: [],
+            runned: 0,
+            running: 0,
+            error: 0,
+			fetchIt: async function(){
+				'use strict';
+				const initialRunning = 30, verbose = false;
+				let maxRunning = 1;
+				if (verbose) console.log("queue.length:",this.queue.length,"runned:",this.runned,"running:",this.running,"error:",this.error);
+				if (this.queue.length > 0 && this.running < maxRunning && this.error === 0) {
+					let delay = this.runned < maxRunning ? 0 : this.runned < initialRunning ? 100 : 2*1000;
+					if (delay > 0){
+						if (verbose) console.log(this.runned, "sleep", delay,"ms");
+						await sleep(delay);
+					}
+					let context = this, e = this.queue.shift();
+					if (verbose) console.log(this.runned, "fetch", e.href, e.innerText.replace(/\s+/g,' '));
+					this.runned++, this.running++,
+					timeout(30*1000, fetch(e.href)
+						.then(function(response) {
+							if (! response.ok){
+								console.log("response error:", response.status, response.statusText);
+								context.error++;
+							}
+							return response.arrayBuffer();
+						})
+						.then(function(buffer) {
+							let html = new TextDecoder("utf-8").decode(buffer);
+							let src = "n/a", s, r, b = str_find_block(html, '<meta charset="', '"');
+							if (! b.error){
+								let charset = html.substring(b.first,b.last);
+								if (charset.toLowerCase() !== "utf-8"){
+									html = new TextDecoder(charset).decode(buffer);
+								}
+							}
+							{
+								let title = "n/a";
+								let b, s, r, p, c;
+								(b = str_find_block(html,'class="article-header-contents">','</div>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/>(.+?)</)) && (title = r[1]) && ((p = e.querySelector('.article-list-headline-title')) || (p = e.querySelector('.article-title'))) && (p.innerText = decodeEntities(title).replace(/\u3000/g," "));
+							}
+							if ((b = str_find_block(html, 'pubdate="pubdate">', '</time>')), !b.error){
+								src = html.substring(b.first,b.last);
+								if ((b = str_find_block(html, '<p class="venderLogo">', '</p>')), !b.error){
+									if (r = html.substring(b.first,b.last).match(/alt="(.+)"/))
+										src = r[1] + " " + src;
+								}
+								else if ((b = str_find_block(html, 'class="outer-link-vender">', '</span>')), !b.error){
+									src = html.substring(b.first,b.last)+" "+src;
+								}
+							}
+							if (src){
+								let p, c = d.createElement("div");
+								(c.innerText = " "+src) && (c.style.fontSize = "small") && ((p = e.querySelector('.article-list-headline-title')) || (p = e.querySelector('.article-title'))) && p.appendChild(c);
+							}
+							context.running--;
+							context.fetchIt();
+						})
+						.catch(function(e){
+							console.log(e);
+							context.running--;
+							context.fetchIt();
+						})
+					);
+				}
+			},
 			fixLink: function(e, href){
 				'use strict';
 				if (e.onclick)
@@ -193,39 +273,11 @@
 				let r = e.href.match(/^(https:\/\/news\.livedoor\.com\/lite\/)topics_detail(\/\d+\/)$/);
 				if (r){
 					e.href = r[1] + "article_detail" + r[2];
-					fetch(e.href)
-					.then(function(response) {
-						return response.arrayBuffer();
-					})
-					.then(function(buffer) {
-						let html = new TextDecoder("utf-8").decode(buffer);
-						let src = "n/a", s, r, b = str_find_block(html, '<meta charset="', '"');
-						if (! b.error){
-							let charset = html.substring(b.first,b.last);
-							if (charset.toLowerCase() !== "utf-8"){
-								html = new TextDecoder(charset).decode(buffer);
-							}
-						}
-						{
-							let title = "n/a";
-							let b, s, r, p, c;
-							(b = str_find_block(html,'class="article-header-contents">','</div>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/>(.+?)</)) && (title = r[1]) && ((p = e.querySelector('.article-list-headline-title')) || (p = e.querySelector('.article-title'))) && (p.innerText = decodeEntities(title).replace(/\u3000/g," "));
-						}
-						if ((b = str_find_block(html, 'pubdate="pubdate">', '</time>')), !b.error){
-							src = html.substring(b.first,b.last);
-							if ((b = str_find_block(html, '<p class="venderLogo">', '</p>')), !b.error){
-								if (r = html.substring(b.first,b.last).match(/alt="(.+)"/))
-									src = r[1] + " " + src;
-							}
-							else if ((b = str_find_block(html, 'class="outer-link-vender">', '</span>')), !b.error){
-								src = html.substring(b.first,b.last)+" "+src;
-							}
-						}
-						if (src){
-							let p, c = d.createElement("div");
-							(c.innerText = " "+src) && (c.style.fontSize = "small") && ((p = e.querySelector('.article-list-headline-title')) || (p = e.querySelector('.article-title'))) && p.appendChild(c);
-						}
-					});
+					if (! e.parentElement.classList.contains("_popIn_recommend_art_img")  && ! e.querySelector("._popIn_recommend_art_title"))
+					{
+						this.queue.push(e);
+						this.fetchIt();
+					}
 				}
 			},
 			preprocess: function(){
