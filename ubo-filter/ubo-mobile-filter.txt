@@ -19,6 +19,7 @@
 ||appspot.com^$subdocument,domain=jiji.com
 jiji.com##div.menubutton
 jiji.com##nav.menu
+jiji.com###Wrapper > aside
 
 ! mainichi.jp
 mainichi.jp###bottom-share
