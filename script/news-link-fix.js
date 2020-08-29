@@ -167,7 +167,7 @@
 						{
 							let title = "n/a";
 							let b, s, r, p, c;
-							(b = str_find_block(html,'class="pickupMain_articleTitle">','<')) && !b.error && (title = html.substring(b.first,b.last)) && (p = e.querySelector('.topics_item_title')) && (p.innerText = decodeEntities(title).replace(/\u3000/g," "));
+							(b = str_find_block(html,'class="pickupMain_articleTitle_text">','<')) && !b.error && (title = html.substring(b.first,b.last)) && (p = e.querySelector('.topics_item_title')) && (p.innerText = decodeEntities(title).replace(/\u3000/g," "));
 						}
 						let sig = 'class="pickupMain_detailLink', i = html.indexOf(sig), r;
 						i != -1 && (r = html.substring(i + sig.length, html.indexOf('data-ual-gotocontent', i + sig.length)).match('href="(.+?)"')) && (e.href = r[1]);
