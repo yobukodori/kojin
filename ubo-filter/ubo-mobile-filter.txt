@@ -157,3 +157,17 @@ weather.yahoo.co.jp###wthimg
 reddit.com##body.scroll-disabled:style(overflow: visible!important; position: static!important;)
 reddit.com##.XPromoPopup
 reddit.com##.xPromoAppStoreFooter
+
+! bookmarklet menu
+www.jiji.com##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.47news.jp##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+news.yahoo.co.jp##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+news.livedoor.com##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+news.nifty.com##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+news.goo.ne.jp##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.excite.co.jp##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+mainichi.jp##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.yomiuri.co.jp##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+jp.mobile.reuters.com##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.cnn.co.jp##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.bbc.com##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)

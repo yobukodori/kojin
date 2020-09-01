@@ -1,0 +1,106 @@
+# name:  ublock origin user resource for firefox mobile 79+
+# author: yobukodori
+# install: add this file url to 'userResourcesLocation' in 'advanced settings'
+
+firefox-mobile-bookmarklet-menu.js application/javascript
+(function() {
+	if (! window["fmbm-data"]){
+		window["fmbm-data"] = { nInstance:0};
+	}
+	let appId = window["fmbm-data"].nInstance++, appName = "fmbm", appVer = "v.0.1.0",
+		appLogPrefix = "["+appName+":"+appId+"]";
+	function log(){
+		console.log.apply(console,[appLogPrefix].concat(Array.from(arguments)));
+	}
+	log(appName,appVer);
+	log("running on", location.href);
+	let name = '{{1}}', src = '{{2}}';
+	log("arguments:", {name:name, src:src});
+	if (! /^(https?|javascript):/.test(src)){
+		log("non-supported src url:", src);
+		return;
+	}
+	function runScript(src){
+		log("run",src);
+		if (/^javascript:/.test(src)){
+			let code = src.substring("javascript:".length);
+			src = URL.createObjectURL(new Blob([code],{type:"application/javascript"}));
+			log("converted javascript code to", src);
+		}
+		let e = document.createElement("script");
+		e.src = src;
+		document.body.appendChild(e);
+	}
+	function appendStylesheet(rules, id)	{
+		let e = document.createElement("style");
+		if (id){
+			e.id = id;
+		}
+		e.type = "text/css";
+		e.innerHTML = rules;
+		document.getElementsByTagName("head")[0].appendChild(e);
+	}
+	function createMenu(){
+		appendStylesheet("#fmbm-menu-button{border:thin solid;width:20px;height:20px;background-color:gold; color:black;font-size:16px;font-family:serif;font-weight:bold;text-align:center;padding:initial; position:fixed;top:100px;right:0px;z-index:10010;} #fmbm-menu{display:inline-flex;flex-direction:column;background-color:gainsboro;position:fixed;top:20%;right:0px;z-index:10020;font-size:large;} .fmbm-hide{display:none!important;}");
+		log("creating menu-button");
+		let btn = document.createElement("button");
+		btn.id = "fmbm-menu-button";
+		btn.textContent = "B";
+		document.body.appendChild(btn);
+		btn.addEventListener("click",ev=>{
+			ev.stopPropagation();
+			log("menu-button clicked and create menu");
+			let html = ""//'<div>'+appName+' '+appVer+'</div>';
+			document["fmbm-data"].bm.forEach((bm,idx)=>{
+				let i = bm.src.lastIndexOf("/")+1, filename = bm.src.substring(i, i+40);
+				html += '<button class="fmbm-menu-item" data-index="'+idx+'">'
+							+ bm.name + ' ' + filename
+							+ '</button>';
+			});
+			html += '<button id="fmbm-menu-close">Close</button>'
+						+ '<button id="fmbm-menu-exit">Exit</button>';
+			let menu = document.createElement("div");
+			menu.id = "fmbm-menu";
+			menu.innerHTML = html;
+			document.body.appendChild(menu);
+			Array.from(menu.getElementsByClassName("fmbm-menu-item")).forEach(e=>{
+				e.addEventListener("click", ev=>{
+					log("menu-item clicked and remove menu");
+					menu.remove();
+					runScript(document["fmbm-data"].bm[ev.target.getAttribute("data-index")].src);
+				});
+			});
+			document.getElementById("fmbm-menu-close").addEventListener("click", ev=>{
+				log("menu-close clicked");
+				//menu.remove();
+			});
+			document.getElementById("fmbm-menu-exit").addEventListener("click", ev=>{
+				log("menu-exit clicked and hide menu-button");
+				btn.classList.add("fmbm-hide");
+			});
+			document.addEventListener("click",ev=>{
+				if (menu.parentElement){
+					log("document clicked and remove menu");
+					menu.remove();
+				}
+			});
+		});
+	}
+	function onDomReady(ev){
+		log("onRomReady");
+		if (! document["fmbm-data"]){
+			log('initializing document["fmbm-data"]');
+			document["fmbm-data"] = { bm: [] };
+		}
+		if (document["fmbm-data"].bm.push({name: name, src: src}) === 1){
+			createMenu();
+		}
+	}
+	log("readystate",document.readyState);
+	if (document.readyState === "loading"){
+		document.addEventListener("DOMContentLoaded", onDomReady);
+		log("added event listener: DOMContentLoaded");
+	} else {
+		onDomReady();
+	}
+})();
