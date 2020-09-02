@@ -104,3 +104,23 @@ firefox-mobile-bookmarklet-menu.js application/javascript
 		onDomReady();
 	}
 })();
+
+
+google-link-fix.js application/javascript
+(function() {
+	if (location.pathname !== "/search"){
+		return;
+	}
+	function onDomReady(ev){
+		["contextmenu","touchstart","mousedown"].forEach(e=>{
+			if (document.querySelector('a[on'+e+']')){
+				document.addEventListener(e, function(event){event.stopImmediatePropagation();}, true);
+			}
+		});
+	}
+	if (document.readyState === "loading"){
+		document.addEventListener("DOMContentLoaded", onDomReady);
+	} else {
+		onDomReady();
+	}
+})();

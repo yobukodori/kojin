@@ -171,3 +171,6 @@ www.yomiuri.co.jp##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobu
 jp.mobile.reuters.com##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
 www.cnn.co.jp##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
 www.bbc.com##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+
+! google link fix
+google.com,google.co.jp##+js(google-link-fix.js)
