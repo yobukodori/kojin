@@ -41,7 +41,7 @@ firefox-mobile-bookmarklet-menu.js application/javascript
 		document.getElementsByTagName("head")[0].appendChild(e);
 	}
 	function createMenu(){
-		appendStylesheet("#fmbm-menu-button{border:thin solid;width:20px;height:20px;background-color:gold; color:black;font-size:16px;font-family:serif;font-weight:bold;text-align:center;padding:initial; position:fixed;top:100px;right:0px;z-index:10010;} #fmbm-menu{display:inline-flex;flex-direction:column;background-color:gainsboro;position:fixed;top:20%;right:0px;z-index:10020;font-size:large;} .fmbm-hide{display:none!important;}");
+		appendStylesheet("#fmbm-menu-button{border:thin solid;width:24px;height:24px;background-color:gold; color:black;font-size:20px;font-family:serif;font-weight:bold;text-align:center;padding:initial; position:fixed;top:100px;right:0px;z-index:100010;} #fmbm-menu{display:inline-flex;flex-direction:column;background-color:gainsboro;position:fixed;top:20%;right:0px;z-index:100020;font-size:large;} .fmbm-hide{display:none!important;}");
 		log("creating menu-button");
 		let btn = document.createElement("button");
 		btn.id = "fmbm-menu-button";
