@@ -117,6 +117,26 @@ google-link-fix.js application/javascript
 				document.addEventListener(e, function(event){event.stopImmediatePropagation();}, true);
 			}
 		});
+		Array.from(document.links).forEach(a=>{
+			try {
+				let url = new URL(a.href);
+				if (url.hostname === location.hostname && url.pathname === "/url" && url.search){
+					let params = {};
+					url.search.substring(1).split("&").forEach(param=>{
+						let i = param.indexOf("="), 
+							name = (i !== -1 ? param.substring(0, i) : ""), 
+							val = (i !== -1 ? decodeURIComponent(param.substring(i+1)) : null);
+						params[name] = val;
+					});
+					let href = params["url"] || params["q"] || "";
+					if (/^https?:/.test(href)){
+						a.href = href;
+					}
+				}
+			}
+			catch (e){
+			}
+		});
 	}
 	if (document.readyState === "loading"){
 		document.addEventListener("DOMContentLoaded", onDomReady);
