@@ -174,3 +174,4 @@ www.bbc.com##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori
 
 ! google link fix
 google.com,google.co.jp##+js(google-link-fix.js)
+google.com,google.co.jp##+js(firefox-mobile-bookmarklet-menu.js,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
