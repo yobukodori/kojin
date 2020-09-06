@@ -159,4 +159,4 @@ reddit.com##.XPromoPopup
 reddit.com##.xPromoAppStoreFooter
 
 ! google link fix
-google.com,google.co.jp##+js(google-link-fix.js)
+google.com,google.co.jp##+js(google-link-fix)
