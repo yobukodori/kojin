@@ -211,7 +211,7 @@
 				let maxRunning = 1;
 				if (verbose) console.log("queue.length:",this.queue.length,"runned:",this.runned,"running:",this.running,"error:",this.error);
 				if (this.queue.length > 0 && this.running < maxRunning && this.error === 0) {
-					let delay = this.runned < maxRunning ? 0 : this.runned < initialRunning ? 100 : 2*1000;
+					let delay = this.runned < maxRunning ? 0 : this.runned < initialRunning ? 100 : 2.5*1000;
 					if (delay > 0){
 						if (verbose) console.log(this.runned, "sleep", delay,"ms");
 						await sleep(delay);
