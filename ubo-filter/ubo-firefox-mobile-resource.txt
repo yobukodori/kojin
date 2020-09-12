@@ -7,7 +7,7 @@ firefox-mobile-bookmarklet-menu.js application/javascript
 	if (! window["fmbm-data"]){
 		window["fmbm-data"] = { nInstance:0};
 	}
-	let appId = window["fmbm-data"].nInstance++, appName = "fmbm", appVer = "v.0.1.0",
+	let appId = window["fmbm-data"].nInstance++, appName = "fmbm", appVer = "v.0.1.1",
 		appLogPrefix = "["+appName+":"+appId+"]";
 	function log(){
 		console.log.apply(console,[appLogPrefix].concat(Array.from(arguments)));
@@ -65,11 +65,17 @@ firefox-mobile-bookmarklet-menu.js application/javascript
 				log("removing menu button");
 				btn.remove();
 				log("creating menu");
-				let html = ""//'<div>'+appName+' '+appVer+'</div>';
+				let html = "";
 				document["fmbm-data"].bm.forEach((bm,idx)=>{
-					let i = bm.src.lastIndexOf("/")+1, filename = bm.src.substring(i, i+40);
+					let description;
+					if (/^javascript:/.test(bm.src)){
+						description = bm.src.substring(0, 40);
+					}
+					else {
+						description = bm.src.substring(bm.src.lastIndexOf("/")+1).substring(0,40);
+					}
 					html += '<button class="fmbm-menu-item" data-index="'+idx+'">'
-								+ bm.name + ' ' + filename
+								+ bm.name + ' ' + description
 								+ '</button>';
 				});
 				html += '<button id="fmbm-menu-close">Close</button>'
