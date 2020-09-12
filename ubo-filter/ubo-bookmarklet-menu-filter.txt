@@ -16,3 +16,5 @@ www.cnn.co.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.
 www.bbc.com##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
 
 google.com,google.co.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+
+weathernews.jp##+js(firefox-mobile-bookmarklet-menu,てんけつ,https://yobukodori.github.io/kojin/script/tenketsu.js)
