@@ -50,7 +50,7 @@ firefox-mobile-bookmarklet-menu.js application/javascript
 		document.getElementsByTagName("head")[0].appendChild(e);
 	}
 	function createMenu(){
-		appendStylesheet("#fmbm-menu-button{border:thin solid;width:30px;height:30px;background-color:gold; color:black;font-size:24px;font-family:serif;font-weight:bold;text-align:center;padding:initial; position:fixed;top:100px;right:0px;z-index:2147483647;} #fmbm-menu{display:inline-flex;flex-direction:column;background-color:gainsboro;position:fixed;top:100px;right:0px;z-index:2147483647;} #fmbm-menu > button {font-family:sans-serif;font-size:20px;!important;border:thin solid !important;} .fmbm-hide{display:none!important;}");
+		appendStylesheet("#fmbm-menu-button{border:thin solid;width:30px;height:30px;background-color:gold; color:black;font-size:24px;font-family:serif;font-weight:bold;text-align:center;padding:initial; position:fixed;top:100px;right:0px;z-index:2147483647;} #fmbm-menu{display:inline-flex;flex-direction:column;background-color:gainsboro;position:fixed;top:100px;right:0px;z-index:2147483647;} #fmbm-menu > button {font-family:sans-serif;font-size:20px !important;border:thin solid !important;padding:0.5em 0.2em !important} .fmbm-hide{display:none !important;}");
 		function createMenuButton(){
 			let btnId = "fmbm-menu-button";
 			if (document.getElementById(btnId)){ return; }
@@ -75,7 +75,7 @@ firefox-mobile-bookmarklet-menu.js application/javascript
 						description = bm.src.substring(bm.src.lastIndexOf("/")+1).substring(0,40);
 					}
 					html += '<button class="fmbm-menu-item" data-index="'+idx+'">'
-								+ bm.name + ' ' + description
+								+ bm.name /* + ' ' + description */
 								+ '</button>';
 				});
 				html += '<button id="fmbm-menu-close">Close</button>'

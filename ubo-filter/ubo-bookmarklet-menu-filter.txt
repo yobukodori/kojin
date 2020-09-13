@@ -15,6 +15,13 @@ jp.mobile.reuters.com##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yob
 www.cnn.co.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
 www.bbc.com##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
 
+! google link fix
 google.com,google.co.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
 
+! てんけつ
 weathernews.jp##+js(firefox-mobile-bookmarklet-menu,てんけつ,https://yobukodori.github.io/kojin/script/tenketsu.js)
+
+!
+5ch.net##+js(firefox-mobile-bookmarklet-menu,ページ先頭,javascript:window.scrollTo(0\,0))
+5ch.net##+js(firefox-mobile-bookmarklet-menu,ページ末尾,javascript:window.scrollTo(0\,document.body.scrollHeight))
+
