@@ -160,3 +160,11 @@ reddit.com##.xPromoAppStoreFooter
 
 ! google link fix
 google.com,google.co.jp##+js(google-link-fix)
+
+! itest.5ch.net
+itest.5ch.net##li.ad
+itest.5ch.net##.ad-native-comment
+itest.5ch.net##.sproutad_frame
+itest.5ch.net##.sproutad_frame-description
+itest.5ch.net###js-bottom-ad-300x250
+itest.5ch.net###instant_ad
