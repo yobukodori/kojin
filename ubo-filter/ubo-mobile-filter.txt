@@ -168,3 +168,6 @@ itest.5ch.net##.sproutad_frame
 itest.5ch.net##.sproutad_frame-description
 itest.5ch.net###js-bottom-ad-300x250
 itest.5ch.net###instant_ad
+
+! 5ch.net pc mode
+5ch.net##div.mascot:style(background-image:none !important)
