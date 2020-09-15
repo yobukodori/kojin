@@ -7,7 +7,7 @@ firefox-mobile-bookmarklet-menu.js application/javascript
 	if (! window["fmbm-data"]){
 		window["fmbm-data"] = { nInstance:0};
 	}
-	let appId = window["fmbm-data"].nInstance++, appName = "fmbm", appVer = "v.0.1.1",
+	let appId = window["fmbm-data"].nInstance++, appName = "fmbm", appVer = "v.0.1.2",
 		appLogPrefix = "["+appName+":"+appId+"]";
 	function log(){
 		console.log.apply(console,[appLogPrefix].concat(Array.from(arguments)));
@@ -17,28 +17,38 @@ firefox-mobile-bookmarklet-menu.js application/javascript
 	let name = '{{1}}', src = '{{2}}', charset = '{{3}}',
 		args = {name: name, src: src, charset: charset !== '{{3}}' ? charset:""};
 	log("args:", args);
-	if (! /^(https?|javascript):/.test(src)){
+	if (! /^(https?|javascript|fmbm-script):/.test(src)){
 		log("non-supported src url:", src);
 		return;
 	}
 	function runScript(args){
-		let src = args.src, charset = args.charset;
+		let src = args.src, charset = args.charset, scheme = src.substring(0, src.indexOf(":"));
 		log("run",src);
-		let e = document.createElement("script");
-		if (/^javascript:/.test(src)){
-			let code = src.substring("javascript:".length);
-			e.src = URL.createObjectURL(new Blob([code],{type:"application/javascript"}));
-			e.charset = "utf-8";
-			log("converted javascript code to", src);
-		}
-		else {
-			e.src = src;
-			if (charset){
-				e.charset = charset;
-				log("charset:",charset);
+		if (scheme === "fmbm-script"){
+			src = src.substring(scheme.length+1).trim();
+			console.log('window["fmbm-script"]['+'"'+src+'"'+']()');
+			if (window["fmbm-script"] && typeof window["fmbm-script"][src] === "function"){
+				setTimeout(window["fmbm-script"][src], 0);
 			}
 		}
-		document.body.appendChild(e);
+		else {
+			let e = document.createElement("script");
+			if (scheme === "javascript"){
+				src = src.substring(scheme.length+1);
+				let url = URL.createObjectURL(new Blob([src],{type:"application/javascript"}));
+				e.src =  url;
+				e.charset = "utf-8";
+				log("converted javascript code to", e.src);
+			}
+			else {
+				e.src = src;
+				if (charset){
+					e.charset = charset;
+					log("charset:",charset);
+				}
+			}
+			document.body.appendChild(e);
+		}
 	}
 	function appendStylesheet(rules, id)	{
 		let e = document.createElement("style");
@@ -50,7 +60,7 @@ firefox-mobile-bookmarklet-menu.js application/javascript
 		document.getElementsByTagName("head")[0].appendChild(e);
 	}
 	function createMenu(){
-		appendStylesheet("#fmbm-menu-button{border:thin solid;width:30px;height:30px;background-color:gold; color:black;font-size:24px;font-family:serif;font-weight:bold;text-align:center;padding:initial; position:fixed;top:100px;right:0px;z-index:2147483647;} #fmbm-menu{display:inline-flex;flex-direction:column;background-color:gainsboro;position:fixed;top:100px;right:0px;z-index:2147483647;} #fmbm-menu > button {font-family:sans-serif;font-size:20px !important;border:thin solid !important;padding:0.5em 0.2em !important} .fmbm-hide{display:none !important;}");
+		appendStylesheet("#fmbm-menu-button{border:thin solid;width:30px;height:30px;background-color:gold; color:black;font-size:24px;font-family:serif;font-weight:bold;text-align:center;padding:initial; position:fixed;top:100px;right:0px;z-index:2147483647;} #fmbm-menu{display:inline-flex;flex-direction:column;background-color:gainsboro;position:fixed;top:100px;right:0px;z-index:2147483647;} #fmbm-menu > button {font-family:sans-serif;font-size:20px !important;border:thin solid !important;padding:0.4em 0.2em !important} #fmbm-about{font-size:15px !important} .fmbm-hide{display:none !important;}");
 		function createMenuButton(){
 			let btnId = "fmbm-menu-button";
 			if (document.getElementById(btnId)){ return; }
@@ -79,7 +89,9 @@ firefox-mobile-bookmarklet-menu.js application/javascript
 								+ '</button>';
 				});
 				html += '<button id="fmbm-menu-close">Close</button>'
-							+ '<button id="fmbm-menu-exit">Exit</button>';
+							+ '<button id="fmbm-menu-exit">Exit</button>'
+							+ '<div id="fmbm-about">'+appName+' '+appVer+'</div>'
+							;
 				let menu = document.createElement("div");
 				menu.id = "fmbm-menu";
 				menu.innerHTML = html;
