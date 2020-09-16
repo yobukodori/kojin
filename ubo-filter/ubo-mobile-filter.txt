@@ -25,6 +25,7 @@ jiji.com###Wrapper > aside
 mainichi.jp###bottom-share
 mainichi.jp###series-btn
 ||performgroup.com^$script,domain=mainichi.jp
+||cdn.mainichi.jp/*/ad/*$script,1p
 
 ! 47news.jp
 ||www.47news.jp/js/ban_pinchi_in_out.js$script,domain=www.47news.jp
