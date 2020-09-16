@@ -1,6 +1,6 @@
 hello.js application/javascript
 (function() {
-	 alert("hello");
+	alert("hello");
 })();
 
 
