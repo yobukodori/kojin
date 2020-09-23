@@ -12,12 +12,20 @@
 <h3>テキスト暗号化</h3>
 Passphrase (128/196/256 bits):<input type="text" id="passphrase" size="64" /><br />
 Initailization vector (IV 128 bits):<input type="text" id="iv" size="64" /><br />
+<div>
 <textarea id="plaintext" rows="5" cols="80"></textarea><br />
-<input type="button" id="encrypt" value="Encrypt" /><br />
+<button id="encrypt">Encrypt</button>
+</div>
+<div>
 Chipper text:<br />
 <textarea id="chipper-text" class="text-string" rows="8" cols="80"></textarea><br />
+<button id="decrypt">Decrypt</button>
+<button id="copy-chipper-text-to-clipboard">Copy Chipper Text To Clipboard</button>
+</div>
 Decrypted text<br />
-<textarea id="decrypted-text" class="text-string" rows="5" cols="80"></textarea><br />
+<div>
+<textarea id="decrypted-text" class="text-string" rows="5" cols="80"></textarea>
+</div>
 <script type='text/javascript'>
 
 (function (){
@@ -35,11 +43,21 @@ Decrypted text<br />
 		let option = {iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7},
 			encrypted = CryptoJS.AES.encrypt(plaintext, passphrase, option);
 		d.getElementById("chipper-text").value = encrypted.toString();
-		// decrypt
+	});
+	d.getElementById("decrypt").addEventListener("click", function(){
+		let passphrase = CryptoJS.enc.Utf8.parse(d.getElementById("passphrase").value),
+			iv = CryptoJS.enc.Utf8.parse(d.getElementById("iv").value);
+		let option = {iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7};
 		let chipperText = d.getElementById("chipper-text").value,
 			decrypted = CryptoJS.AES.decrypt(chipperText, passphrase, option);
 			console.log("chipperText="+chipperText);
 		d.getElementById("decrypted-text").value = decrypted.toString(CryptoJS.enc.Utf8);
+	});
+	d.getElementById("copy-chipper-text-to-clipboard").addEventListener("click", function(){
+		let ta = document.getElementById('chipper-text');
+		ta.select();
+		document.execCommand("copy");
+		ta.selectionEnd = ta.selectionStart;
 	});
 })();
 
