@@ -20,6 +20,8 @@
 jiji.com##div.menubutton
 jiji.com##nav.menu
 jiji.com###Wrapper > aside
+jiji.com##^iframe
+jiji.com##^script:has-text(createElement('iframe'))
 
 ! mainichi.jp
 mainichi.jp###bottom-share
@@ -32,6 +34,7 @@ mainichi.jp###series-btn
 ||www.youtube.com^$subdocument,script,important,domain=www.47news.jp
 ||softbank.jp^$script,domain=www.47news.jp
 ||ytimg.com^$script,domain=www.47news.jp
+www.47news.jp##^#\34 7news-billboard
 
 ! this.kiji.is (47news)
 this.kiji.is##div.page__header
