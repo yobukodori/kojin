@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.1.16
+ * title: news link fix v.0.1.17
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -100,6 +100,9 @@
 		"www.yomiuri.co.jp": {
 		},
 		"www.47news.jp": {
+			isTarget: function(e){
+				return ! e.classList.contains("hvr-sweep-to-top");
+			},
 			fixLink: function(e, href){
 				'use strict';
 				let attr = e.getAttribute("style");
@@ -422,18 +425,24 @@
 			if (! e.classList.contains(fixedSig)){
 				e.classList.add(fixedSig);
 				let href = e.getAttribute("href");
-				if (href && href.charAt(0) !== "#"){
+				if (href && ! /^(javascript|blob|data):/.test(href) && href.charAt(0) !== "#"){
 					if (! sd || ! sd.isTarget || sd.isTarget(e)){
 						newtab(e);
 						underline(e);
+						if (fixed[href]){
+							e.style.backgroundColor = "gray";
+						}
+						else {
+							fixed[href] = true;
+							if (sd && sd.fixLink)
+								sd.fixLink(e, href);
+						}
 					}
-					if (sd && sd.fixLink)
-						sd.fixLink(e, href);
 				}
 			}
 		}
 	}
-	let d = document, fixedSig = "ybkdr-link-fixed";
+	let d = document, fixedSig = "ybkdr-link-fixed", fixed = {};
 	let sd = siteData[d.location.hostname.toLowerCase()];
 	if (sd && sd.preprocess)
 		sd.preprocess();
