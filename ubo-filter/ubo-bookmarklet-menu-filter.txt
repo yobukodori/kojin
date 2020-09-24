@@ -2,26 +2,26 @@
 ! Description: for personal use.
 
 ! bookmarklet menu
-www.jiji.com##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-www.47news.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-news.yahoo.co.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-news.livedoor.com##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-news.nifty.com##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-news.goo.ne.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-www.excite.co.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-mainichi.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-www.yomiuri.co.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-jp.mobile.reuters.com##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-www.cnn.co.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
-www.bbc.com##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.jiji.com##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.47news.jp##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+news.yahoo.co.jp##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+news.livedoor.com##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+news.nifty.com##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+news.goo.ne.jp##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.excite.co.jp##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+mainichi.jp##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.yomiuri.co.jp##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+jp.mobile.reuters.com##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.cnn.co.jp##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+www.bbc.com##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
 
 ! google link fix
-google.com,google.co.jp##+js(firefox-mobile-bookmarklet-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
+google.com,google.co.jp##+js(script-menu,にりふ,https://yobukodori.github.io/kojin/script/news-link-fix.js)
 
 ! てんけつ
-weathernews.jp##+js(firefox-mobile-bookmarklet-menu,てんけつ,https://yobukodori.github.io/kojin/script/tenketsu.js)
+weathernews.jp##+js(script-menu,てんけつ,https://yobukodori.github.io/kojin/script/tenketsu.js)
 
 !
-5ch.net##+js(firefox-mobile-bookmarklet-menu,ページ先頭,javascript:window.scrollTo(0\,0))
-5ch.net##+js(firefox-mobile-bookmarklet-menu,ページ末尾,javascript:window.scrollTo(0\,document.body.scrollHeight))
+5ch.net##+js(script-menu,ページ先頭,fmsm:scroll-to-page-top)
+5ch.net##+js(script-menu,ページ末尾,fmsm:scroll-to-page-bottom)
 
