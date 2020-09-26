@@ -21,17 +21,27 @@ twitter.com##div[data-testid="UserCell"]:has(path[d^="M20.75 2H3.25C2.007"])
 ! sidebarColumn のおすすめトレンド内プロモーションを消す
 twitter.com##div[data-testid="sidebarColumn"] h1[aria-level="1"] + div > div > div > div > div:has(path[d^="M20.75 2H3.25C2.007"])
 
-! primaryColumn のおすすめユーザーを消す
+! primaryColumn のおすすめ何とかのヘッダを消す
 twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(h2[role="heading"])
-twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(div[data-testid="UserCell"])
-twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href^="/i/related_users/"])
-twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href^="/who_to_follow/"])
-twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href="/i/connect_people"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(h2[role="heading"])
+
+! primaryColumn のおすすめユーザーを消す
+twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(div[data-testid="UserCell"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(div[data-testid="UserCell"])
-twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/related_users/"])
-twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/who_to_follow/"])
+
+! primaryColumn のおすすめユーザーのさらに表示を消す
+twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href="/i/connect_people"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/connect_people"])
+! 以前は下記だったが上記に完全移行したかな？
+! twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href^="/i/related_users/"])
+! twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href^="/who_to_follow/"])
+! twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/related_users/"])
+! twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/who_to_follow/"])
+
+! おすすめトピックを消す
+twitter.com##a[aria-labelledby*="topic-not-interested"]
+! その他のトピックを消す
+twitter.com##a[href="/i/flow/topics_selector"]
 
 ! primaryColumn のトピックをフォローを消す
 twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(path[d^="M18.265 3.314c-3.45-3.45"])
