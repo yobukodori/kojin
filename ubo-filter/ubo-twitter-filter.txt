@@ -34,7 +34,7 @@ twitter.com##div[aria-label="タイムライン: ホームタイムライン"] >
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(div[data-testid="UserCell"])
 
 ! primaryColumn のおすすめユーザーのさらに表示を消す
-twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href="/i/connect_people"])
+twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href^="/i/connect_people"])
 twitter.com##div[aria-label$="さんのツイート"] > div > div > div:has(a[href^="/i/connect_people"])
 ! 以前は下記だったが上記に完全移行したかな？
 ! twitter.com##div[aria-label="タイムライン: ホームタイムライン"] > div > div > div:has(a[href^="/i/related_users/"])
