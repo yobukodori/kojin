@@ -15,6 +15,12 @@
 ||connect.facebook.net^$third-party
 ||platform.twitter.com^$third-party
 
+! google link fix
+google.com,google.co.jp##+js(google-link-fix)
+
+! ================================
+!  ニュースサイト
+! ================================
 ! jiji.com
 ||appspot.com^$subdocument,domain=jiji.com
 jiji.com##div.menubutton
@@ -23,18 +29,13 @@ jiji.com###Wrapper > aside
 jiji.com##^iframe
 jiji.com##^script:has-text(createElement('iframe'))
 
-! mainichi.jp
-mainichi.jp###bottom-share
-mainichi.jp###series-btn
-||performgroup.com^$script,domain=mainichi.jp
-||cdn.mainichi.jp/*/ad/*$script,1p
-
 ! 47news.jp
 ||www.47news.jp/js/ban_pinchi_in_out.js$script,domain=www.47news.jp
 ||www.youtube.com^$subdocument,script,important,domain=www.47news.jp
 ||softbank.jp^$script,domain=www.47news.jp
 ||ytimg.com^$script,domain=www.47news.jp
-www.47news.jp##^#\34 7news-billboard
+! トップ冒頭ad
+www.47news.jp###\34 7news-billboard
 
 ! this.kiji.is (47news)
 this.kiji.is##div.page__header
@@ -46,6 +47,42 @@ this.kiji.is##div.page__curatedBy
 this.kiji.is##div.page__gdpr
 ||fonts.gstatic.com^$font,domain=this.kiji.is
 ||use.fontawesome.com^$stylesheet,domain=this.kiji.is
+! 記事本文上部広告とSNS
+this.kiji.is##.main__adWrapper
+this.kiji.is##.main__share
+
+! news.yahoo.co.jp
+news.yahoo.co.jp##.topics_item-normal .topics_item_thumbnail
+news.yahoo.co.jp##.newsFeed_item_thumbnail
+news.yahoo.co.jp##ul.bd .thumbnail
+!news.yahoo.co.jp##^.yjnSub_list_thumbnail
+news.yahoo.co.jp##div.widePic
+news.yahoo.co.jp##.topics_item_comment
+news.yahoo.co.jp###ycCountBtn
+news.yahoo.co.jp###socialComments
+news.yahoo.co.jp###news-survey-plugin
+news.yahoo.co.jp###topicsEvalMod
+news.yahoo.co.jp##.thumb
+headlines.yahoo.co.jp###comment-count-00
+headlines.yahoo.co.jp###comModule
+headlines.yahoo.co.jp##.listPaneltype-cont-img
+headlines.yahoo.co.jp##.thum
+headlines.yahoo.co.jp##.listModBoxWrapLarge div.yvpub-player
+||c.yimg.jp^$image,domain=headlines.yahoo.co.jp
+||yimg.jp^$script,domain=headlines.yahoo.co.jp
+! 2020/5/28
+news.yahoo.co.jp###comment-count
+||news.yahoo.co.jp/comment/*$xhr,domain=news.yahoo.co.jp
+! 記事を非表示関連
+news.yahoo.co.jp##div.newsFeed_item_dislike_balloon-close + div
+news.yahoo.co.jp##li.newsFeed_item a[href="javascript:void(0)"]
+! 記事本文の冒頭写真
+news.yahoo.co.jp##.articleMainImage
+! 記事本文の冒頭SNS
+news.yahoo.co.jp##.articleBody #fixedSNS
+
+! nifty
+news.nifty.com##.article_sns_share
 
 ! news.goo.ne.jp
 news.goo.ne.jp###smartbanner
@@ -60,29 +97,26 @@ news.goo.ne.jp##^script:has-text($('#overlay_app_dl'))
 ||sports-digican.com^$stylesheet,domain=news.goo.ne.jp
 ||fontawesome.com^$stylesheet,domain=news.goo.ne.jp
 
-! news.yahoo.co.jp
-news.yahoo.co.jp##.topics_item-normal .topics_item_thumbnail
-news.yahoo.co.jp##.newsFeed_item_thumbnail
-news.yahoo.co.jp##ul.bd .thumbnail
-!news.yahoo.co.jp##^.yjnSub_list_thumbnail
-news.yahoo.co.jp##div.widePic
-news.yahoo.co.jp##.topics_item_comment
-news.yahoo.co.jp###ycCountBtn
-news.yahoo.co.jp###socialComments
-news.yahoo.co.jp###news-survey-plugin
-news.yahoo.co.jp###topicsEvalMod
-news.yahoo.co.jp##.thumb
-||c.yimg.jp^$image,domain=news.yahoo.co.jp
-headlines.yahoo.co.jp###comment-count-00
-headlines.yahoo.co.jp###comModule
-headlines.yahoo.co.jp##.listPaneltype-cont-img
-headlines.yahoo.co.jp##.thum
-headlines.yahoo.co.jp##.listModBoxWrapLarge div.yvpub-player
-||c.yimg.jp^$image,domain=headlines.yahoo.co.jp
-||yimg.jp^$script,domain=headlines.yahoo.co.jp
-! 2020/5/28
-news.yahoo.co.jp###comment-count
-||news.yahoo.co.jp/comment/*$xhr,domain=news.yahoo.co.jp
+! www.excite.co.jp/news/
+www.excite.co.jp##section.digest
+
+! mainichi.jp
+mainichi.jp###bottom-share
+mainichi.jp###series-btn
+||performgroup.com^$script,domain=mainichi.jp
+||cdn.mainichi.jp/*/ad/*$script,1p
+
+! reuters.com
+||www.youtube.com^$subdocument,script,important,domain=reuters.com
+||evidon.com^$script,domain=reuters.com
+reuters.com##div.GetTheAppBanner_get-the-app-banner
+
+! www.cnn.co.jp
+www.cnn.co.jp###gdpr_area
+||twitter.com^$script,domain=www.cnn.co.jp
+
+! news.biglobe.ne.jp
+news.biglobe.ne.jp##div.boxImg02
 
 ! google news
 news.google.com##article > figure
@@ -96,24 +130,12 @@ news.google.com##article > figure
 ||r10s.jp^$script,domain=news.infoseek.co.jp
 ||r10s.to^$script,domain=news.infoseek.co.jp
 
-! www.excite.co.jp/news/
-www.excite.co.jp##section.digest
-
-! news.biglobe.ne.jp
-news.biglobe.ne.jp##div.boxImg02
-
 ! lite-ra.com
 lite-ra.com##div.ad
 
-! www.cnn.co.jp
-www.cnn.co.jp###gdpr_area
-||twitter.com^$script,domain=www.cnn.co.jp
-
-! reuters.com
-||www.youtube.com^$subdocument,script,important,domain=reuters.com
-||evidon.com^$script,domain=reuters.com
-reuters.com##div.GetTheAppBanner_get-the-app-banner
-
+! ================================
+!  天気
+! ================================
 ! weather.nifty.com
 weather.nifty.com###weeklyWeather tbody > tr > th:nth-child(1)
 weather.nifty.com###mainPinPoint div[id] > h3:nth-child(-n+5)
@@ -157,13 +179,13 @@ weather.yahoo.co.jp##article:has(.imaten)
 weather.yahoo.co.jp##aside + section:has(#index2days)
 weather.yahoo.co.jp###wthimg
 
+! ================================
+!  
+! ================================
 ! reddit.com
 reddit.com##body.scroll-disabled:style(overflow: visible!important; position: static!important;)
 reddit.com##.XPromoPopup
 reddit.com##.xPromoAppStoreFooter
-
-! google link fix
-google.com,google.co.jp##+js(google-link-fix)
 
 ! itest.5ch.net
 itest.5ch.net##li.ad
