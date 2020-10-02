@@ -80,6 +80,12 @@ news.yahoo.co.jp##li.newsFeed_item a[href="javascript:void(0)"]
 news.yahoo.co.jp##.articleMainImage
 ! 記事本文の冒頭SNS
 news.yahoo.co.jp##.articleBody #fixedSNS
+! 記事本文冒頭のヤフコメ
+news.yahoo.co.jp##.viewableWrap:has(> #viewable_comment_appeal_header)
+! 記事本文下部のヤフコメ
+news.yahoo.co.jp##.news-comment-plugin
+! 記事解説のヤフコメ数表示
+news.yahoo.co.jp##.pickupMain_comment
 
 ! nifty
 news.nifty.com##.article_sns_share
