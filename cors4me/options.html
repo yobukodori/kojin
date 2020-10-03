@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style type="text/css">
+
+body{
+	background-color: #f8f8f8;
+}
+
+form.pc, form input.pc, form button.pc, #log.pc {
+	font-size: large;
+}
+
+form.mobile, form input.mobile, form button.mobile, #log.mobile {
+	font-size: x-large;
+}
+
+form input[type="text"], form textarea {
+	font-family: inherit;
+	font-size: inherit;
+}
+
+#appliedUrls, #userAgent {
+	width: 100%;
+	word-break: break-all;
+}
+
+#toggle.on {
+	background-color: yellow;
+}
+
+#toggle.off {
+	background-color: gray;
+	font-weight: bold;
+	color: yellow;
+	border-color: black;
+}
+
+</style>
+</head>
+<body>
+	<form>
+		<div>
+			<input type="checkbox" id="enableAtStartup">
+			<label for="enableAtStartup">Enable at startup</label>
+            <input type="checkbox" id="printDebugInfo">
+            <label for="printDebugInfo">Print debug info</label>
+		</div>
+		<div style="border-style:solid;padding:0px 5px 5px;border-width:thin">
+				Applied URLs (Comma-Separated URL patterns)<br/>
+				e.g. *://*.a.com/*, *://*.b.com/*<br/>
+				ref. https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Match_patterns<br/>
+				<textarea id="appliedUrls" rows="3">https://www.jiji.com/*,https://www.47news.jp/*,https://news.yahoo.co.jp/*,https://news.livedoor.com/*,https://news.nifty.com/*,https://jp.mobile.reuters.com/*,https://www.cnn.co.jp/*,https://www.bbc.com/japanese/*</textarea>
+		</div>
+		<div style="border-style:solid;padding:0px 5px 5px;border-width:thin">
+				User-Agent (Optional)<br/>
+				<textarea id="userAgent" rows="3">Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0</textarea>
+		</div>
+		<div style="margin-top:5px;">
+			<button type="submit">Save</button>
+			<button type="button" id="apply">Apply</button>
+			| <button type="button" id="getStatus">Get Status</button>
+			<button type="button" id="toggle">Toggle On/Off</button>
+		</div>
+		<div id="log">dummy for<br/><br/><br/><br/><br/><br/>
+			<br/><br/><br/>android</div>
+	</form>
+	<script src="util.js"></script>
+	<script src="options.js"></script>
+</body>
+</html>
