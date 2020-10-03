@@ -102,10 +102,7 @@ function onDOMContentLoaded()
 	};
 	let e = document.querySelectorAll("form, form input, form textarea, form button, #log");
 	for (let i = 0 ; i < e.length ; i++){
-		let cn = e[i].className;
-		if (typeof cn !== "string")
-			cn = "";
-		e[i].className = cn + (g_is_pc ? " pc" : " mobile");
+		e[i].classList.add("mobile");
 	}
 	
 }
