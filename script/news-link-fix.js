@@ -172,7 +172,7 @@
 							let b, s, r, p, c;
 							(b = str_find_block(html,'class="pickupMain_articleTitle_text">','<')) && !b.error && (title = html.substring(b.first,b.last)) && (p = e.querySelector('.topics_item_title')) && (p.innerText = decodeEntities(title).replace(/\u3000/g," "));
 						}
-						let sig = 'class="pickupMain_detailLink', i = html.indexOf(sig), r;
+						let sig = 'class="pickupMain_articleTitle', i = html.indexOf(sig), r;
 						i != -1 && (r = html.substring(i + sig.length, html.indexOf('data-ual-gotocontent', i + sig.length)).match('href="(.+?)"')) && (e.href = r[1]);
 						let parent = e.querySelector('div.topics_item_sub'), b, src, span;
 						(b = str_find_block(html,'class="pickupMain_media">','<')) && !b.error && (src = html.substring(b.first,b.last)) && parent &&  (span = d.createElement("span")) && (span.className = "newsFeed_item_media") && (span.setAttribute("style","vertical-align: bottom"),!0) && (span.innerText = src) && parent.appendChild(span);
