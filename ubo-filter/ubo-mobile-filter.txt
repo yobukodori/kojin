@@ -15,9 +15,6 @@
 ||connect.facebook.net^$third-party
 ||platform.twitter.com^$third-party
 
-! google link fix
-google.com,google.co.jp##+js(google-link-fix)
-
 ! ================================
 !  ニュースサイト
 ! ================================
