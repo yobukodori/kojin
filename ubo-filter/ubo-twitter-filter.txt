@@ -60,7 +60,7 @@ twitter.com##div[aria-label="タイムライン: ホームタイムライン"] >
 ! twitter.com##div[aria-label="タイムライン: リスト"] > div[style*="padding-bottom"] > div:first-child > div:first-child > div:first-child > div:first-child:style(height:0)
 
 ! 検索文字列の先読み補完がもたつくのでブロック
-||api.twitter.com/*/search/typeahead.json$xmlhttprequest,first-party
+||twitter.com/i*/search/typeahead.json$xhr,1p
 
 ! トレンドの更新をブロック
 ! ||api.twitter.com/*/guide.json$xmlhttprequest,first-party
