@@ -204,10 +204,23 @@
 			}
 		},
 		"news.livedoor.com": {
+			fixEveryTime: true,
+			cache: {},
             queue: [],
             runned: 0,
             running: 0,
             error: 0,
+			fixIt: function(e, art){
+				let p = e.querySelector('.article-list-headline-title') || e.querySelector('.article-title'); 
+				if (p){
+					art.ng && (e.style.backgroundColor = "gray");
+					art.ng ? (p.innerText = "(省略)") : (art.title && (p.innerText = art.title));
+					if (art.src){
+						let c = d.createElement("div");
+						(c.innerText = " "+art.src) && (c.style.fontSize = "small") && p.appendChild(c);
+					}
+				}
+			},
 			fetchIt: async function(){
 				'use strict';
 				const initialRunning = 30, verbose = false;
@@ -220,6 +233,10 @@
 						await sleep(delay);
 					}
 					let context = this, e = this.queue.shift();
+					if (this.cache[e.href]){
+						this.fixIt(e, this.cache[e.href]);
+						setTimeout(function(){ context.fetchIt(); }, 0);
+					}
 					if (verbose) console.log(this.runned, "fetch", e.href, e.innerText.replace(/\s+/g,' '));
 					this.runned++, this.running++,
 					timeout(30*1000, fetch(e.href)
@@ -232,37 +249,36 @@
 						})
 						.then(function(buffer) {
 							let html = new TextDecoder("utf-8").decode(buffer);
-							let src = "n/a", s, r, b = str_find_block(html, '<meta charset="', '"');
+							let s, r, b = str_find_block(html, '<meta charset="', '"');
 							if (! b.error){
 								let charset = html.substring(b.first,b.last);
 								if (charset.toLowerCase() !== "utf-8"){
 									html = new TextDecoder(charset).decode(buffer);
 								}
 							}
+							let art = { title:"", src:"" };
 							{
-								let title = "n/a";
 								let b, s, r, p, c;
-								(b = str_find_block(html,'class="article-header-contents">','</div>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/>(.+?)</)) && (title = r[1]) && ((p = e.querySelector('.article-list-headline-title')) || (p = e.querySelector('.article-title'))) && (p.innerText = decodeEntities(title).replace(/\u3000/g," "));
+								(b = str_find_block(html,'class="article-header-contents">','</div>')) && !b.error && (s = html.substring(b.first,b.last)) && (r = s.match(/>(.+?)</)) && (art.title = decodeEntities(r[1]).replace(/\u3000/g," "));
 							}
 							if ((b = str_find_block(html, 'pubdate="pubdate">', '</time>')), !b.error){
-								src = html.substring(b.first,b.last);
+								art.src = html.substring(b.first,b.last);
 								if ((b = str_find_block(html, '<p class="venderLogo">', '</p>')), !b.error){
 									if (r = html.substring(b.first,b.last).match(/alt="(.+)"/))
-										src = r[1] + " " + src;
+										art.src = r[1] + " " + art.src;
 								}
 								else if ((b = str_find_block(html, 'class="outer-link-vender">', '</span>')), !b.error){
-									src = html.substring(b.first,b.last)+" "+src;
+									art.src = html.substring(b.first,b.last)+" "+art.src;
 								}
+								art.ng = /スポーツ報知|スポーツアネックス|スポニチアネックス|東スポWeb|Smart FLASH|デイリースポーツ|日刊スポーツ|サーチナ/.test(art.src);
 							}
-							if (src){
-								let p, c = d.createElement("div");
-								(c.innerText = " "+src) && (c.style.fontSize = "small") && ((p = e.querySelector('.article-list-headline-title')) || (p = e.querySelector('.article-title'))) && p.appendChild(c);
-							}
+							context.cache[e.href] = art;
+							context.fixIt(e, art);
 							context.running--;
 							context.fetchIt();
 						})
-						.catch(function(e){
-							console.log(e);
+						.catch(function(err){
+							console.log(err);
 							context.running--;
 							context.fetchIt();
 						})
@@ -429,14 +445,9 @@
 					if (! sd || ! sd.isTarget || sd.isTarget(e)){
 						newtab(e);
 						underline(e);
-						if (fixed[href]){
-							e.style.backgroundColor = "gray";
-						}
-						else {
-							fixed[href] = true;
-							if (sd && sd.fixLink)
-								sd.fixLink(e, href);
-						}
+						fixed[href] && (e.style.backgroundColor = "darkgray");
+						sd && sd.fixLink && (! fixed[href] || sd.fixEveryTime) && sd.fixLink(e, href);
+						! fixed[href] && (fixed[href] = true);
 					}
 				}
 			}
