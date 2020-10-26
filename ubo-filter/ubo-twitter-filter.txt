@@ -66,10 +66,10 @@ twitter.com##div[aria-label="タイムライン: ホームタイムライン"] >
 ! ||api.twitter.com/*/guide.json$xmlhttprequest,first-party
 
 ! 閲覧に支障がないと思われる余分な通信はブロック
-||api.twitter.com/*/jot/client_event.json$xmlhttprequest,first-party
-||api.twitter.com/*/live_pipeline/update_subscriptions$xmlhttprequest,first-party
-||twitter.com/i/csp_report$xmlhttprequest,first-party
-!||api.twitter.com/*/jot/error_log.json$xmlhttprequest,first-party
+||api.twitter.com/*/jot/client_event.json$xhr,1p
+||api.twitter.com/*/live_pipeline/update_subscriptions$xhr,1p
+||api.twitter.com/*/jot/error_log.json$xhr,1p
+||twitter.com/i/csp_report$xhr,1p
 
 !#if env_mobile
 
