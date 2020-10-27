@@ -270,7 +270,7 @@
 								else if ((b = str_find_block(html, 'class="outer-link-vender">', '</span>')), !b.error){
 									art.src = html.substring(b.first,b.last)+" "+art.src;
 								}
-								art.ng = /スポーツ報知|スポーツアネックス|スポニチアネックス|東スポWeb|Smart FLASH|デイリースポーツ|日刊スポーツ|サーチナ/.test(art.src);
+								art.ng = /スポーツ報知|スポーツアネックス|スポニチアネックス|東スポWeb|Smart FLASH|デイリースポーツ|日刊スポーツ|サーチナ|リアルライブ|Techinsight|スポーツソウル日本版/.test(art.src);
 							}
 							context.cache[e.href] = art;
 							context.fixIt(e, art);
