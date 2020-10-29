@@ -101,7 +101,7 @@
 		},
 		"www.47news.jp": {
 			isTarget: function(e){
-				return ! e.classList.contains("hvr-sweep-to-top");
+				return /\d{7}|showcases\.html/.test(e.href);
 			},
 			fixLink: function(e, href){
 				'use strict';
@@ -138,7 +138,8 @@
 					});
 					return false;
 				}
-				return true;
+				//https://news.goo.ne.jp/topstories/politics/goo/59f568603b0ad383137a42c0fd0f34e1.html
+				return /[a-f\d]{20,}/.test(e.href);
 			},
 			fixLink: function(e, href){
 				'use strict';
@@ -169,6 +170,7 @@
 					.then(function(html) {
 						let b, p, title, src, href;
 						{
+							(b = str_find_block_r(html,'<a ','<h2')) && !b.error && (b = str_find_block(html,'href="','"',b.first)) && !b.error && (href = html.substring(b.first,b.last));
 							(b = str_find_block_r(html,'>','</h2>')) && !b.error && (title = html.substring(b.first,b.last));
 							title && (b = str_find_block_r(html,'>','</span>', b.next)) && !b.error && (src = html.substring(b.first,b.last))
 						}
@@ -193,7 +195,14 @@
 		"jp.mobile.reuters.com": {
 			postprocess: function(){
 				$("a").each(function(){$(this).off('click')});
+			},
+			isTarget: function(e){
+				return /\/id[A-Z\d]{10,}$/.test(e.href);
 			}
+		},
+		"www.cnn.co.jp": {
+		},
+		"www.bbc.com": {
 		},
 		"news.infoseek.co.jp": {
 			fixLink: function(e, href){
@@ -317,6 +326,9 @@
 			}
 		},
 		"www.excite.co.jp": {
+			isTarget: function(e){
+				return /news\/article\/.+/.test(e.href);
+			},
 			fixLink: function(e, href){
 				'use strict';
 				if (e.href.includes('/news/article/')){
@@ -451,7 +463,7 @@
 				e.classList.add(fixedSig);
 				let href = e.getAttribute("href");
 				if (href && ! /^(javascript|blob|data):/.test(href) && href.charAt(0) !== "#"){
-					if (! sd || ! sd.isTarget || sd.isTarget(e)){
+					if (! sd || (sd.isTarget && sd.isTarget(e)) || /\d{5,}/.test(href)){
 						newtab(e);
 						underline(e);
 						fixed[href] && (e.style.backgroundColor = "darkgray");
