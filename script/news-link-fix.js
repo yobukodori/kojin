@@ -196,6 +196,7 @@
 							let parent = e.querySelector('div.topics_item_sub'), span;
 							parent &&  (span = d.createElement("span")) && (span.className = "newsFeed_item_media") && (span.setAttribute("style","vertical-align: bottom"),!0) && (span.innerText = art.src) && parent.appendChild(span);
 						}
+						art.ng && (e.style.backgroundColor = "gray");
 					})
 					.catch(err=>{
 						console.log("catch:",err);
@@ -260,6 +261,7 @@
 						(c.innerText = " "+art.src) && (c.style.fontSize = "small") && p.appendChild(c);
 					}
 				}
+				art.ng && (e.style.backgroundColor = "gray");
 			},
 			fetchIt: async function(){
 				'use strict';
