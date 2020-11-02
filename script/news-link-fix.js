@@ -171,9 +171,30 @@
 			}
 		},
 		"news.yahoo.co.jp": {
+			fixEveryTime: true,
+			cache: {},
+			fixIt: function(e, art){
+				if (art.title){
+					let p = e.querySelector('.topics_item_title');
+					p && (p.innerText = decodeEntities(art.title).replace(/\u3000/g," "));
+				}
+				if (art.href){
+					e.href = art.href;
+				}
+				if (art.src){
+					let parent = e.querySelector('div.topics_item_sub'), span;
+					parent &&  (span = d.createElement("span")) && (span.className = "newsFeed_item_media") && (span.setAttribute("style","vertical-align: bottom"),!0) && (span.innerText = art.src) && parent.appendChild(span);
+				}
+				art.ng && (e.style.backgroundColor = "gray");
+			},
 			fixLink: function(e, href){
 				'use strict';
 				if (/\/pickup\/\d+/.test(e.href)){
+					if (this.cache[e.href]){
+						this.fixIt(e, this.cache[e.href]);
+						return;
+					}
+					let context = this;
 					fetch(e.href, {mode:"no-cors"})
 					.then(function(response) {
 						return response.text();
@@ -186,17 +207,8 @@
 							art.title && (b = str_find_block_r(html,'>','</span>', b.next)) && !b.error && (art.src = html.substring(b.first,b.last))
 						}
 						art = censor(art);
-						if (art.title){
-							(p = e.querySelector('.topics_item_title')) && (p.innerText = decodeEntities(art.title).replace(/\u3000/g," "));
-						}
-						if (art.href){
-							e.href = art.href;
-						}
-						if (art.src){
-							let parent = e.querySelector('div.topics_item_sub'), span;
-							parent &&  (span = d.createElement("span")) && (span.className = "newsFeed_item_media") && (span.setAttribute("style","vertical-align: bottom"),!0) && (span.innerText = art.src) && parent.appendChild(span);
-						}
-						art.ng && (e.style.backgroundColor = "gray");
+						context.fixIt(e, art);
+						context.cache[e.href] = art;
 					})
 					.catch(err=>{
 						console.log("catch:",err);
