@@ -87,7 +87,7 @@
 	
 	function censor(art){
 		if (art.src){
-			art.ng = /スポーツ報知|スポーツアネックス|スポニチアネックス|東スポWeb|Smart FLASH|デイリースポーツ|日刊スポーツ|サーチナ|リアルライブ|Techinsight|スポーツソウル日本版|女性自身|ナリナリドットコム/.test(art.src);
+			art.ng = /スポーツ報知|スポーツアネックス|スポニチアネックス|東スポWeb|Smart FLASH|デイリースポーツ|日刊スポーツ|サーチナ|リアルライブ|Techinsight|スポーツソウル日本版|女性自身|ナリナリドットコム|オリコン/.test(art.src);
 		}
 		if (art.ng){
 			art.original = art.title;
