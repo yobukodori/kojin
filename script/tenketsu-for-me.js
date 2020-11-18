@@ -4,8 +4,7 @@
 
 	function corsAnywhere(url){
 		// using CORS for Me
-		return url;
-		//return "https://cors-anywhere.herokuapp.com/" + url;
+		return url; //return "https://cors-anywhere.herokuapp.com/" + url;
 	}
 	
 	function str_find_block(str, sig1, sig2, from)
