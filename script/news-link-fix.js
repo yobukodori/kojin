@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.2.1
+ * title: news link fix v.0.2.2
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -175,15 +175,15 @@
 			cache: {},
 			fixIt: function(e, art){
 				if (art.title){
-					let p = e.querySelector('.topics_item_title');
-					p && (p.innerText = decodeEntities(art.title).replace(/\u3000/g," "));
+					let p = e.querySelector('p');
+					p && (p.textContent = decodeEntities(art.title).replace(/\u3000/g," "));
 				}
 				if (art.href){
 					e.href = art.href;
 				}
 				if (art.src){
-					let parent = e.querySelector('div.topics_item_sub'), span;
-					parent &&  (span = d.createElement("span")) && (span.className = "newsFeed_item_media") && (span.setAttribute("style","vertical-align: bottom"),!0) && (span.innerText = art.src) && parent.appendChild(span);
+					let parent = e.querySelector('p + div'), span;
+					parent &&  (span = d.createElement("span")) && (span.className = "newsFeed_item_media") && (span.setAttribute("style","vertical-align: bottom"),!0) && (span.textContent = art.src) && parent.appendChild(span);
 				}
 				art.ng && (e.style.backgroundColor = "gray");
 			},
