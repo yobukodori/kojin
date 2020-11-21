@@ -91,7 +91,7 @@ news.yahoo.co.jp###comment-count
 news.yahoo.co.jp##div.newsFeed_item_dislike_balloon-close + div
 news.yahoo.co.jp##li.newsFeed_item a[href="javascript:void(0)"]
 ! 記事本文の冒頭写真
-news.yahoo.co.jp##.articleMainImage
+news.yahoo.co.jp##a[href$="/images/000"][data-ylk*="slk:thum"]
 ! 記事本文の冒頭SNS
 news.yahoo.co.jp##.articleBody #fixedSNS
 ! 記事本文冒頭のヤフコメ
