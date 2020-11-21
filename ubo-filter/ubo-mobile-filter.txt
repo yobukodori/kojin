@@ -60,6 +60,23 @@ news.yahoo.co.jp###socialComments
 news.yahoo.co.jp###news-survey-plugin
 news.yahoo.co.jp###topicsEvalMod
 news.yahoo.co.jp##.thumb
+! 大量に先読みするニュース写真をブロック
+||news-pctr.c.yimg.jp^$image,domain=news.yahoo.co.jp
+||amd-pctr.c.yimg.jp^$image,domain=news.yahoo.co.jp
+! サムネ要素を隠す
+news.yahoo.co.jp##li[data-ual]:not(:first-child) div.thumbnail
+news.yahoo.co.jp##li[data-ual] div.newsFeed_item_thumbnail
+! https://logql.yahoo.co.jp/v1/public/yql リクエストを出させない
+||yimg.jp/images/*/rapid-*.js$script,domain=news.yahoo.co.jp
+! よくわからないけどいらなさそうなスクリプト
+||yimg.jp/images/ds/*$script,domain=news.yahoo.co.jp
+||yimg.jp/yui/jp/smh/sp/*$script,domain=news.yahoo.co.jp
+! ヤフコメ関係いらない
+||news.yahoo.co.jp/comment/*$xhr,domain=news.yahoo.co.jp
+! 広告(offer)関連
+||mempf.yahoo.co.jp/v2/offer$script,domain=news.yahoo.co.jp
+! 1x1画像
+||news.yahoo.co.jp/cb_smp.gif$image,domain=news.yahoo.co.jp
 headlines.yahoo.co.jp###comment-count-00
 headlines.yahoo.co.jp###comModule
 headlines.yahoo.co.jp##.listPaneltype-cont-img
