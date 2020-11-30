@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>yobukodoriアドオン利用統計</title>
+<style type="text/css">
+table {
+	border-collapse:collapse;
+	border: solid;
+}
+th {
+	border: solid;
+}
+td {
+	text-align:right;
+	border: solid;
+}
+td.header {
+}
+</style>
+</head>
+<script src="script/mylib.js"></script>
+<body>
+
+<h1>yobukodoriアドオン利用統計</h1>
+<a href="https://addons.mozilla.org/ja/firefox/user/15200812/">yobukodori の拡張機能 - Mozilla</a><br />
+<div id="playes-links">
+<span>好玩网</span>
+</div>
+<div id="result">
+<table class="tg">
+<thead>
+  <tr>
+    <th></th>
+    <th>CORS for Me</th>
+    <th>CSP for Me</th>
+    <th>Script for Me</th>
+    <th>Script Menu</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="header">1日平均ユーザー数</td>
+    <td class="users cors-for-me moz"></td>
+    <td class="users csp-for-me moz"></td>
+    <td class="users script-for-me moz"></td>
+    <td class="users script-menu moz"></td>
+  </tr>
+  <tr>
+    <td class="header">レビュー数</td>
+    <td class="reviews cors-for-me moz"></td>
+    <td class="reviews csp-for-me moz"></td>
+    <td class="reviews script-for-me moz"></td>
+    <td class="reviews script-menu moz"></td>
+  </tr>
+  <tr>
+    <td class="header">評価</td>
+    <td class="rating cors-for-me moz"></td>
+    <td class="rating csp-for-me moz"></td>
+    <td class="rating script-for-me moz"></td>
+    <td class="rating script-menu moz"></td>
+  </tr>
+  <tr>
+    <td class="header">週間ダウンロード数</td>
+    <td class="downloads cors-for-me moz"></td>
+    <td class="downloads csp-for-me moz"></td>
+    <td class="downloads script-for-me moz"></td>
+    <td class="downloads script-menu moz"></td>
+  </tr>
+  <tr>
+    <td class="header">好玩网 ダウンロード数</td>
+    <td class="downloads cors-for-me playes"></td>
+    <td class="downloads csp-for-me playes"></td>
+    <td class="downloads script-for-me playes"></td>
+    <td class="downloads script-menu playes"></td>
+  </tr>
+  <tr>
+    <td class="header">好玩网 レビュー数<br></td>
+    <td class="reviews cors-for-me playes"></td>
+    <td class="reviews csp-for-me playes"></td>
+    <td class="reviews script-for-me playes"></td>
+    <td class="reviews script-menu playes"></td>
+  </tr>
+  <tr>
+    <td class="header">好玩网 評価<br></td>
+    <td class="rating cors-for-me playes"></td>
+    <td class="rating csp-for-me playes"></td>
+    <td class="rating script-for-me playes"></td>
+    <td class="rating script-menu playes"></td>
+  </tr>
+</tbody>
+</table>
+<span class="datetime"></span>
+</div>
+<script type='text/javascript'>
+document.addEventListener("DOMContentLoaded", ()=>{
+	let tab = document.querySelector('#result > table');
+	let url = "https://addons.mozilla.org/api/v4/addons/search/?app=firefox&appversion=85.0&author=15200812&page=1&page_size=10&sort=users&type=extension&lang=ja&wrap_outgoing_links=true";
+	fetch(corsAnywhere(url))
+	.then(res=>res.json())
+	.then(data=>{
+		console.log(data);
+		data.results.forEach(a=>{
+			let name = a.name.toLowerCase().replace(/\s/g,'-');
+			tab.querySelector('td.moz.users.' + name).textContent = a.average_daily_users;
+			tab.querySelector('td.moz.reviews.' + name).textContent = a.ratings.count;
+			tab.querySelector('td.moz.rating.' + name).textContent = a.ratings.average;
+			tab.querySelector('td.moz.downloads.' + name).textContent = a.weekly_downloads;
+		});
+	})
+	.catch(err=>{
+		console.log(err);
+	});
+	
+	let playes = {
+		"CORS for Me": {
+			url: "https://www.playes.net/chrome/308847.html",
+		},
+		"CSP for Me": {
+			url: "https://www.playes.net/chrome/309020.html",
+		},
+		"Script for Me": {
+			url: "https://www.playes.net/chrome/320038.html",
+		},
+		"Script Menu": {
+			url: "https://www.playes.net/chrome/320039.html",
+		},
+	};
+	let playesLinks = document.getElementById("playes-links");
+	Object.keys(playes).forEach(k=>{
+		let data = playes[k];
+		let name = k.toLowerCase().replace(/\s/g,'-'), url = data.url;
+		let a = document.createElement("a");
+		a.href = url, a.textContent = k, a.style.cssText = "margin-left:1em;";
+		playesLinks.appendChild(a);
+		fetch(url)
+		.then(res=>res.text())
+		.then(html=>{
+			let r, b = str_find_block(html, "<dl ", "</dl>");
+			if (b){
+				html.substring(b.first, b.last).split('</dt>').forEach(dt=>{
+					if  (r = dt.match(/<dt>下载：(\d+)/)){
+						tab.querySelector('td.playes.downloads.' + name).textContent = r[1];
+					}
+					else if  (r = dt.match(/<dt>评分：.+(\d+)$/)){
+						tab.querySelector('td.playes.reviews.' + name).textContent = r[1];
+						if  (r = dt.match(/data-rate='(.+?)'/)){
+							tab.querySelector('td.playes.rating.' + name).textContent = r[1];
+						}
+					}
+				});
+			}
+		});
+	});
+	document.querySelector(".datetime").textContent = new Date().toLocaleString();
+});
+</script>
+</body>
+</html>
