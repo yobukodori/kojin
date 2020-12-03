@@ -25,9 +25,17 @@
 		ro.error = "";
 		return ro;
 	}
-
-	if (! window.tenki_dir){
-		alert("tenki.jpの地域をwindow.tenki_dirに設定してください");
+	
+	let tenki_dir;
+	location.search.substring(1).split("&").forEach(param=>{
+		let i = param.indexOf("="), 
+			name = (i !== -1 ? param.substring(0, i) : ""), 
+			val = (i !== -1 ? decodeURIComponent(param.substring(i+1)) : null);
+		if (name === "tenki_dir")
+			tenki_dir = val;
+	});
+	if (! tenki_dir){
+		alert("tenki.jpの地域をURLのクエリに設定してください。../?tenki_dir=x/xx/xxxx/xxxxx");
 		return;
 	}
 	
@@ -44,7 +52,7 @@
 	}
 	
 	if (wn.hour){ 
-		fetch(corsAnywhere("https://tenki.jp/lite/forecast/"+window.tenki_dir+"/1hour.html"))
+		fetch(corsAnywhere("https://tenki.jp/lite/forecast/"+tenki_dir+"/1hour.html"))
 		.then(function(res){
 			return res.text();
 		})
@@ -101,7 +109,7 @@
 		});
 	}
 	
-	fetch(corsAnywhere("https://tenki.jp/lite/forecast/"+window.tenki_dir+"/10days.html"))
+	fetch(corsAnywhere("https://tenki.jp/lite/forecast/"+tenki_dir+"/10days.html"))
 	.then(function(res){
 		return res.text();
 	})
