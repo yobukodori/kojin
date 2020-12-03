@@ -1,5 +1,5 @@
 /*
- * title: iconic menu v.0.1.2
+ * title: iconic menu v.0.1.3
  * name: iconic.menu.js
  * author: yobukodori
 */
@@ -8,16 +8,16 @@
 	"use strict";
 	let d = document;
 	let pp = "", iv = "";
-	if (window.CryptoJS){
-		location.search.substring(1).split("&").forEach(param=>{
-			let i = param.indexOf("="), 
-				name = (i !== -1 ? param.substring(0, i) : ""), 
-				val = (i !== -1 ? decodeURIComponent(param.substring(i+1)) : null);
-			if (name === "pp")
-				pp = val;
-			else if (name === "iv")
-				iv = val;
-		});
+	location.search.substring(1).split("&").forEach(param=>{
+		let i = param.indexOf("="), 
+			name = (i !== -1 ? param.substring(0, i) : ""), 
+			val = (i !== -1 ? decodeURIComponent(param.substring(i+1)) : null);
+		if (name === "pp")
+			pp = val;
+		else if (name === "iv")
+			iv = val;
+	});
+	if (pp && iv && window.CryptoJS){
 		let passphrase = CryptoJS.enc.Utf8.parse(pp);
 		let option = {iv: CryptoJS.enc.Utf8.parse(iv), mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7};
 		iconicMenu.items.forEach(item=>{
@@ -79,7 +79,7 @@
 			e.className = "item";
 			d.getElementById("iconic-menu-container").appendChild(e);
 	});
-	if (pp || iv){
+	if (pp && iv){
 		let qs = "?pp=" + encodeURIComponent(pp) + "&iv=" + encodeURIComponent(iv);
 		let ee = d.querySelectorAll("a.item-url");
 		for (let i = 0 ; i < ee.length ; i++){
