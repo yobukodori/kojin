@@ -30,6 +30,15 @@ Decrypted text<br />
 
 (function (){
 	let d = document;
+	location.search.substring(1).split("&").forEach(param=>{
+		let i = param.indexOf("="), 
+			name = (i !== -1 ? param.substring(0, i) : ""), 
+			val = (i !== -1 ? decodeURIComponent(param.substring(i+1)) : null);
+		if (name === "pp")
+			d.getElementById("passphrase").value = val;
+		else if (name === "iv")
+			d.getElementById("iv").value = val;
+	});
 	d.getElementById("encrypt").addEventListener("click", function(){
 		let passphrase = CryptoJS.enc.Utf8.parse(d.getElementById("passphrase").value),
 			iv = CryptoJS.enc.Utf8.parse(d.getElementById("iv").value),
