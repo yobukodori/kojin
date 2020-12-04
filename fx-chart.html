@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>FXチャート</title>
+<style type="text/css">
+div.options {
+	display: flex;
+}
+
+.filter-list {
+	padding-right: 0.3em;
+}
+
+#container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.pair {
+	border: solid thin;
+	text-align: center;
+}
+
+.caption {
+	font-size: small;
+}
+
+a {
+	margin-top: -1em;
+}
+
+.hide {
+	display: none;
+}
+</style>
+</head>
+<body>
+<div class="options">
+<button class="show-all">全て</button><button class="show-includes">含む</button><div class="filter-list"></div><button class="show-excludes">除外</button><button class="show-all">全て</button>
+|
+<select id="ashi">
+<option value="h">日足</option>
+<option value="60">60分足</option>
+<option value="5">5分足</option>
+</select>
+|
+<button class="update">更新</button>
+</div>
+<div id="container">
+</div>
+
+<script type='text/javascript'>
+document.addEventListener("DOMContentLoaded", ()=>{
+	var d = document;
+	let jp = {"jpy":"円", "usd":"米ドル","eur":"ユーロ","gbp":"ポンド","cad":"加ドル","chf":"スイスフラン","aud":"豪ドル","nzd":"NZドル","hkd":"香港ドル","zar":"南アランド","try":"トルコリラ"};
+	let currency = ["jpy", "usd","eur","gbp","cad","chf","aud","nzd","hkd","zar","try"];
+	let filterList = d.querySelector("div.filter-list");
+	currency.forEach(c=>{
+		let cb = d.createElement("input");
+		cb.type = "checkbox";
+		cb.className = c;
+		let id = "cb-" + c;
+		cb.id = id;
+		cb.style.cssText = "margin-left: 0.5em";
+		let lb = d.createElement("label");
+		lb.setAttribute("for", id);
+		lb.textContent = c.toUpperCase();
+		filterList.appendChild(cb);
+		filterList.appendChild(lb);
+	});
+	document.querySelectorAll('.show-all').forEach(btn=>{
+		btn.addEventListener("click",ev=>{
+			document.querySelectorAll(".pair").forEach(e=>{
+				e.classList.remove("hide");
+			});
+		});
+	});
+	document.querySelectorAll('.show-includes').forEach(btn=>{
+		btn.addEventListener("click",ev=>{
+			document.querySelectorAll(".pair").forEach(e=>{
+				console.log(e);
+				let pair = e.getAttribute("data-pair"),
+					c1 = e.getAttribute("data-c1"), 
+					c2 = e.getAttribute("data-c2");
+				console.log("input."+c1,'/',"input."+c2);
+				let match = d.querySelector('input.' + c1).checked || d.querySelector('input.' + c2).checked;
+				match ? e.classList.remove("hide") : e.classList.add("hide") ;
+			});
+		});
+	});
+	document.querySelectorAll('.show-excludes').forEach(btn=>{
+		btn.addEventListener("click",ev=>{
+			document.querySelectorAll(".pair").forEach(e=>{
+				let pair = e.getAttribute("data-pair"),
+					c1 = e.getAttribute("data-c1"), 
+					c2 = e.getAttribute("data-c2");
+				let match = d.querySelector('input.' + c1).checked || d.querySelector('input.' + c2).checked;
+				! match ? e.classList.remove("hide") : e.classList.add("hide") ;
+			});
+		});
+	});
+	document.getElementById('ashi').addEventListener("change",ev=>{
+		let now = Date.now();
+		document.querySelectorAll(".pair img").forEach(e=>{
+			src = e.src.replace(/(h|60|5)\.png/, ev.target.value + ".png");
+			e.src = src.substring(0, src.indexOf('?') + 1) + now;
+		});
+	});
+	document.querySelectorAll('.update').forEach(btn=>{
+		btn.addEventListener("click",ev=>{
+			let now = Date.now();
+			document.querySelectorAll(".pair img").forEach(e=>{
+				e.src = e.src.substring(0, e.src.indexOf('?') + 1) + now;
+			});
+		});
+	});
+
+	let pair = {"usdjpy":{"chartId":"01"}, "eurjpy":{"chartId":"02"}, "eurusd":{"chartId":"03"}, "gbpjpy":{"chartId":"05"}, "gbpusd":{"chartId":"10"}, "audjpy":{"chartId":"04"}, "audusd":{"chartId":"13"}, "audnzd":{"chartId":"26"}, "nzdjpy":{"chartId":"06"}, "nzdusd":{"chartId":"14"}, "cadjpy":{"chartId":"07"}, "usdcad":{"chartId":"23"}, "chfjpy":{"chartId":"08"}, "usdchf":{"chartId":"11"}, "eurgbp":{"chartId":"22"}, "audeur":{"chartId":"15"}, "eurnzd":{"chartId":"25"}, "gbpaud":{"chartId":"21"}, "audcad":{"chartId":"24"}, "zarjpy":{"chartId":"12"}, "tryjpy":{"chartId":"16"}, "hkdjpy":{"chartId":"09"}};
+	let container = d.getElementById("container");
+	let now = Date.now();
+	Object.keys(pair).forEach(k => {
+		let c1 = k.substring(0,3), c2 = k.substring(3);
+		let div = d.createElement("div"), a = d.createElement("a"), img = d.createElement("img");
+		div.setAttribute("data-pair", k), div.setAttribute("data-c1", c1), div.setAttribute("data-c2", c2);
+		div.className = "pair " + k + ' ' + c1 + ' ' + c2;
+		let cap = d.createElement("div");
+		cap.textContent = jp[c1]+'/'+jp[c2]; //(c1 + '/' + c2).toUpperCase();
+		cap.className = "caption";
+		div.appendChild(cap);
+		a.href = "https://www.gaitame.com/markets/chart/details.html?country=" + k + "&interval=60";
+		a.target = "_blank";
+		img.src = "https://www.gaitame.com/chart/neo/img/s_" + pair[k].chartId + "_"+d.getElementById("ashi").value+".png" + "?" + now;
+		a.appendChild(img);
+		div.appendChild(a);
+		container.appendChild(div);
+	});
+});
+</script>
+</body>
+</html>
