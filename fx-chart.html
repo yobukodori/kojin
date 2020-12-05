@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>FXチャート</title>
 <style type="text/css">
-div.options {
-	display: flex;
-}
 
 .filter-list {
 	padding-right: 0.3em;
@@ -38,7 +35,7 @@ a {
 </head>
 <body>
 <div class="options">
-<button class="show-all">全て</button><button class="show-includes">含む</button><div class="filter-list"></div><button class="show-excludes">除外</button><button class="show-all">全て</button>
+<button class="show-all">全て</button><button class="show-includes">含む</button><span class="filter-list"></span><button class="show-excludes">除外</button><button class="show-all">全て</button>
 |
 <select id="ashi">
 <option value="h">日足</option>
@@ -56,7 +53,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 	var d = document;
 	let jp = {"jpy":"円", "usd":"米ドル","eur":"ユーロ","gbp":"ポンド","cad":"加ドル","chf":"スイスフラン","aud":"豪ドル","nzd":"NZドル","hkd":"香港ドル","zar":"南アランド","try":"トルコリラ"};
 	let currency = ["jpy", "usd","eur","gbp","cad","chf","aud","nzd","hkd","zar","try"];
-	let filterList = d.querySelector("div.filter-list");
+	let filterList = d.querySelector(".filter-list");
 	currency.forEach(c=>{
 		let cb = d.createElement("input");
 		cb.type = "checkbox";
