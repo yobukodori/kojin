@@ -59,6 +59,15 @@ twitter.com##div[aria-label="タイムライン: ホームタイムライン"] >
 ! 2020/4/25 旧仕様版（モバイル。現時点で新仕様と混在中）こっちはやっぱりちらつく
 ! twitter.com##div[aria-label="タイムライン: リスト"] > div[style*="padding-bottom"] > div:first-child > div:first-child > div:first-child > div:first-child:style(height:0)
 
+!固定されたリストのリストがありませんを非表示
+twitter.com##div[aria-label="タイムライン: 自分のリスト"] > div > div:has-text(表示するリストがありません)
+!新しいリストを見つけるを非表示
+twitter.com##div[aria-label="タイムライン: 自分のリスト"] > div > div:has(h2:has-text(/見つける/))
+!新しいリストを見つける内のフォローリストを非表示
+twitter.com##div[aria-label="タイムライン: 自分のリスト"] > div > div:has(div[role="button"]:has-text(/フォロー/))
+!新しいリストを見つける末尾さらに表示を非表示
+twitter.com##div[aria-label="タイムライン: 自分のリスト"] > div > div:has(a[href="/i/lists/suggested"])
+
 ! 検索文字列の先読み補完がもたつくのでブロック
 ||twitter.com/i*/search/typeahead.json$xhr,1p
 
