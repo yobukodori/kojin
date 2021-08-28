@@ -57,6 +57,8 @@ news.yahoo.co.jp##.thumbnail img
 news.yahoo.co.jp##.topics_item_comment
 !記事ページのyahooバナー
 news.yahoo.co.jp###mhd_banner_wrapper
+!記事ページ上部広告スペース
+news.yahoo.co.jp##.adWrap
 !記事ページのコメント数
 news.yahoo.co.jp###comment-count
 ! 動画
