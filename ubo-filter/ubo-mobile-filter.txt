@@ -49,57 +49,34 @@ this.kiji.is##.main__adWrapper
 this.kiji.is##.main__share
 
 ! news.yahoo.co.jp
-news.yahoo.co.jp##.topics_item-normal .topics_item_thumbnail
-news.yahoo.co.jp##.newsFeed_item_thumbnail
-news.yahoo.co.jp##ul.bd .thumbnail
-!news.yahoo.co.jp##^.yjnSub_list_thumbnail
-news.yahoo.co.jp##div.widePic
+!一覧トップニュース
+news.yahoo.co.jp##li[data-ual*="element_id:first-"] > a > div > .thumbnail:style(background-color:black !important)
+!ニュースサムネ
+news.yahoo.co.jp##.thumbnail img
+!一覧のコメント数
 news.yahoo.co.jp##.topics_item_comment
-news.yahoo.co.jp###ycCountBtn
-news.yahoo.co.jp###socialComments
-news.yahoo.co.jp###news-survey-plugin
-news.yahoo.co.jp###topicsEvalMod
-news.yahoo.co.jp##.thumb
-! 大量に先読みするニュース写真をブロック
-||news-pctr.c.yimg.jp^$image,domain=news.yahoo.co.jp
-||amd-pctr.c.yimg.jp^$image,domain=news.yahoo.co.jp
-! サムネ要素を隠す
-news.yahoo.co.jp##li[data-ual]:not(:first-child) div.thumbnail
-news.yahoo.co.jp##li[data-ual] div.newsFeed_item_thumbnail
-! https://logql.yahoo.co.jp/v1/public/yql リクエストを出させない
-||yimg.jp/images/*/rapid-*.js$script,domain=news.yahoo.co.jp
-! よくわからないけどいらなさそうなスクリプト
-||yimg.jp/images/ds/*$script,domain=news.yahoo.co.jp
-||yimg.jp/yui/jp/smh/sp/*$script,domain=news.yahoo.co.jp
-! ヤフコメ関係いらない
-||news.yahoo.co.jp/comment/*$xhr,domain=news.yahoo.co.jp
-! 広告(offer)関連
-||mempf.yahoo.co.jp/v2/offer$script,domain=news.yahoo.co.jp
-! 1x1画像
-||news.yahoo.co.jp/cb_smp.gif$image,domain=news.yahoo.co.jp
-headlines.yahoo.co.jp###comment-count-00
-headlines.yahoo.co.jp###comModule
-headlines.yahoo.co.jp##.listPaneltype-cont-img
-headlines.yahoo.co.jp##.thum
-headlines.yahoo.co.jp##.listModBoxWrapLarge div.yvpub-player
-||c.yimg.jp^$image,domain=headlines.yahoo.co.jp
-||yimg.jp^$script,domain=headlines.yahoo.co.jp
-! 2020/5/28
+!記事ページのyahooバナー
+news.yahoo.co.jp###mhd_banner_wrapper
+!記事ページのコメント数
 news.yahoo.co.jp###comment-count
-||news.yahoo.co.jp/comment/*$xhr,domain=news.yahoo.co.jp
+! 動画
+news.yahoo.co.jp##.yvpub-player:upward(2)
+! 学びがある
+news.yahoo.co.jp###emotion-list:upward(div)
+!記事の後のいらんもん
+news.yahoo.co.jp###contents article ~ *
+! ヤフコメ
+news.yahoo.co.jp###comModule
+! テレメトリ
+||dsb.yahoo.co.jp^$1p
+! いらんだろう
+*$xhr,domain=news.yahoo.co.jp
+||yahoo.co.jp/*.gif^$image,1p
 ! 記事を非表示関連
 news.yahoo.co.jp##div.newsFeed_item_dislike_balloon-close + div
 news.yahoo.co.jp##li.newsFeed_item a[href="javascript:void(0)"]
-! 記事本文の冒頭写真
-news.yahoo.co.jp##a[href$="/images/000"][data-ylk*="slk:thum"]
-! 記事本文の冒頭SNS
-news.yahoo.co.jp##.articleBody #fixedSNS
 ! 記事本文冒頭のヤフコメ
 news.yahoo.co.jp##.viewableWrap:has(> #viewable_comment_appeal_header)
-! 記事本文下部のヤフコメ
-news.yahoo.co.jp##.news-comment-plugin
-! 記事解説のヤフコメ数表示
-news.yahoo.co.jp##.pickupMain_comment
 
 ! nifty
 news.nifty.com##.article_sns_share
