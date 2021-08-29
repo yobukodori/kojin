@@ -358,9 +358,11 @@
 			},
 			preprocess: function(){
 				'use strict';
-				$('.swiper-container').css("overflow", "auto");
-				$('.topics-block .article-list > li').css("height","auto");
-				$('.topics-block .article-list a .article-title').css("line-height","initial");
+				d.querySelectorAll('.swiper-container').forEach(e=> e.style.overflow = "auto");
+				d.querySelectorAll('.topics-block .article-list > li').forEach(e=> e.style.height = "auto");
+				d.querySelectorAll('.topics-block .article-list a .article-title').forEach(e=> e.style.lineHeight = "initial");
+				d.querySelectorAll('.article-list-headline-image').forEach(e=> e.style.display = "none");
+				d.querySelectorAll('.article-list-headline-inner').forEach(e=> e.style.height = "auto");
 			}
 		},
 		"www.excite.co.jp": {
