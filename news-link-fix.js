@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.2.1
+ * title: news link fix v.0.2.2
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -87,7 +87,7 @@
 	
 	function censor(art){
 		if (art.src){
-			art.ng = /スポーツ報知|スポーツアネックス|スポニチアネックス|東スポWeb|Smart FLASH|デイリースポーツ|日刊スポーツ|サーチナ|リアルライブ|Techinsight|スポーツソウル日本版|女性自身|ナリナリドットコム/.test(art.src);
+			art.ng = /中日スポーツ|サンケイスポーツ|スポーツ報知|スポーツアネックス|スポニチアネックス|東スポWeb|Smart FLASH|デイリースポーツ|日刊スポーツ|サーチナ|リアルライブ|Techinsight|スポーツソウル日本版|女性自身|ナリナリドットコム|オリコン|週刊女性|おくたま経済新聞|J-CASTニュース|ガジェット通信|マイナビニュース|弁護士ドットコム|テレビドガッチ/.test(art.src);
 		}
 		if (art.ng){
 			art.original = art.title;
@@ -171,9 +171,30 @@
 			}
 		},
 		"news.yahoo.co.jp": {
+			fixEveryTime: true,
+			cache: {},
+			fixIt: function(e, art){
+				if (art.title){
+					let p = e.querySelector('p');
+					p && (p.textContent = decodeEntities(art.title).replace(/\u3000/g," "));
+				}
+				if (art.href){
+					e.href = art.href;
+				}
+				if (art.src){
+					let parent = e.querySelector('p + div'), span;
+					parent &&  (span = d.createElement("span")) && (span.className = "newsFeed_item_media") && (span.setAttribute("style","vertical-align: bottom"),!0) && (span.textContent = art.src) && parent.appendChild(span);
+				}
+				art.ng && (e.style.backgroundColor = "gray");
+			},
 			fixLink: function(e, href){
 				'use strict';
 				if (/\/pickup\/\d+/.test(e.href)){
+					if (this.cache[e.href]){
+						this.fixIt(e, this.cache[e.href]);
+						return;
+					}
+					let context = this;
 					fetch(e.href, {mode:"no-cors"})
 					.then(function(response) {
 						return response.text();
@@ -186,17 +207,8 @@
 							art.title && (b = str_find_block_r(html,'>','</span>', b.next)) && !b.error && (art.src = html.substring(b.first,b.last))
 						}
 						art = censor(art);
-						if (art.title){
-							(p = e.querySelector('.topics_item_title')) && (p.innerText = decodeEntities(art.title).replace(/\u3000/g," "));
-						}
-						if (art.href){
-							e.href = art.href;
-						}
-						if (art.src){
-							let parent = e.querySelector('div.topics_item_sub'), span;
-							parent &&  (span = d.createElement("span")) && (span.className = "newsFeed_item_media") && (span.setAttribute("style","vertical-align: bottom"),!0) && (span.innerText = art.src) && parent.appendChild(span);
-						}
-						art.ng && (e.style.backgroundColor = "gray");
+						context.fixIt(e, art);
+						context.cache[e.href] = art;
 					})
 					.catch(err=>{
 						console.log("catch:",err);
@@ -346,10 +358,11 @@
 			},
 			preprocess: function(){
 				'use strict';
-				let ee = d.querySelectorAll('div.swiper-slide');
-				for (let i = 0 ; i < ee.length ; i++){
-					ee[i].style.height = "";
-				}
+				d.querySelectorAll('.swiper-container').forEach(e=> e.style.overflow = "auto");
+				d.querySelectorAll('.topics-block .article-list > li').forEach(e=> e.style.height = "auto");
+				d.querySelectorAll('.topics-block .article-list a .article-title').forEach(e=> e.style.lineHeight = "initial");
+				d.querySelectorAll('.article-list-headline-image').forEach(e=> e.style.display = "none");
+				d.querySelectorAll('.article-list-headline-inner').forEach(e=> e.style.height = "auto");
 			}
 		},
 		"www.excite.co.jp": {
