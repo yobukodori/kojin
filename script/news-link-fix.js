@@ -267,10 +267,10 @@
 				let p = e.querySelector('.article-list-headline-title') || e.querySelector('.article-title'); 
 				if (p){
 					//art.ng && (e.style.backgroundColor = "gray");
-					p.innerText = art.title;
+					art.title && (p.innerText = art.title);
 					if (art.src){
-						let c = d.createElement("span");
-						(c.innerText = " "+art.src) && (c.style.fontSize = "small") && p.appendChild(c);
+						let c = d.createElement("div");
+						(c.innerText = " "+art.src) && (c.style.fontSize = "small") && p.append(c);
 					}
 				}
 				art.ng && (e.style.backgroundColor = "gray");
