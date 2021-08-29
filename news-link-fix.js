@@ -270,7 +270,7 @@
 					p.innerText = art.title;
 					if (art.src){
 						let c = d.createElement("div");
-						(c.innerText = " "+art.src) && (c.style.fontSize = "small") && p.appendChild(c);
+						(c.innerText = " "+art.src) && (c.style.fontSize = "small") && p.append(c);
 					}
 				}
 				art.ng && (e.style.backgroundColor = "gray");
