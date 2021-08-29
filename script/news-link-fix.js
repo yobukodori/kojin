@@ -269,7 +269,7 @@
 					//art.ng && (e.style.backgroundColor = "gray");
 					p.innerText = art.title;
 					if (art.src){
-						let c = d.createElement("div");
+						let c = d.createElement("span");
 						(c.innerText = " "+art.src) && (c.style.fontSize = "small") && p.appendChild(c);
 					}
 				}
@@ -358,10 +358,9 @@
 			},
 			preprocess: function(){
 				'use strict';
-				let ee = d.querySelectorAll('div.swiper-slide');
-				for (let i = 0 ; i < ee.length ; i++){
-					ee[i].style.height = "";
-				}
+				$('.swiper-container').css("overflow", "auto");
+				$('.topics-block .article-list > li').css("height","auto");
+				$('.topics-block .article-list a .article-title').css("line-height","initial");
 			}
 		},
 		"www.excite.co.jp": {
