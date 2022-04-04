@@ -1,5 +1,6 @@
 (function(){
 	"use strict";
+	return; // 仕様変更に未対応 2022/04/04現在
 	let d = document;
 
 	function corsAnywhere(url){
