@@ -1,0 +1,149 @@
+﻿<title>Terser for bookmarklet</title>
+
+<script src="terser.4.8.0.browser.bundle.js"></script>
+<script src="regpack/contextDescriptor_browser.js"></script>
+<script src="regpack/stringHelper.js"></script>
+<script src="regpack/packerData.js"></script>
+<script src="regpack/shapeShifter.js"></script>
+<script src="regpack/regPack.js"></script>
+<script src="regpack/patternViewer.js"></script>
+<script src="regpack/thermalViewer.js"></script>
+
+<h2><a href="https://github.com/fabiosantoscode/terser">Terser</a>-online-for-bookmarklet (ES6 minifier)</h2>
+<input type=checkbox id=check> show terser options</a> 
+<input type=checkbox id=extra checked> extra compression (js1k)</a> 
+<br>
+<br>
+<textarea id=input placeholder=input></textarea>
+<textarea id=options>// options
+{
+  toplevel: true,
+  compress: {
+    passes: 5,
+    unsafe: true
+    pure_getters: true
+  },
+}</textarea>
+<div class=out>
+  <textarea id=output placeholder=output></textarea>
+  <br style=clear:both>
+  <button onclick='copyToClipboard()'>COPY OUTPUT</button>&nbsp;<span id=outsize>Output size: 0b</span>
+  <span class=pack>
+  <button onclick=output.value=pack(output.value)>RegPack</button>
+  <input size=2 id=paramOExcludedVars value="a b c">
+  <input size=1 id=paramFGain value="1">
+  <input size=1 id=paramFLength value="0">
+  <input size=1 id=paramFCopies value="0">
+</span>
+
+<style>
+h2 { margin: 0 0 5px; }
+body { font-family: arial; }
+textarea, .out { width: calc(50vw - 25px); height: calc(100vh - 100px); margin: 0 10px 0 0; float: left; vertical-align: top; }
+.out { margin: 0 }
+textarea ~ textarea ~ textarea { margin: 0 }
+#options { display: none; }
+#check:checked ~ #options { display: block; }
+#check:checked ~ textarea, #check:checked ~ div, #check:checked ~ div > textarea { width: calc(33vw - 15px); }
+.pack { float: right; }
+input[size="1"] { width: 15px }
+#output { height: calc(100vh - 130px); }
+#outsize, .pack { display: inline-block; margin: 10px 0 0; }
+</style>
+
+<script>
+check.checked = 0;
+input.value = "";
+output.value = "";
+onload = function(){
+  input.oninput = options.oninput = extra.onchange = function(){
+    try{eval("opt = " + options.value)} catch(e){ opt = {} }
+    if(extra.checked){
+      result = Terser.minify("onload = function(){" + input.value + "}", opt);
+    }
+    else {
+      result = Terser.minify(input.value, opt);
+    }
+    
+    if(result.error) output.value = "// error\n" + result.error;
+    else {
+	  console.log("extra.checked: "+extra.checked);
+	  console.log("result.code.length: "+result.code.length );
+	  let code;
+      if(extra.checked){
+        outsize.innerHTML = "Output size: " + (result.code.length - 21) + "b";
+        code = result.code.length > 21 ? result.code.slice(0, -1).replace(/-- >/g, "-->").replace(/onload=function\(\){(var )?(.*)}/,"$2") : "";
+      }
+      else {
+        outsize.innerHTML = "Output size: " + (result.code.length) + "b";
+        code = result.code.length > 1 ? result.code : "";
+      }
+	  output.value = code.replace(/^!function\(\){/,"javascript:(function(){").replace(/}\(\);?$/,"})();");
+    }
+  }
+  
+  output.oninput = function(){
+    outsize.innerHTML = "Output size: " + (output.value.length) + "b";
+  }
+}
+
+pack = function(input){
+	
+	// Get rid of comments and empty lines
+	input = input.replace(/([\r\n]|^)\s*\/\/.*|[\r\n]+\s*/g,'');
+	var options = {
+		withMath : false,
+		hash2DContext : true,
+		hashWebGLContext : true,
+		hashAudioContext : true,
+		contextVariableName : "c",
+		contextType : 0,
+		reassignVars : true,
+		varsNotReassigned : document.getElementById("paramOExcludedVars").value,
+		crushGainFactor : parseFloat(document.getElementById("paramFGain").value),
+		crushLengthFactor : parseFloat(document.getElementById("paramFLength").value),
+		crushCopiesFactor : parseFloat(document.getElementById("paramFCopies").value),
+		crushTiebreakerFactor : 1,
+		wrapInSetInterval : false,
+		timeVariableName : "",
+		useES6 : true
+	};
+
+	var originalLength = packer.getByteLength(input);
+	var inputList = packer.runPacker(input, options);
+	var methodCount = inputList.length;
+	var patternViewer = new PatternViewer;
+	var thermalViewer = new ThermalViewer;
+		
+	var bestMethod=0, bestStage=0, bestCompression=1e8;
+	for (var i=0; i<methodCount; ++i) {
+		var packerData = inputList[i];
+    //console.log(packerData);
+		for (var j=0; j<4; ++j) {
+			var output = (j==0 ? packerData.contents : packerData.result[j-1][1]);
+			var packedLength = packer.getByteLength(output);
+      //console.log(packedLength);
+			if (packedLength > 0 && packedLength < bestCompression) {
+				bestCompression = packedLength;
+				bestMethod = i;
+				bestStage = j;
+			} 
+		}
+	} 
+
+	var bestOutput = inputList[bestMethod];
+  outsize.innerHTML = "Output size: " + (bestCompression) + "b";
+  //console.log(bestOutput.result[bestStage-1][1]);
+  //console.log(bestOutput, bestStage-1);
+  
+  return bestOutput.result[bestStage-1][1];
+}
+
+function copyToClipboard()
+{
+	let e = document.getElementById("output");
+	e.select();
+	document.execCommand("copy");
+	e.selectionEnd = e.selectionStart;
+}
+</script>
