@@ -25,6 +25,11 @@ jiji.com##nav.menu
 jiji.com###Wrapper > aside
 jiji.com##^iframe
 jiji.com##^script:has-text(createElement('iframe'))
+jiji.com##.read.ArticleHeadlineList .ybkdr-link-fixed.clearfix .comment_count_wrap
+jiji.com##dl.top5new > .ybkdr-link-fixed.clearfix .comment_count_wrap
+jiji.com##.comment_count_wrap
+jiji.com##.RectangleAd
+jiji.com###comment
 
 ! 47news.jp
 ||www.47news.jp/js/ban_pinchi_in_out.js$script,domain=www.47news.jp
@@ -47,6 +52,11 @@ this.kiji.is##div.page__gdpr
 ! 記事本文上部広告とSNS
 this.kiji.is##.main__adWrapper
 this.kiji.is##.main__share
+
+! nordot.app(47news)
+nordot.app###divSticky-01-Container
+nordot.app##.js-header.page__header
+nordot.app##.page__curatedBy
 
 ! news.yahoo.co.jp
 !一覧トップニュース
@@ -79,6 +89,10 @@ news.yahoo.co.jp##div.newsFeed_item_dislike_balloon-close + div
 news.yahoo.co.jp##li.newsFeed_item a[href="javascript:void(0)"]
 ! 記事本文冒頭のヤフコメ
 news.yahoo.co.jp##.viewableWrap:has(> #viewable_comment_appeal_header)
+! 2022-02-26 https://news.yahoo.co.jp
+news.yahoo.co.jp##.rapidnofollow
+! 記事本文冒頭コメント数とリンク
+news.yahoo.co.jp##a[data-cl-params="_cl_vmodule:cmtmod;_cl_link:count;"]
 
 ! nifty
 news.nifty.com##.article_sns_share
@@ -132,7 +146,13 @@ news.google.com##article > figure
 ! lite-ra.com
 lite-ra.com##div.ad
 
-! ================================
+! 2020-10-09 https://www.buzzfeed.com
+www.buzzfeed.com###commentsWrapper:style(height:0px!important)
+
+! 2021-05-16 https://www.nishinippon.co.jp
+www.nishinippon.co.jp##.js-fixedContent.c-fixedContent
+
+================================
 !  天気
 ! ================================
 ! weather.nifty.com
@@ -193,6 +213,8 @@ itest.5ch.net##.sproutad_frame
 itest.5ch.net##.sproutad_frame-description
 itest.5ch.net###js-bottom-ad-300x250
 itest.5ch.net###instant_ad
+itest.5ch.net##.ad_network_content
+itest.5ch.net##.res_ad
 
 ! 5ch.net pc mode
 5ch.net##div.mascot:style(background-image:none !important)
@@ -202,3 +224,5 @@ itest.5ch.net###instant_ad
 jma.go.jp###jma_ad_container
 jma.go.jp##.jma_ad_space
 jma.go.jp###delete_jma_ad_space
+jma.go.jp##.ad-sp
+
