@@ -91,8 +91,10 @@ news.yahoo.co.jp##li.newsFeed_item a[href="javascript:void(0)"]
 news.yahoo.co.jp##.viewableWrap:has(> #viewable_comment_appeal_header)
 ! 2022-02-26 https://news.yahoo.co.jp
 news.yahoo.co.jp##.rapidnofollow
-! 記事本文冒頭コメント数とリンク
-news.yahoo.co.jp##a[data-cl-params="_cl_vmodule:cmtmod;_cl_link:count;"]
+! 記事本文冒頭コメント数とユーザーアイコンとリンク
+news.yahoo.co.jp##a[href$="%2Fcomments"']
+! 記事本文末尾ユーザーリアクション
+news.yahoo.co.jp##div[class^="ArticleReaction__Wrapper"]
 
 ! nifty
 news.nifty.com##.article_sns_share
