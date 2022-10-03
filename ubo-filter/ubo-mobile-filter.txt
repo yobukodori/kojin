@@ -19,6 +19,7 @@
 !  ニュースサイト
 ! ================================
 ! jiji.com
+||piano.io^$script,domain=jiji.com
 ||appspot.com^$subdocument,domain=jiji.com
 jiji.com##div.menubutton
 jiji.com##nav.menu
