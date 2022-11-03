@@ -128,7 +128,7 @@
 					})
 					.then(function(html) {
 						let sig = '<span class="btn_inner">記事全文を読む', i, url;
-						((i = html.indexOf(sig)) !== -1) && ((i = html.lastIndexOf(sig = '<a href="', i)) !== -1) && (i += sig.length) && (url = html.substring(i, html.indexOf('"', i))) && (e.href = url);
+						((i = html.indexOf(sig)) !== -1) && ((i = html.lastIndexOf(sig = '<a href="', i)) !== -1) && (i += sig.length) && (url = html.substring(i, html.indexOf('"', i))) && (e.href = url) && (e.style.backgroundColor = "ivory");
 					});			
 				}
 			}
