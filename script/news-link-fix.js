@@ -120,6 +120,7 @@
 				attr = (attr ? attr + "; " : "") + "touch-action: initial";
 				e.setAttribute("style", attr);
 				if (/\/\d+\.html/.test(e.href)){
+					e.appendChild(document.createTextNode(" # fetch "+e.href));
 					fetch(e.href)
 					.then(function(response) {
 						return response.text();
@@ -127,9 +128,7 @@
 					.then(function(html) {
 						let sig = '<span class="btn_inner">記事全文を読む', i, url;
 						((i = html.indexOf(sig)) !== -1) && ((i = html.lastIndexOf(sig = '<a href="', i)) !== -1) && (i += sig.length) && (url = html.substring(i, html.indexOf('"', i))) && (e.href = url);
-						let ne = document.createElement("span");
-						ne.textContent = "url="+url;
-						e.appendChild(ne);
+						e.appendChild(document.createTextNode(" # url "+url));
 					});			
 				}
 			}
