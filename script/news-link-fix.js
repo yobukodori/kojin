@@ -1,5 +1,5 @@
 /*
- * title: news link fix v.0.2.2
+ * title: news link fix v.0.2.3
  * name: news-link-fix.js
  * author: yobukodori
 */
@@ -125,8 +125,8 @@
 						return response.text();
 					})
 					.then(function(html) {
-						let sig = '<a class="read-more-button"', i, r;
-						(i = html.indexOf(sig)) !== -1 && (r = html.substring(i, html.indexOf(">", i + sig.length) + 1).match('href="(.+?)"')) && (e.href = r[1]);
+						let sig = '<span class="btn_inner">記事全文を読む', i, url;
+						((i = html.indexOf(sig)) !== -1) && ((i = html.lastIndexOf(sig = '<a href="', i)) !== -1) && (i += sig.length) && (url = html.substring(i, html.indexOf('"', i))) && (e.href = url);
 					});			
 				}
 			}
@@ -270,7 +270,7 @@
 					art.title && (p.innerText = art.title);
 					if (art.src){
 						let c = d.createElement("div");
-						(c.innerText = " "+art.src) && (c.style.fontSize = "small") && p.append(c);
+						(c.innerText = " "+art.src) && (c.style.fontSize = "small") && p.appendChild(c);
 					}
 				}
 				art.ng && (e.style.backgroundColor = "gray");
