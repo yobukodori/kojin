@@ -39,6 +39,8 @@ jiji.com###comment
 ||ytimg.com^$script,domain=www.47news.jp
 ! トップ冒頭ad
 www.47news.jp###\34 7news-billboard
+! 広告カルーセル
+www.47news.jp###slick_pr
 
 ! this.kiji.is (47news)
 this.kiji.is##div.page__header
