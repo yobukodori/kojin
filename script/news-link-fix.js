@@ -116,6 +116,7 @@
 			},
 			fixLink: function(e, href){
 				'use strict';
+				e.appendChild(document.createTextNode(" #### fixLink "+href));
 				let attr = e.getAttribute("style");
 				attr = (attr ? attr + "; " : "") + "touch-action: initial";
 				e.setAttribute("style", attr);
