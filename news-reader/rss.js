@@ -1,3 +1,7 @@
+function corsAnyWhere(url){
+	return "https://cors.zserge.com/?u=" + encodeURIComponent(url);
+}
+
 function getRSS(prof, callback){
 	let url = prof.url;
 	console.log("# loading html from", url);
@@ -87,5 +91,8 @@ function getRSS(prof, callback){
 			}
 		}
 		callback(rss);
+	})
+	.catch(err => {
+		console.log("error on fetching", url + ":" + err);
 	});
 }
