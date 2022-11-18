@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>私的ニュースリーダー</title>
+<link rel="stylesheet" href="main.css" type="text/css" />
+</head>
+<body>
+<label for="select-channel">チャンネル:</label>
+<select name="channel" id="channel-select">
+<option value="">すべて</option>
+<!--
+<option value="dog">Dog</option>
+-->
+</select>
+<input type="text" id="search-text"  value=""><button id="search">絞り込み</button><button id="reset-search-result">絞り込みを解除</button>
+<div id="status"></div>
+<div id="items">
+</div>
+<p>
+【注意】このニュースリーダーをフルに機能させるには <a href="https://developer.mozilla.org/ja/docs/Web/HTTP/CORS">CORS</a> の制限をバイパスする拡張機能（例えばfirefox用では <a href="https://addons.mozilla.org/ja/firefox/addon/cors-for-me/">CORS for Me</a>）をブラウザに登録し、下記のURLの読み込みを許可する必要があります
+</p>
+<p id="cors-urls"></p>
+<script src="rss.js"></script>
+<script src="profiles.js"></script>
+<script src="main.js"></script>
+<script type='text/javascript'>
+</script>
+</body>
+</html>

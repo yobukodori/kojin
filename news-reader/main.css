@@ -1,0 +1,29 @@
+.clear {
+	clear: both;
+}
+
+.hide, .x-channel, .x-search {
+	display: none;
+}
+
+#items > .item {
+	padding: 0.2em 0 0.2em 0.3em;
+}
+
+#items > .item:nth-child(2n) {
+	/* background-color: whitesmoke; */
+}
+
+.item > .title {
+	text-decoration-line: none;
+}
+
+.item > .channel {
+	margin-left: 1em;
+	font-size: 80%;
+}
+
+.item > .date {
+	margin-left: 0.5em;
+	font-size: 90%;
+}
