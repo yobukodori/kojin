@@ -1,5 +1,5 @@
 function corsAnyWhere(url){
-	return "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
+	return "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
 }
 
 function getRSS(prof, callback){
