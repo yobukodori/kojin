@@ -3,7 +3,7 @@ function corsAnyWhere(url){
 }
 
 function getRSS(prof, callback){
-	let url = prof.url;
+	let url = (document.location.protocol === "https:" && (new URL(prof.url)).protocol === "http:") ? corsAnyWhere(prof.url) : prof.url;
 	console.log("# loading html from", url);
 	fetch(url, {})
 	.then(res => {
