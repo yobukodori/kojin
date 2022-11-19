@@ -71,6 +71,9 @@ const profiles = {
 			date: "span, div + p + p",
 			description: "",
 		},
+		adjustDate: function (datestr){
+			return /^\(.+\)$/.test(datestr) ? datestr.slice(1, -1) : datestr;
+		},
 	},
 	"jiji.comトップ": {
 		url: "https://www.jiji.com/",
