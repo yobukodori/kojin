@@ -102,7 +102,7 @@ document.getElementById("reset-search-result").addEventListener("click", ()=>{
 document.addEventListener("DOMContentLoaded", ()=>{
 	let urls = "";
 	Object.keys(profiles).forEach(k => {
-		urls += ", " + profiles[k].url;
+		urls += ", " + profiles[k].url + (profiles[k].mobile ? ", " + profiles[k].mobile : "");
 	});
 	document.getElementById("cors-urls").textContent = urls.substring(1);
 	Object.keys(profiles).forEach(k => {

@@ -62,6 +62,7 @@ const profiles = {
 	},
 	"jiji.com新着": {
 		url: "https://www.jiji.com/jc/list?g=news",
+		mobile: "https://www.jiji.com/sp/list?g=news",
 		type: "html",
 		itemSelector: '.ArticleListMain li a',
 		selector: {
@@ -165,9 +166,10 @@ const profiles = {
 	*/
 	"朝日新聞トップ": {
 		url: "https://www.asahi.com/",
+		mobile: "https://www.asahi.com/sp/",
 		type: "html",
 		selector: {
-			item: '.p-topNews__firstNews, .p-topNews__listItem, .p-topNews2__listItem',
+			item: '.p-topNews__firstNews, .p-topNews__listItem, .p-topNews2__listItem, .p-topNews .c-articleModule:nth-child(1)',
 			title: '.c-articleModule__title',
 			link: 'a.c-articleModule__link',
 			date: "time",
