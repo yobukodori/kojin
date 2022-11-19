@@ -26,6 +26,12 @@ function createRegExp(s){
 	return s;
 }
 
+function showStatus(){
+	let text = "";
+	Array.from(arguments).forEach(e => text += " " + e);
+	document.getElementById("status").textContent = text.substring(1);
+}
+
 function printRSS(rss){
 	const container = document.getElementById('items');
 	rss.item.forEach(d => {
@@ -55,9 +61,13 @@ function printRSS(rss){
 document.getElementById("channel-select").addEventListener("change", ()=>{
 	let title = document.getElementById("channel-select").value;
 	console.log("channel-select on change. value:", title);
+	let displaying = 0, narrowing;
 	Array.from(document.getElementById('items').children).forEach(e => {
 		(! title || e.dataChannel.title === title) ? e.classList.remove("x-channel") : e.classList.add("x-channel");
+		e.offsetParent && ++displaying;
+		! narrowing && e.classList.contains("x-search") && (narrowing = true);
 	});
+	showStatus((narrowing ? "絞り込み結果" : "取得結果") + ":", displaying, "件");
 });
 
 document.getElementById("search").addEventListener("click", ()=>{
@@ -69,16 +79,24 @@ document.getElementById("search").addEventListener("click", ()=>{
 		alert("invalid RegExp pattern");
 		return;
 	}
+	let displaying = 0, narrowing;
 	Array.from(document.getElementById('items').children).forEach(e => {
 		! e.classList.contains("x-search") && ! rex.exec(e.dataItem.title) && e.classList.add("x-search");
+		e.offsetParent && ++displaying;
+		! narrowing && e.classList.contains("x-search") && (narrowing = true);
 	});
-	document.getElementById("status").textContent = "絞り込み結果:";
+	showStatus((narrowing ? "絞り込み結果" : "ヒットなし 取得結果") + ":", displaying, "件");
 });
 
 document.getElementById("reset-search-result").addEventListener("click", ()=>{
 	console.log("reset search result");
-	Array.from(document.getElementById('items').children).forEach(e => e.classList.remove("x-search"));
-	document.getElementById("status").textContent = "";
+	let displaying = 0, narrowing;
+	Array.from(document.getElementById('items').children).forEach(e => {
+		e.classList.remove("x-search");
+		e.offsetParent && ++displaying;
+		! narrowing && e.classList.contains("x-search") && (narrowing = true);
+	});
+	showStatus("取得結果:", displaying, "件");
 });
 
 document.addEventListener("DOMContentLoaded", ()=>{
@@ -88,14 +106,15 @@ document.addEventListener("DOMContentLoaded", ()=>{
 	});
 	document.getElementById("cors-urls").textContent = urls.substring(1);
 	Object.keys(profiles).forEach(k => {
-		const ch = profiles[k];
-		console.log("channel:", ch);
-		getRSS(ch, rss => {
+		const prof = profiles[k];
+		//if (! prof.name.startsWith("jiji.comトップ")){return;}
+		console.log("channel:", prof);
+		getRSS(prof, rss => {
 			if (rss.error){
 				console.log("# An error occurred while loading", url, ":",  rss.error);
 				return;
 			}
-			console.log("# got rss from", ch.url);
+			console.log("# got rss from", prof.url);
 			printRSS(rss);
 			if (rss.channel.title){
 				let e = document.createElement("option");
@@ -104,7 +123,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 					i = sortedIndex(Array.from(container.children).map(opt => opt.value), e.value);
 				i < container.children.length ? container.children[i].before(e) : container.append(e);
 			}
-			document.getElementById("status").textContent = document.getElementById('items').children.length + "件のニュース:";
+			showStatus("取得結果:", document.getElementById('items').children.length, "件");
 		});
 	});
 });
