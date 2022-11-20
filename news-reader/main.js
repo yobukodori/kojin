@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 	document.getElementById("cors-urls").textContent = urls.substring(1);
 	Object.keys(profiles).forEach(k => {
 		const prof = profiles[k];
-		//if (! prof.name.startsWith("AFPBB新着")){return;}
+		//if (! prof.name.startsWith("AFPBB人気")){return;}
 		console.log("channel:", prof);
 		getRSS(prof, rss => {
 			if (rss.error){

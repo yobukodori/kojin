@@ -31,13 +31,14 @@ function getRSS(prof, callback){
 	})
 	.then(text => {
 		const domParser = new DOMParser();
-		console.log("# got text:\n" + text.substring(0,1000));
+		console.log("# got text from", url, ":\n" + text.substring(0,1000));
 		const rss = {error: "unexpected response text", channel: {title: prof.name, link: url}, item: []};
 		if (prof.type === "html"){
 			let d = domParser.parseFromString(text, "text/html");
 			console.log(d);
 			if (prof.selector){
 				d.querySelectorAll(prof.selector.item).forEach(item => {
+					console.log(rss.channel.title, "item:", item);
 					if (prof.max && rss.item.length === prof.max){ return; }
 					let data = {}, title, link, date;
 					title = item.querySelector(prof.selector.title) || (item.matches(prof.selector.title) && item);
@@ -54,21 +55,10 @@ function getRSS(prof, callback){
 						data.date && prof.adjustDate && (data.date = prof.adjustDate(data.date));
 						data.date && (data.datetime = parseDate(data.date));
 					}
+					console.log(rss.channel.title, "data:", data);
+					if (data.datetime && prof.isObsolete && prof.isObsolete(data.datetime)){ return; }
 					if (prof.excludeItem && prof.excludeItem(item, data)){ return; }
 					rss.item.push(data);
-				});
-				delete rss.error;
-			}
-			else if (prof.itemSelector){
-				d.querySelectorAll(prof.itemSelector).forEach(a => {
-					if (prof.max && rss.item.length === prof.max){ return; }
-					const data = {title: a.textContent.trim()};
-					if (data.title){
-						const u = new URL(a.getAttribute("href"), prof.url);
-						data.link = prof.normarizeLink ? prof.normarizeLink(u) : u.href;
-						! rss.item.find(e => e.link === data.link) && rss.item.push(data);
-					}
-					data.datetime = 0;
 				});
 				delete rss.error;
 			}
@@ -90,13 +80,13 @@ function getRSS(prof, callback){
 				container = ch.children;
 			}
 			if (container){
-				Array.from(container).forEach(e =>{
-					if (e.tagName !== "item"){ return; }
-					console.log("item:", e);
+				Array.from(container).forEach(item =>{
+					if (item.tagName !== "item"){ return; }
+					console.log(rss.channel.title, "item:", item);
 					if (prof.max && rss.item.length === prof.max){ return; }
 					let tag, data = {};
 					[{tag: "title", name: "title"}, {tag: "link", name: "link"}, {tag: "dc:date", name: "date"}, {tag: "pubDate", name: "pubDate"}].forEach(d => {
-						data[d.name] = (tag = e.getElementsByTagName(d.tag)).length > 0 && tag[0].textContent;
+						data[d.name] = (tag = item.getElementsByTagName(d.tag)).length > 0 && tag[0].textContent;
 					});
 					if (data.link){
 						const u = new URL(data.link);
@@ -104,8 +94,9 @@ function getRSS(prof, callback){
 					}
 					! data.date && data.pubDate && (data.date = data.pubDate);
 					data.datetime = data.date ? (new Date(data.date)).getTime() : 0;
-					console.log("data:", data);
-					! (prof.isObsolete && prof.isObsolete(data)) &&  rss.item.push(data);
+					console.log(rss.channel.title, "data:", data);
+					if (data.datetime && prof.isObsolete && prof.isObsolete(data.datetime)){ return; }
+					rss.item.push(data);
 				});
 				delete rss.error;
 			}

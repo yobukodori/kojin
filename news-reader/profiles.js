@@ -1,48 +1,4 @@
 const profiles = {
-	"AP通信": {
-		url: "https://news.yahoo.co.jp/rss/media/aptsushinv/all.xml",
-		type: "rss",
-		itemSelector: '#top-topstory li > a, #top-latest li > a',
-		normarizeLink: function (url){
-			return url.search = "", (new URL(url)).href;
-		},
-		isObsolete: function (item){
-			return new Date() - new Date(item.date || item.pubDate) > 24 * 60 * 60 * 1000;
-		},
-	},
-	"CNN国際ニュース rss": {
-		url: "http://feeds.cnn.co.jp/rss/cnn/cnn.rdf",
-		type: "rss",
-		max: 20,
-	},
-	"ブルームバーグトップニュース rss": {
-		url: "https://assets.wor.jp/rss/rdf/bloomberg/top.rdf",
-		type: "rss",
-	},
-	"NHK主要ニュース rss": {
-		url: "https://www.nhk.or.jp/rss/news/cat0.xml",
-		type: "rss",
-	},
-	/*
-	"JIJI.COM": {
-		url: "https://www.jiji.com/",
-		type: "html",
-		itemSelector: 'section.HomeTopics a',
-	},
-	"AFPBB": {
-		url: "https://www.afpbb.com/",
-		type: "html",
-		itemSelector: '#top-topstory li > a, #top-latest li > a',
-		normarizeLink: function (url){
-			return url.search = "", (new URL(url)).href;
-		},
-	},
-	"CNN": {
-		url: "https://www.cnn.co.jp/",
-		type: "html",
-		itemSelector: '.pg-container:nth-child(1) > section:nth-child(1) a:not(h1 > a:nth-child(1), [href$="/"])',
-	},
-	*/
 	"jiji.com rss": {
 		url: "https://www.jiji.com/rss/ranking.rdf",
 		type: "rss",
@@ -54,7 +10,6 @@ const profiles = {
 		url: "https://www.jiji.com/jc/list?g=news",
 		mobile: "https://www.jiji.com/sp/list?g=news",
 		type: "html",
-		itemSelector: '.ArticleListMain li a',
 		selector: {
 			item: '.ArticleListMain li > a, .ArticleHeadlineList li > a',
 			title: 'p:nth-child(1), div + p',
@@ -64,6 +19,9 @@ const profiles = {
 		},
 		adjustDate: function (datestr){
 			return /^\(.+\)$/.test(datestr) ? datestr.slice(1, -1) : datestr;
+		},
+		isObsolete: function (datetime){
+			return Date.now() - datetime > 24 * 60 * 60 * 1000;
 		},
 	},
 	"jiji.comトップ": {
@@ -172,17 +130,21 @@ const profiles = {
 			return item.getElementsByTagName("time").length === 0;
 		},
 	},
+	"NHK主要ニュース rss": {
+		url: "https://www.nhk.or.jp/rss/news/cat0.xml",
+		type: "rss",
+	},
 	"ロイタートップニュース rss": {
 		url: "https://assets.wor.jp/rss/rdf/reuters/top.rdf",
 		type: "rss",
 	},
-	/*
-	"ロイタートップ": {
-		url: "https://jp.reuters.com/",
-		type: "html",
-		itemSelector: '#topStory .story-content a, .top-story-content a, #hp-top-news-top a, .top-news-module .article-header a',
+	"CNN国際ニュース rss": {
+		url: "http://feeds.cnn.co.jp/rss/cnn/cnn.rdf",
+		type: "rss",
+		isObsolete: function (datetime){
+			return Date.now() - datetime > 24 * 60 * 60 * 1000;
+		},
 	},
-	*/
 	"BBCトップ": {
 		url: "https://www.bbc.com/japanese",
 		type: "html",
@@ -197,15 +159,35 @@ const profiles = {
 	"AFPBB総合アクセスランキング rss": {
 		url: "http://feeds.afpbb.com/rss/afpbb/access_ranking",
 		type: "rss",
-		max: 5,
+		isObsolete: function (datetime){
+			let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+			return yesterday.setHours(0, 0, 0, 0), datetime <  yesterday.getTime();
+		},
 	},
 	/*
+	"AFPBB人気": {
+		url: "https://www.afpbb.com/list/ranking",
+		type: "html",
+		selector: {
+			item: 'main li, #common-ranking li',
+			title: 'h3.title',
+			link: 'a',
+			date: ".day",
+			description: "",
+		},
+		adjustDate: function (datestr){
+			const r = /^(.+)\(.\)\s(.+)$/.exec(datestr);
+			return r ?  r[1] + " " + r[2] : datestr;
+		},
+		max: 10,
+	},
+	*/
 	"AFPBB総合新着 rss": {
 		url: "http://feeds.afpbb.com/rss/afpbb/afpbbnews",
 		type: "rss",
 		max: 20,
 	},
-	*/
+	/*
 	"AFPBB新着": {
 		url: "https://www.afpbb.com/list/latest/",
 		type: "html",
@@ -224,6 +206,11 @@ const profiles = {
 			return r ?  r[1] + "/" + r[2] + " " + r[3] : datestr;
 		},
 	},
+	*/
+	"ブルームバーグトップニュース rss": {
+		url: "https://assets.wor.jp/rss/rdf/bloomberg/top.rdf",
+		type: "rss",
+	},
 	"Forbes政治経済": {
 		url: "https://forbesjapan.com/category/lists/economics?internal=nav_cat_economics",
 		type: "html",
@@ -235,6 +222,24 @@ const profiles = {
 			description: "",
 		},
 		max: 10,
+		isObsolete: function (datetime){
+			let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+			return yesterday.setHours(0, 0, 0, 0), datetime <  yesterday.getTime();
+		},
+	},
+	"AP通信": {
+		url: "https://news.yahoo.co.jp/rss/media/aptsushinv/all.xml",
+		type: "rss",
+		normarizeLink: function (url){
+			return url.search = "", (new URL(url)).href;
+		},
+		isObsolete: function (datetime){
+			return Date.now() - datetime > 24 * 60 * 60 * 1000;
+		},
+		isObsolete: function (datetime){
+			let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+			return yesterday.setHours(0, 0, 0, 0), datetime <  yesterday.getTime();
+		},
 	},
 };
 
