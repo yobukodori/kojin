@@ -14,8 +14,11 @@ const profiles = {
 			item: '.ArticleListMain li > a, .ArticleHeadlineList li > a',
 			title: 'p:nth-child(1), div + p',
 			link: 'a',
-			date: "span, div + p + p",
+			date: "span, .ArticleDate",
 			description: "",
+		},
+		normarizeLink: function (url){
+			return url.pathname.startsWith("/sp/") && (url.pathname = "/jc/" + url.pathname.substring(4)), (new URL(url)).href;
 		},
 		adjustDate: function (datestr){
 			return /^\(.+\)$/.test(datestr) ? datestr.slice(1, -1) : datestr;
@@ -34,13 +37,12 @@ const profiles = {
 			date: "",
 			description: "",
 		},
-		getTitle: function (e){
-			return e.firstChild.textContent
+		getTitle: function (title){
+			return title.firstChild.textContent
 		},
-		adjustDate: function (datestr){
-			return /^\(.+\)$/.test(datestr) ? datestr.slice(1, -1) : datestr;
+		getDatetime: function (item){
+			return 0; // this.now ? this.now : (this.now = Date.now());
 		},
-		max: 20,
 	},
 	"47NEWSトップ": {
 		url: "https://www.47news.jp/",

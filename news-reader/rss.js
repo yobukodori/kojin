@@ -55,6 +55,9 @@ function getRSS(prof, callback){
 						data.date && prof.adjustDate && (data.date = prof.adjustDate(data.date));
 						data.date && (data.datetime = parseDate(data.date));
 					}
+					else if (prof.getDatetime){
+						data.datetime = prof.getDatetime(item);
+					}
 					console.log(rss.channel.title, "data:", data);
 					if (data.datetime && prof.isObsolete && prof.isObsolete(data.datetime)){ return; }
 					if (prof.excludeItem && prof.excludeItem(item, data)){ return; }
