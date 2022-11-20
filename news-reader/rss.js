@@ -23,15 +23,15 @@ function parseDate(datestr){
 
 function getRSS(prof, callback){
 	let url = (document.location.protocol === "https:" && (new URL(prof.url)).protocol === "http:") ? corsAnyWhere(prof.url) : prof.url;
-	console.log("# loading html from", url);
+	console.log("# loading", prof.type, "from", url);
 	fetch(url, {})
 	.then(res => {
 		console.log("# got res:", res);
-		return res.text();
+		return prof.type === "json" ? res.json() : res.text();
 	})
 	.then(text => {
 		const domParser = new DOMParser();
-		console.log("# got text from", url, ":\n" + text.substring(0,1000));
+		console.log("# got", prof.type, "from", url, ":\n" + ("" + text).substring(0,1000));
 		const rss = {error: "unexpected response text", channel: {title: prof.name, link: url}, item: []};
 		if (prof.type === "html"){
 			let d = domParser.parseFromString(text, "text/html");
@@ -103,6 +103,27 @@ function getRSS(prof, callback){
 				});
 				delete rss.error;
 			}
+		}
+		else if (prof.type === "json"){
+			let items = prof.getItems(text);
+			items.forEach(item => {
+				let data = {datetime: 0};
+				["title", "link", "date"].forEach(name => {
+					data[name] = prof.get[name] ? prof.get[name](item) : item[name];
+				});
+				if (data.link){
+					const u = new URL(data.link, prof.url);
+					data.link = prof.normarizeLink ? prof.normarizeLink(u) : u.href;
+				}
+				if (data.date){
+					prof.adjustDate && (data.date = prof.adjustDate(data.date));
+					data.datetime =  (new Date(data.date)).getTime();
+				}
+				console.log(rss.channel.title, "data:", data);
+				if (data.datetime && prof.isObsolete && prof.isObsolete(data.datetime)){ return; }
+				rss.item.push(data);
+			});
+			delete rss.error;
 		}
 		callback(rss);
 	})

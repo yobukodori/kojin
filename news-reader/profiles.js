@@ -141,6 +141,7 @@ const profiles = {
 		type: "rss",
 	},
 	"CNN国際ニュース rss": {
+		// httpなので混在コンテンツでブロックされる。CORSプロキシで対応
 		url: "http://feeds.cnn.co.jp/rss/cnn/cnn.rdf",
 		type: "rss",
 		isObsolete: function (datetime){
@@ -158,7 +159,9 @@ const profiles = {
 			description: "",
 		},
 	},
+	// AFPBB人気 ===============================
 	"AFPBB総合アクセスランキング rss": {
+		// httpなので混在コンテンツでブロックされる。CORSプロキシで対応
 		url: "http://feeds.afpbb.com/rss/afpbb/access_ranking",
 		type: "rss",
 		isObsolete: function (datetime){
@@ -168,6 +171,7 @@ const profiles = {
 	},
 	/*
 	"AFPBB人気": {
+		// モバイルでは日付がない。PCはある。
 		url: "https://www.afpbb.com/list/ranking",
 		type: "html",
 		selector: {
@@ -184,12 +188,31 @@ const profiles = {
 		max: 10,
 	},
 	*/
-	"AFPBB総合新着 rss": {
+	// AFPBB総合新着 ===============================
+	/*
+	"AFPBB総合新着 rss": { 
+		// httpなので混在コンテンツでブロックされる。CORSプロキシで対応
+		// 不要な中国タブ記事が含まれる
 		url: "http://feeds.afpbb.com/rss/afpbb/afpbbnews",
 		type: "rss",
 		max: 20,
 	},
+	*/
 	/*
+	"AFPBB新着 json": {
+		// 反応が遅いがほかは問題なし
+		url: "https://www.afpbb.com/list/ajax/latest_articles_more.js?page=1&type=afp",
+		type: "json",
+		getItems: function(data){ return data; },
+		get: {
+			date: function(item){ return item.day; },
+		},
+		adjustDate: function (datestr){
+			const r = /^(\d+)年\s(.+)\(.\)\s(.+)$/.exec(datestr);
+			return r ?  r[1] + "/" + r[2] + " " + r[3] : datestr;
+		},
+	},
+	*/
 	"AFPBB新着": {
 		url: "https://www.afpbb.com/list/latest/",
 		type: "html",
@@ -208,12 +231,12 @@ const profiles = {
 			return r ?  r[1] + "/" + r[2] + " " + r[3] : datestr;
 		},
 	},
-	*/
 	"ブルームバーグトップニュース rss": {
 		url: "https://assets.wor.jp/rss/rdf/bloomberg/top.rdf",
 		type: "rss",
 	},
 	"Forbes政治経済": {
+		// 日付: PCあり モバイルなし
 		url: "https://forbesjapan.com/category/lists/economics?internal=nav_cat_economics",
 		type: "html",
 		selector: {
