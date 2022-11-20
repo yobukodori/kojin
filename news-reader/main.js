@@ -33,7 +33,7 @@ function showStatus(){
 }
 
 function printRSS(rss){
-	const container = document.getElementById('items');
+	const container = document.getElementById('items'), today = new Date();
 	rss.item.forEach(d => {
 		console.log(d);
 		if (Array.from(container.children).find(item => item.dataItem.link === d.link)){
@@ -53,7 +53,13 @@ function printRSS(rss){
 		date.textContent = d.datetime ? (new Date(d.datetime)).toLocaleString() : (d.date  || ""), date.className = "date";
 		item.className = "item", item.append(title, description, channel, date);
 		item.dataItem = d, item.dataChannel = rss.channel;
-		const i = sortedIndex(Array.from(container.children).map(item => item.dataItem.datetime), item.dataItem.datetime, true);
+		let datetime = item.dataItem.datetime;
+		if (datetime === 0){
+			let r = /^((\d+)年)?(\d+)月(\d+)日$/.exec(item.dataItem.date);
+			r && (item.dataItem.datetime2 = datetime = Date.parse( (r[2] || today.getFullYear()) + "/" + r[3] + "/" +r [4] + " 00:00"));
+		}
+		let ar = Array.from(container.children).map(item => item.dataItem.datetime2 || item.dataItem.datetime),  i = sortedIndex(ar, datetime, true);
+		while (i < ar.length && datetime === ar[i]){ i++; }
 		i < container.children.length ? container.children[i].before(item) : container.append(item);
 	});
 }
@@ -107,7 +113,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 	document.getElementById("cors-urls").textContent = urls.substring(1);
 	Object.keys(profiles).forEach(k => {
 		const prof = profiles[k];
-		//if (! prof.name.startsWith("jiji.comトップ")){return;}
+		//if (! prof.name.startsWith("AFPBB新着")){return;}
 		console.log("channel:", prof);
 		getRSS(prof, rss => {
 			if (rss.error){

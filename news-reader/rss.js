@@ -5,7 +5,9 @@ function corsAnyWhere(url){
 function parseDate(datestr){
 	let now = new Date(), r;
 	if (r = /^(\d+)時(\d+)分$/.exec(datestr) || /^(\d+):(\d+)$/.exec(datestr)){
-		return Date.parse(now.toLocaleDateString() + " " + r[1] + ":" + r[2]);
+		let datetime = Date.parse(now.toLocaleDateString() + " " + r[1] + ":" + r[2]);
+		datetime > now && (datetime -= 24 * 60 * 60 * 1000);
+		return datetime;
 	}
 	else if (r = /^(\d+\/\d+\s\d+:\d+)$/.exec(datestr)){ // jiji.com
 		return Date.parse(now.getFullYear() + "/" + r[1]);
@@ -39,7 +41,7 @@ function getRSS(prof, callback){
 					if (prof.max && rss.item.length === prof.max){ return; }
 					let data = {}, title, link, date;
 					title = item.querySelector(prof.selector.title) || (item.matches(prof.selector.title) && item);
-					data.title = title ? title.textContent.trim() : "";
+					data.title = title ? (prof.getTitle ? prof.getTitle(title) : title.textContent.trim()) : "";
 					link = item.querySelector(prof.selector.link) || (item.matches(prof.selector.link) && item);
 					if (link){
 						const u = new URL(link.getAttribute("href"), prof.url);

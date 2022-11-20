@@ -10,16 +10,6 @@ const profiles = {
 			return new Date() - new Date(item.date || item.pubDate) > 24 * 60 * 60 * 1000;
 		},
 	},
-	"AFPBB総合新着 rss": {
-		url: "http://feeds.afpbb.com/rss/afpbb/afpbbnews",
-		type: "rss",
-		max: 20,
-	},
-	"AFPBB総合アクセスランキング rss": {
-		url: "http://feeds.afpbb.com/rss/afpbb/access_ranking",
-		type: "rss",
-		max: 5,
-	},
 	"CNN国際ニュース rss": {
 		url: "http://feeds.cnn.co.jp/rss/cnn/cnn.rdf",
 		type: "rss",
@@ -85,6 +75,9 @@ const profiles = {
 			link: 'a',
 			date: "",
 			description: "",
+		},
+		getTitle: function (e){
+			return e.firstChild.textContent
 		},
 		adjustDate: function (datestr){
 			return /^\(.+\)$/.test(datestr) ? datestr.slice(1, -1) : datestr;
@@ -199,6 +192,36 @@ const profiles = {
 			link: 'a',
 			date: "h3 ~ time",
 			description: "",
+		},
+	},
+	"AFPBB総合アクセスランキング rss": {
+		url: "http://feeds.afpbb.com/rss/afpbb/access_ranking",
+		type: "rss",
+		max: 5,
+	},
+	/*
+	"AFPBB総合新着 rss": {
+		url: "http://feeds.afpbb.com/rss/afpbb/afpbbnews",
+		type: "rss",
+		max: 20,
+	},
+	*/
+	"AFPBB新着": {
+		url: "https://www.afpbb.com/list/latest/",
+		type: "html",
+		selector: {
+			item: '#tab-afpbb li',
+			title: 'h3.title',
+			link: 'a',
+			date: ".day",
+			description: "",
+		},
+		getTitle: function (e){
+			return e.childNodes.length > 1 && e.childNodes[1].nodeType === 3 ? e.childNodes[1].textContent : e.textContent;
+		},
+		adjustDate: function (datestr){
+			const r = /^(\d+)年\s(.+)\(.\)\s(.+)$/.exec(datestr);
+			return r ?  r[1] + "/" + r[2] + " " + r[3] : datestr;
 		},
 	},
 	"Forbes政治経済": {
