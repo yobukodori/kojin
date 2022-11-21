@@ -3,31 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>個人的な</title>
-<link rel="icon" type="image/png" href="https://yobukodori.github.io/kojin/icon/na.png">
-<link href="css/iconic.menu.css" rel="stylesheet" type="text/css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+<title>ニュースリーダー</title>
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="main.css" type="text/css" />
 </head>
 <body>
-<div id="iconic-menu-container">
+<label for="select-channel">チャンネル:</label>
+<select name="channel" id="channel-select">
+<option value="">すべて</option>
+<!--
+<option value="dog">Dog</option>
+-->
+</select>
+<input type="text" id="search-text"  value=""><button id="search">絞り込み</button><button id="reset-search-result">絞り込みを解除</button>
+<div id="status"></div>
+<div id="items">
 </div>
+<p>
+【注意】このニュースリーダーをフルに機能させるには <a href="https://developer.mozilla.org/ja/docs/Web/HTTP/CORS">CORS</a> の制限をバイパスする拡張機能（例えばfirefox用では <a href="https://addons.mozilla.org/ja/firefox/addon/cors-for-me/">CORS for Me</a>）をブラウザに登録し、下記のURLの読み込みを許可する必要があります
+</p>
+<p id="cors-urls"></p>
+<script src="log.js"></script>
+<script src="rss.js"></script>
+<script src="profiles.js"></script>
+<script src="main.js"></script>
 <script type='text/javascript'>
-var iconicMenu = {
-	items: [
-		{name: "Twitter", url: "https://mobile.twitter.com/", icon: "icon/twitter.png"},
-		{name: "検索", url: "https://google.com/", icon: "icon/google.png"},
-		{name: "GitHub", url: "https://github.com/", icon: "icon/github.png"},
-		{name: "ニュース", url: "news-sites.html", icon: "icon/news.png"},
-		{"name": "天気(WN系)", "aes-url": "qQjPWgg9LepcuwUx2BjmDTYiK5earVOItMm/rEmupTlXi54LUs9fiSabzuh4i8ESWUNuW2gscFDHY3ZOukxATZVvgSZxL3KMpXbO+1LEkAE=", "icon": "icon/weather.png"},		
-		{name: "雨雲", url: "https://www.jma.go.jp/jp/highresorad/m_index.html", icon: "icon/rain-cloud.png"},
-		{name: "天気", url: "weather.html", icon: "icon/folder.png"},
-		{name: "Google", url: "google.html", icon: "icon/gfolder.png"},
-		{name: "共有メモ", url: "https://docs.google.com/document/d/13w7RRaj-qN0rSDQjFzRFAqpbdiRSE8_i1Hy7o9ngKMc/edit?usp=sharing", icon: "icon/google-docs.png"},
-		{name: "共有フォルダ", url: "https://drive.google.com/drive/folders/1Z1lYn_sPWpRE5djvI3e8bGriQBtqT8zf?usp=sharing", icon: "icon/folder.png"},
-		{name: "各種設定", url: "settings.html", icon: "icon/settings.png"},
-		{name: "その他", url: "others.html", icon: "icon/folder.png"},
-	],
-};
 </script>
-<script type="text/javascript" src ="script/iconic.menu.js"></script>
-</body></html>
+</body>
+</html>
