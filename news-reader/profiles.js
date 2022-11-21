@@ -7,11 +7,6 @@ const profiles = {
 			url.search.startsWith("?k=") && (url.search = url.search.split("&")[0]);
 			return (new URL(url)).href;
 		},
-		/*
-		normarizeLink: function (url){
-			return url.search.endsWith("&m=rss") && (url.search = url.search.slice(0,-6)), (new URL(url)).href;
-		},
-		*/
 	},
 	"jiji.com新着": {
 		url: "https://www.jiji.com/jc/list?g=news",
@@ -37,12 +32,12 @@ const profiles = {
 		},
 	},
 	"jiji.comトップ": {
-		url: "https://www.jiji.com/",
+		url: "https://www.jiji.com/sp/", // pc版はタイトルが省略されている
 		type: "html",
 		access: ["https://www.jiji.com/jc/article?*", "https://www.jiji.com/sp/article?*"],
 		selector: {
-			item: '.HomeTopics .TopicsPhoto, .HomeTopics li',
-			title: '.TopicsPhoto > a > span, li > a',
+			item: '.HomeTopics .TopicsPhoto, .HomeTopics li, .top5new',
+			title: '.TopicsPhoto > a > span, li > a, dd > p',
 			link: 'a',
 			date: "",
 			description: "",
