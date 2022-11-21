@@ -1,14 +1,26 @@
 const profiles = {
-	"jiji.com rss": {
-		url: "https://www.jiji.com/rss/ranking.rdf",
-		type: "rss",
-		normarizeLink: function (url){
-			return url.search.endsWith("&m=rss") && (url.search = url.search.slice(0,-6)), (new URL(url)).href;
+	"jiji.comトップ": {
+		url: "https://www.jiji.com/",
+		type: "html",
+		access: ["https://www.jiji.com/jc/article?*", "https://www.jiji.com/sp/article?*"],
+		selector: {
+			item: '.HomeTopics .TopicsPhoto, .HomeTopics li',
+			title: '.TopicsPhoto > a > span, li > a',
+			link: 'a',
+			date: "",
+			description: "",
+		},
+		getTitle: function (title/* element */){
+			return title.firstChild.textContent
+		},
+		getDateFromArticle: function(text){
+			let sig = '"dateModified":"', i = text.indexOf(sig), start = i > -1 && i + sig.length, end = start && text.indexOf('"', start), date = end ?  text.substring(start, end) : "";
+			return date;
 		},
 	},
 	"jiji.com新着": {
 		url: "https://www.jiji.com/jc/list?g=news",
-		mobile: "https://www.jiji.com/sp/list?g=news",
+		access: ["https://www.jiji.com/sp/list?g=news"],
 		type: "html",
 		selector: {
 			item: '.ArticleListMain li > a, .ArticleHeadlineList li > a',
@@ -27,21 +39,11 @@ const profiles = {
 			return Date.now() - datetime > 24 * 60 * 60 * 1000;
 		},
 	},
-	"jiji.comトップ": {
-		url: "https://www.jiji.com/",
-		type: "html",
-		selector: {
-			item: '.HomeTopics .TopicsPhoto, .HomeTopics li',
-			title: 'a',
-			link: 'a',
-			date: "",
-			description: "",
-		},
-		getTitle: function (title){
-			return title.firstChild.textContent
-		},
-		getDatetime: function (item){
-			return 0; // this.now ? this.now : (this.now = Date.now());
+	"jiji.com rss": {
+		url: "https://www.jiji.com/rss/ranking.rdf",
+		type: "rss",
+		normarizeLink: function (url){
+			return url.search.endsWith("&m=rss") && (url.search = url.search.slice(0,-6)), (new URL(url)).href;
 		},
 	},
 	"47NEWSトップ": {
@@ -119,7 +121,7 @@ const profiles = {
 	*/
 	"朝日新聞トップ": {
 		url: "https://www.asahi.com/",
-		mobile: "https://www.asahi.com/sp/",
+		access: ["https://www.asahi.com/sp/"],
 		type: "html",
 		selector: {
 			item: '.p-topNews__firstNews, .p-topNews__listItem, .p-topNews2__listItem, .p-topNews .c-articleModule:nth-child(1)',
@@ -237,7 +239,7 @@ const profiles = {
 	},
 	"Forbes政治経済": {
 		// 日付: PCあり モバイルなし
-		url: "https://forbesjapan.com/category/lists/economics?internal=nav_cat_economics",
+		url: "https://forbesjapan.com/category/lists/economics",
 		type: "html",
 		selector: {
 			item: '.article-text .edittools-stream li',
@@ -246,7 +248,34 @@ const profiles = {
 			date: ".article-time",
 			description: "",
 		},
-		max: 10,
+		first: 5,   // 最初の <first> item だけ処理
+		max: 10, // 最大 <max> item だけ取得
+		getDateFromArticle: function(text){
+			let sig = 'name="publishdatetime" value="', i = text.indexOf(sig), start = i > -1 && i + sig.length, end = start && text.indexOf('"', start), date = end ?  text.substring(start, end) : "";
+			return date;
+		},
+		isObsolete: function (datetime){
+			let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+			return yesterday.setHours(0, 0, 0, 0), datetime <  yesterday.getTime();
+		},
+	},
+	"Forbesテクノロジー": {
+		// 日付: PCあり モバイルなし
+		url: "https://forbesjapan.com/category/lists/technology",
+		type: "html",
+		selector: {
+			item: '.article-text .edittools-stream li',
+			title: '.article-headline',
+			link: 'a',
+			date: ".article-time",
+			description: "",
+		},
+		first: 5,   // 最初の <first> item だけ処理
+		max: 10, // 最大 <max> item だけ取得
+		getDateFromArticle: function(text){
+			let sig = 'name="publishdatetime" value="', i = text.indexOf(sig), start = i > -1 && i + sig.length, end = start && text.indexOf('"', start), date = end ?  text.substring(start, end) : "";
+			return date;
+		},
 		isObsolete: function (datetime){
 			let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
 			return yesterday.setHours(0, 0, 0, 0), datetime <  yesterday.getTime();

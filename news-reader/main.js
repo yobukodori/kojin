@@ -108,14 +108,16 @@ document.getElementById("reset-search-result").addEventListener("click", ()=>{
 document.addEventListener("DOMContentLoaded", ()=>{
 	let urls = "";
 	Object.keys(profiles).forEach(k => {
-		urls += ", " + profiles[k].url + (profiles[k].mobile ? ", " + profiles[k].mobile : "");
+		urls += ", " + profiles[k].url;
+		profiles[k].access && profiles[k].access.forEach(url => urls += ", " + url);
 	});
 	document.getElementById("cors-urls").textContent = urls.substring(1);
 	Object.keys(profiles).forEach(k => {
 		const prof = profiles[k];
-		//if (! prof.name.startsWith("AFPBB新着")){return;}
+		//if (! prof.name.startsWith("jiji.comトップ")){return;}
 		console.log("channel:", prof);
-		getRSS(prof, rss => {
+		getRSS(prof)
+		.then(rss => {
 			if (rss.error){
 				console.log("# An error occurred while loading", prof.url, ":",  rss.error);
 				return;
