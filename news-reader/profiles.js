@@ -1,4 +1,41 @@
 const profiles = {
+	"jiji.com rss": {
+		url: "https://www.jiji.com/rss/ranking.rdf",
+		type: "rss",
+		normarizeLink: function (url){
+			url.pathname.startsWith("/sp/") && (url.pathname = "/jc/" + url.pathname.substring(4));
+			url.search.startsWith("?k=") && (url.search = url.search.split("&")[0]);
+			return (new URL(url)).href;
+		},
+		/*
+		normarizeLink: function (url){
+			return url.search.endsWith("&m=rss") && (url.search = url.search.slice(0,-6)), (new URL(url)).href;
+		},
+		*/
+	},
+	"jiji.com新着": {
+		url: "https://www.jiji.com/jc/list?g=news",
+		access: ["https://www.jiji.com/sp/list?g=news"],
+		type: "html",
+		selector: {
+			item: '.ArticleListMain li > a, .ArticleHeadlineList li > a',
+			title: 'p:nth-child(1), div + p',
+			link: 'a',
+			date: "span, .ArticleDate",
+			description: "",
+		},
+		normarizeLink: function (url){
+			url.pathname.startsWith("/sp/") && (url.pathname = "/jc/" + url.pathname.substring(4));
+			url.search.startsWith("?k=") && (url.search = url.search.split("&")[0]);
+			return (new URL(url)).href;
+		},
+		adjustDate: function (datestr){
+			return /^\(.+\)$/.test(datestr) ? datestr.slice(1, -1) : datestr;
+		},
+		isObsolete: function (datetime){
+			return Date.now() - datetime > 24 * 60 * 60 * 1000;
+		},
+	},
 	"jiji.comトップ": {
 		url: "https://www.jiji.com/",
 		type: "html",
@@ -13,37 +50,14 @@ const profiles = {
 		getTitle: function (title/* element */){
 			return title.firstChild.textContent
 		},
+		normarizeLink: function (url){
+			url.pathname.startsWith("/sp/") && (url.pathname = "/jc/" + url.pathname.substring(4));
+			url.search.startsWith("?k=") && (url.search = url.search.split("&")[0]);
+			return (new URL(url)).href;
+		},
 		getDateFromArticle: function(text){
 			let sig = '"dateModified":"', i = text.indexOf(sig), start = i > -1 && i + sig.length, end = start && text.indexOf('"', start), date = end ?  text.substring(start, end) : "";
 			return date;
-		},
-	},
-	"jiji.com新着": {
-		url: "https://www.jiji.com/jc/list?g=news",
-		access: ["https://www.jiji.com/sp/list?g=news"],
-		type: "html",
-		selector: {
-			item: '.ArticleListMain li > a, .ArticleHeadlineList li > a',
-			title: 'p:nth-child(1), div + p',
-			link: 'a',
-			date: "span, .ArticleDate",
-			description: "",
-		},
-		normarizeLink: function (url){
-			return url.pathname.startsWith("/sp/") && (url.pathname = "/jc/" + url.pathname.substring(4)), (new URL(url)).href;
-		},
-		adjustDate: function (datestr){
-			return /^\(.+\)$/.test(datestr) ? datestr.slice(1, -1) : datestr;
-		},
-		isObsolete: function (datetime){
-			return Date.now() - datetime > 24 * 60 * 60 * 1000;
-		},
-	},
-	"jiji.com rss": {
-		url: "https://www.jiji.com/rss/ranking.rdf",
-		type: "rss",
-		normarizeLink: function (url){
-			return url.search.endsWith("&m=rss") && (url.search = url.search.slice(0,-6)), (new URL(url)).href;
 		},
 	},
 	"47NEWSトップ": {
