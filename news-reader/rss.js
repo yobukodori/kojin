@@ -1,5 +1,6 @@
 function corsAnyWhere(url){
-	return "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
+	return "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(url);
+	//return "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
 }
 
 function parseDate(datestr){
