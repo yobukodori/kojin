@@ -37,7 +37,6 @@ function getRSS(prof){
 			const domParser = new DOMParser();
 			let count = 0;
 			console.log("# got", prof.type, "from", url, ":\n" + ("" + text).substring(0,1000));
-			prof.name.startsWith("CNN") && log(text);
 			if (prof.type === "html"){
 				let d = domParser.parseFromString(text, "text/html");
 				console.log(d);

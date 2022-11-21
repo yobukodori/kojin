@@ -156,12 +156,26 @@ const profiles = {
 		url: "https://assets.wor.jp/rss/rdf/reuters/top.rdf",
 		type: "rss",
 	},
+	/*
 	"CNN国際ニュース rss": {
 		// httpなので混在コンテンツでブロックされる。CORSプロキシで対応
+		// api.allorigins.win経由だとpcでは最新のrssが取れるがモバイルだと古いrssを取ってしまう(firefox)
 		url: "http://feeds.cnn.co.jp/rss/cnn/cnn.rdf",
 		type: "rss",
 		isObsolete: function (datetime){
 			return Date.now() - datetime > 24 * 60 * 60 * 1000;
+		},
+	},
+	*/
+	"CNN全記事一覧": {
+		url: "https://www.cnn.co.jp/archives/",
+		type: "html",
+		selector: {
+			item: '.list-news-line > li',
+			title: 'a + a',
+			link: 'a',
+			date: "span",
+			description: "",
 		},
 	},
 	"BBCトップ": {
@@ -175,39 +189,11 @@ const profiles = {
 			description: "",
 		},
 	},
-	// AFPBB人気 ===============================
-	"AFPBB総合アクセスランキング rss": {
-		// httpなので混在コンテンツでブロックされる。CORSプロキシで対応
-		url: "http://feeds.afpbb.com/rss/afpbb/access_ranking",
-		type: "rss",
-		isObsolete: function (datetime){
-			let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
-			return yesterday.setHours(0, 0, 0, 0), datetime <  yesterday.getTime();
-		},
-	},
-	/*
-	"AFPBB人気": {
-		// モバイルでは日付がない。PCはある。
-		url: "https://www.afpbb.com/list/ranking",
-		type: "html",
-		selector: {
-			item: 'main li, #common-ranking li',
-			title: 'h3.title',
-			link: 'a',
-			date: ".day",
-			description: "",
-		},
-		adjustDate: function (datestr){
-			const r = /^(.+)\(.\)\s(.+)$/.exec(datestr);
-			return r ?  r[1] + " " + r[2] : datestr;
-		},
-		max: 10,
-	},
-	*/
-	// AFPBB総合新着 ===============================
+	// ===========================================
 	/*
 	"AFPBB総合新着 rss": { 
 		// httpなので混在コンテンツでブロックされる。CORSプロキシで対応
+		// api.allorigins.win経由だとpcでは最新のrssが取れるがモバイルだと古いrssを取ってしまう(firefox)
 		// 不要な中国タブ記事が含まれる
 		url: "http://feeds.afpbb.com/rss/afpbb/afpbbnews",
 		type: "rss",
@@ -247,6 +233,39 @@ const profiles = {
 			return r ?  r[1] + "/" + r[2] + " " + r[3] : datestr;
 		},
 	},
+	// ===========================================
+	/*
+	"AFPBB総合アクセスランキング rss": {
+		// ランキングされている記事は古いものが多い。
+		// httpなので混在コンテンツでブロックされる。CORSプロキシで対応
+		// api.allorigins.win経由だとpcでは最新のrssが取れるがモバイルだと古いrssを取ってしまう(firefox)
+		url: "http://feeds.afpbb.com/rss/afpbb/access_ranking",
+		type: "rss",
+		isObsolete: function (datetime){
+			let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+			return yesterday.setHours(0, 0, 0, 0), datetime <  yesterday.getTime();
+		},
+	},
+	"AFPBB人気": {
+		// ランキングされている記事は古いものが多い。
+		// モバイルでは日付がない。PCはある。
+		url: "https://www.afpbb.com/list/ranking",
+		type: "html",
+		selector: {
+			item: 'main li, #common-ranking li',
+			title: 'h3.title',
+			link: 'a',
+			date: ".day",
+			description: "",
+		},
+		adjustDate: function (datestr){
+			const r = /^(.+)\(.\)\s(.+)$/.exec(datestr);
+			return r ?  r[1] + " " + r[2] : datestr;
+		},
+		max: 10,
+	},
+	*/
+	// ===========================================
 	"ブルームバーグトップニュース rss": {
 		url: "https://assets.wor.jp/rss/rdf/bloomberg/top.rdf",
 		type: "rss",

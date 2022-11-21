@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 	document.getElementById("cors-urls").textContent = urls.substring(1);
 	Object.keys(profiles).forEach(k => {
 		const prof = profiles[k];
-		//if (! prof.name.startsWith("jiji.comトップ")){return;}
+		//if (! prof.name.startsWith("AFPBB")){return;}
 		console.log("channel:", prof);
 		getRSS(prof)
 		.then(rss => {
