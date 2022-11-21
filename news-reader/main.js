@@ -112,6 +112,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
 		profiles[k].access && profiles[k].access.forEach(url => urls += ", " + url);
 	});
 	document.getElementById("cors-urls").textContent = urls.substring(1);
+	showStatus("読み込み中・・・");
+	let total = Object.keys(profiles).length,  read = 0;
 	Object.keys(profiles).forEach(k => {
 		const prof = profiles[k];
 		//if (! prof.name.startsWith("AFPBB")){return;}
@@ -131,7 +133,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 					i = sortedIndex(Array.from(container.children).map(opt => opt.value), e.value);
 				i < container.children.length ? container.children[i].before(e) : container.append(e);
 			}
-			showStatus("取得結果:", document.getElementById('items').children.length, "件");
+			showStatus(++read === total ? "取得結果:" : read + "/" + total + " 読み込み中・・・", document.getElementById('items').children.length, "件");
 		});
 	});
 });
