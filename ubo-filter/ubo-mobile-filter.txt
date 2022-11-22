@@ -159,6 +159,15 @@ www.buzzfeed.com###commentsWrapper:style(height:0px!important)
 ! 2021-05-16 https://www.nishinippon.co.jp
 www.nishinippon.co.jp##.js-fixedContent.c-fixedContent
 
+! 2022-11-11 https://www.bloomberg.co.jp
+www.bloomberg.co.jp##.outstream-ad
+www.bloomberg.co.jp##.page-ad
+
+! 2022-11-21 https://forbesjapan.com
+forbesjapan.com##.ad_header
+! 無料会員に登録すると、続きをお読みいただけます - スマホのみ
+forbesjapan.com##^style:has-text(#btn-next-)
+
 ================================
 !  天気
 ! ================================
@@ -233,3 +242,5 @@ jma.go.jp##.jma_ad_space
 jma.go.jp###delete_jma_ad_space
 jma.go.jp##.ad-sp
 
+! 2022-10-17 https://fx.minkabu.jp
+fx.minkabu.jp##.gpt-ad
