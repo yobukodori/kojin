@@ -16,6 +16,9 @@ twitter.com#@#[data-testid="trend"]:has-text(/推荐|Promoted|Gesponsert|Рек�
 ! 2020/4/21 仕様変更で効かなくなる
 ! twitter.com##div[data-testid="primaryColumn"] h1[aria-level="1"] + div > div:first-child > div:first-child > div:has(path[d^="M20.75 2H3.25C2.007"])
 
+! 2022/12/15 primaryColumn のおすすめのツイートなど吹き出し付きツイート非表示（モバイル）
+twitter.com##div[data-testid="primaryColumn"] div[data-testid="cellInnerDiv"]:has(path[d^="M12 1.75c-5.11 0-9.25"])
+
 ! 2020/4/21 プロモツイートを消す
 twitter.com##div[data-testid="tweet"]:has(path[d^="M20.75 2H3.25C2.007"])
 
