@@ -68,6 +68,9 @@
 						if (/^whoToFollow-\d/.test(entry.entryId)){
 							log("#### removed who to follow", entry), removed++, ng = true;
 						}
+						else if (/^promotedTweet-\d/.test(entry.entryId)){
+							log("#### removed promoted tweet", entry), removed++, ng = true;
+						}
 						if (! ng){
 							log("# entry", entry.entryId, entry);
 							entries.push(entry);
