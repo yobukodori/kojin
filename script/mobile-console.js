@@ -20,7 +20,7 @@
 		const consoleLog = console.log, mconsole = new MobileConsole();
 		console.log = new Proxy(console.log, {
 			apply: function(target, thisArg, args) {
-				mconsole.log.call(mconsole, args);
+				mconsole.log.apply(mconsole, args);
 			},
 		});
 	}
