@@ -84,8 +84,7 @@ news.yahoo.co.jp###contents article ~ *
 news.yahoo.co.jp###comModule
 ! テレメトリ
 ||dsb.yahoo.co.jp^$1p
-! いらんだろう
-*$xhr,domain=news.yahoo.co.jp
+! いらんだろう ー＞ いる
 ||yahoo.co.jp/*.gif^$image,1p
 ! 記事を非表示関連
 news.yahoo.co.jp##div.newsFeed_item_dislike_balloon-close + div
