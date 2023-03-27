@@ -2,7 +2,7 @@
 //name Fix google search result redirection
 //matches https://*.google.com/search?*,https://*.google.co.jp/search?*
 //options
-{ "wrapCodeInScriptTag":true, "runAt":"document_start" }
+0,{ "wrapCodeInScriptTag":true, "runAt":"document_start" }
 //js
 (function() {
 	function log(){
