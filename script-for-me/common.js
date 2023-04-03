@@ -1,14 +1,22 @@
 //==========================================================
-//name Fix google search result redirection
+//name Fix google search results link redirection
 //matches https://*.google.com/search?*,https://*.google.co.jp/search?*
-//options
-0,{ "wrapCodeInScriptTag":true, "runAt":"document_start" }
+//option page, end
 //js
-(function() {
+(function(){
 	function log(){
 		console.log.apply(console,["[Fix google search result redirection]"].concat(Array.from(arguments)));
 	}
-	log("running on", location.origin + location.pathname);
+	log("started");
+	let footer = new Set(), fixed = 0;
+	document.querySelectorAll('footer a[href^="/url?"]').forEach(a => footer.add(a));
+	document.querySelectorAll('a[href^="/url?"]').forEach((a, i) =>{
+		if (footer.has(a)){ return; }
+		const params = new URLSearchParams(new URL(a.href).search);
+		const href = params.get("q") || params.get("url");
+		try { href && new URL(href) && (a.href = href, fixed++); } catch(e){}
+	});
+	fixed && log("fixed", fixed, "redirection");
 	const obj = HTMLAnchorElement.prototype, prop = "href";
 	const {get, set} = Object.getOwnPropertyDescriptor(obj, prop);
 	if (get && set){
