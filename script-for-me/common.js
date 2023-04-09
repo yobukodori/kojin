@@ -26,9 +26,4 @@
 		});
 		log("protected HTMLAnchorElement.prototype.href");
 	}
-	EventTarget.prototype.addEventListener = new Proxy(EventTarget.prototype.addEventListener, {
-        apply: function(target, thisArg, args ) {
-			args[0] !== "click" && Reflect.apply(target, thisArg, args);
-		}
-	});
 })();
