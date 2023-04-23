@@ -1,0 +1,67 @@
+.clear {
+	clear: both;
+}
+
+#alert-modal {
+	position: fixed;
+	inset: 0;
+	margin: 0 auto;
+	background-color: rgba(128, 128, 128, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#alert-modal > div {
+	border: solid;
+	background-color: #ffff88;
+	min-width: 200px;
+	max-width: 90%;
+	max-height: 90%;
+	overflow-y: scroll;
+	padding: 0.5em 1em;
+}
+
+.hide, .x-channel, .x-filter, .x-settings-filter {
+	display: none;
+}
+
+.x-settings-filter.show {
+	display: inherit;
+}
+
+#update-interval {
+	width: 1.2em;
+	text-align: right;
+}
+
+#items > .item {
+	padding: 0.2em 0 0.2em 0.3em;
+}
+
+#items > .new {
+	background-color: bisque;
+}
+
+#items > .item:nth-child(2n) {
+	/* background-color: whitesmoke; */
+}
+
+.item > .title {
+	text-decoration-line: none;
+}
+
+.item > .channel {
+	margin-left: 1em;
+	font-size: 80%;
+}
+
+.item > .date {
+	margin-left: 0.5em;
+	font-size: 90%;
+}
+
+#app-info {
+	text-align: center;
+	font-weight: bold;
+}

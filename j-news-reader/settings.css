@@ -1,0 +1,58 @@
+#settings-modal {
+	position: fixed;
+	inset: 0;
+	margin: 0 auto;
+	background-color: rgba(128, 128, 128, 0.2);
+	display: flex;
+	/*align-items: center;*/
+	justify-content: center;
+}
+
+#settings-content {
+	width: 90%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	overflow-y: scroll;
+	background-color: ivory;
+}
+
+#settings-bar {
+	text-align: right;
+}
+
+#settings-bar .settings-close {
+	margin: 0.2em 0.2em 0 0
+}
+
+#settings-content .container.checkbox {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#settings-channels .container.checkbox > div {
+	margin-left: 0.5em;
+	min-width: 30%;
+}
+
+#settings-channels, #settings-title-filter {
+	margin: 0.2em;
+}
+
+#settings-title-filter textarea {
+	margin-left: 0.5em;
+	width: 98%;
+}
+
+#settings-yahoo {
+	margin: 0.4em 0.2em;
+	border: solid lightgray;
+	padding: 0.2em;
+}
+
+#settings-yahoo .container.checkbox > div {
+	margin-left: 0.5em;
+}
+
+#settings-yahoo-media-filter textarea {
+	width: 99%;
+}

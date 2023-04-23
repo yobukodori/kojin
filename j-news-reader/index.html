@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>日本語ニュースリーダー</title>
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="main.css" type="text/css" />
+<link rel="stylesheet" href="settings.css" type="text/css" />
+</head>
+<body>
+<button id="update">更新</button><input type="checkbox" id="auto-update"><input type="text" id="update-interval"  value="10"><label for="auto-update">分間隔で自動更新</label>
+<button id="clear-new-mark">既読</button>
+<button id="clear-new-mark-then-upate">既読更新</button>
+<label for="select-channel">チャンネル:</label>
+<select name="channel" id="channel-select">
+<option value="">すべて</option>
+<option value="!new">新着</option>
+<option value="!filtered">除外</option>
+</select>
+<label for="filter-text">フィルタ:</label><input type="text" id="filter-text"  value=""><label for="filter-text"><button id="apply-filter">適用</button><button id="clear-filter">解除</button></label>
+| <button id="settings">設定</button>
+<div>更新時刻:<span id="update-time"></span><span class="hide" id="auto-update-info"> (更新まで <span id="update-counter">∞</span> 秒)</span> 　 <span id="status"></span></div>
+<div id="items">
+</div>
+<p>
+<h4>【注意】このニュースリーダーをフルに機能させるにはクロスドメインリクエストの制限をバイパスする拡張機能（例えば Firefox 用では自作 <a href="https://addons.mozilla.org/ja/firefox/addon/cors-for-me/">CORS for Me</a>）をブラウザに登録し、下記のURLの読み込みを許可する必要があります</h4>
+</p>
+<p id="cors-urls"></p>
+<p>
+<h4>現在収集しているニュースチャンネルは下記のとおりです</h4>
+</p>
+<p id="collecting-channels"></p>
+<p id="app-info">日本語ニュースリーダー ver.<span id="app-ver">0.0.0</span> by <a href="https://github.com/yobukodori/j-news-reader">yobukodori</a></p>
+<script src="filter.js"></script>
+<script src="log.js"></script>
+<script src="rss.js"></script>
+<script src="profiles.js"></script>
+<script src="settings.js"></script>
+<script src="main.js"></script>
+<script type='text/javascript'>
+</script>
+</body>
+</html>
