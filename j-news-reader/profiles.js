@@ -414,14 +414,14 @@ const profiles = {
 								})
 								.then(text =>{
 									const doc = domParser.parseFromString(text, "text/html");
-									let a = doc.querySelector('[data-ual-view-type="digest"] a');
-									if (a){
-										item.link = a.href;
-										let p = a.querySelector('p');
-										if (p){ item.title = p.textContent.trim(); }
-										let s = a.querySelector('p + span');
-										if (s){ item.media = s.textContent.trim(); }
-									}
+									let d = doc.querySelector('[data-ual-view-type="digest"]'),
+										a = d && d.querySelector('a'),
+										t = a && a.querySelector('p, h2'),
+										m = (a && a.querySelector('p + span > span'))
+											|| (d && d.querySelector('a + div > span'));
+									if (a){ item.link = a.href; }
+									if (t && t.textContent.trim()){ item.title = t.textContent.trim(); };
+									if (m && m.textContent.trim()){ item.media = m.textContent.trim(); }
 									resolve(true);
 								})
 								.catch(e => reject(e));
