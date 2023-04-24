@@ -6,7 +6,7 @@ const settings = {
 		ngYahooCategory: {},
 		yahooGetSource: false,
 		yahooMediaFilter: "",
-		afpbbNgCategory: {sports:true},
+		afpbbNgCategory: {},
 	},
 	getActiveChannelCount(){
 		return Object.keys(this.profiles).length - Object.keys(this.data.ngChannel).length;
