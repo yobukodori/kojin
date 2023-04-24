@@ -98,7 +98,7 @@ function canonicalizeMediaName(name){
 }
 
 function getCanonicalizedMediaName(item){
-	return canonicalizeMediaName((item.dataChannel.title.startsWith("Yahoo!") && item.dataItem.media) ? item.dataItem.media : item.dataChannel.title);
+	return canonicalizeMediaName((item.dataChannel.yahoo && item.dataItem.media) ? item.dataItem.media : item.dataChannel.title);
 }
 
 function updateItemClassByChannel(e){
@@ -117,10 +117,23 @@ function printRSS(rss, opts){
 	rss.item.forEach(d => {
 		logd(d);
 		let duplicated;
-		if (rss.channel.title.startsWith("Yahoo!") && d.media){
-			const media = canonicalizeMediaName(d.media);
-			duplicated = Array.from(container.children).find(item => item.dataChannel.title !== rss.channel.title && item.dataItem.title === d.title && canonicalizeMediaName(item.dataChannel.title) === media);
-			if (duplicated){ return; }
+		if (rss.channel.yahoo){
+			if (d.media){
+				let media = canonicalizeMediaName(d.media);
+				duplicated = Array.from(container.children).find(item => ! item.dataChannel.yahoo && item.dataItem.title === d.title &&  getCanonicalizedMediaName(item) === media);
+				if (duplicated){
+					//console.log("# duplicated:", d.title+"\n" + duplicated.dataChannel.title, "/ Yahoo", d.media);
+					return;
+				}
+			}
+		}
+		else {
+			let media = canonicalizeMediaName(rss.channel.title);
+			duplicated = Array.from(container.children).find(item => item.dataChannel.yahoo && item.dataItem.title === d.title &&  getCanonicalizedMediaName(item) === media);
+			if (duplicated){
+				console.log("#### duplicated:", d.title+"\nYahoo", duplicated.dataItem.media, "/", rss.channel.title);
+				duplicated.remove();
+			}
 		}
 		if (duplicated = Array.from(container.children).find(item => item.dataItem.link === d.link)){
 			logd("duplicated link");
