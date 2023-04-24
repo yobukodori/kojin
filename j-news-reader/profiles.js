@@ -291,6 +291,12 @@ const profiles = {
 			const r = /^(\d+)年\s(.+)\(.\)\s(.+)$/.exec(datestr);
 			return r ?  r[1] + "/" + r[2] + " " + r[3] : datestr;
 		},
+		getCategory(item){
+			let cat = ["news", "sports", "environment-science-it", "lifestyle"];
+			for (let i = 0 ; i < cat.length ; i++){
+				if (item.classList.contains(cat[i])){ return cat[i]; }
+			}
+		},
 	},
 	// ===========================================
 	/*

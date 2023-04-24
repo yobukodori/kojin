@@ -3,9 +3,10 @@ const settings = {
 	data: {
 		ngChannel: {},
 		titleFilter: "",
-		ngYahooCategory: {sports:true},
+		ngYahooCategory: {},
 		yahooGetSource: false,
 		yahooMediaFilter: "",
+		afpbbNgCategory: {sports:true},
 	},
 	getActiveChannelCount(){
 		return Object.keys(this.profiles).length - Object.keys(this.data.ngChannel).length;
@@ -16,7 +17,7 @@ const settings = {
 	load(){
 		let v = localStorage.getItem("settings");
 		if (v){
-			this.data = JSON.parse(v);
+			this.data = Object.assign(this.data, JSON.parse(v));
 		}
 	},
 	save(){
@@ -30,6 +31,9 @@ const settings = {
 	},
 	isNgTitle(title){
 		return this.data.titleFilter ? new Filter(this.data.titleFilter).match(title) : false;
+	},
+	isAfpbbNgCategory(name){
+		return this.data.afpbbNgCategory[name];
 	},
 	isNgYahooCategory(id){
 		return this.data.ngYahooCategory[id];
@@ -47,7 +51,7 @@ const settings = {
 	},
 	open(){
 		const id = "settings-modal";
-		if (document.getElementById(id)){ return; }
+		if (document.getElementById(id)){ throw Error("settings.open already opened"); }
 		const modal = document.createElement("div");
 		modal.id = id;
 		modal.insertAdjacentHTML("beforeend", 
@@ -64,6 +68,10 @@ const settings = {
 	<div id="settings-title-filter">
 		<b>タイトルが次のフィルタに一致する記事を除外する</b>
 		<div><textarea rows="5" spellcheck="false"></textarea></div>
+	</div>
+	<div id="settings-yahoo-get-source">
+		<div><input type="checkbox" id="afpbb-exclude-sports">
+			<label for="sy-get-source"><b>AFPBBのスポーツ記事を除外する</b></label></div>
 	</div>
 	<div id="settings-yahoo">
 		<b>Yahoo!ニュース設定</b>
@@ -112,6 +120,12 @@ const settings = {
 		tfilter.addEventListener("blur", ev =>{
 			updateTitleFilter();
 		});
+		// AFPBBスポーツ記事除外
+		e = dlg.querySelector("#afpbb-exclude-sports");
+		this.data.afpbbNgCategory.sports && (e.checked = true);
+		e.addEventListener("change", ev =>{
+			this.data.afpbbNgCategory.sports = ev.target.checked ? true : false;
+		});
 		// Yahoo カテゴリ選択
 		c = dlg.querySelector('#settings-yahoo-categories > .container');
 		yahoo.categories.forEach(ca =>{
@@ -144,7 +158,7 @@ const settings = {
 			updateYahoFilter();
 		});
 		
-		let onkeydown, cleanup, close;
+		let onkeydown, cleanup, close, resolve;
 		onkeydown = function(ev){
 			if (document.elementFromPoint(0,0) === modal){
 				ev.key === "Escape" && cleanup();
@@ -154,6 +168,7 @@ const settings = {
 		cleanup = function(){
 			document.removeEventListener("keydown", onkeydown);
 			modal.remove();
+			setTimeout(resolve, 0, true);
 		};
 		close = function(){
 			let t = updateTitleFilter(), y = updateYahoFilter();
@@ -165,5 +180,9 @@ const settings = {
 		dlg.addEventListener("click", ev => ev.stopPropagation());
 
 		document.body.appendChild(modal);
+		
+		return new Promise((_resolve, reject)=>{
+			resolve = _resolve;
+		});
 	},
 };

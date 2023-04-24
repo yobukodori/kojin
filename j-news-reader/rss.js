@@ -99,6 +99,9 @@ function getRSS(prof){
 							let {datetime, exact} = parseDate(data.date);
 							data.datetime = datetime, data.exact = exact;
 						}
+						if (prof.getCategory){
+							data.category = prof.getCategory(item);
+						}
 						logd(rss.channel.title, "data:", data);
 						rss.itemCount++;
 						if (data.datetime && prof.isObsolete && prof.isObsolete(data.datetime)){ return; }
