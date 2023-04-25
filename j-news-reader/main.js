@@ -113,7 +113,9 @@ function isNgItem(item){
 
 const sameTitle = function(){
 	function han2zen(s){
-		return s.replace(/[0-9A-Za-z]/g, c => String.fromCharCode(c.charCodeAt(0) + 0xffe0));
+		return s.replace(/[0-9A-Za-z]/g, c => String.fromCharCode(c.charCodeAt(0) + 0xfee0))
+				.replace(/―/g, "　")
+				;
 	}
 	return function(t1, t2){
 		return han2zen(t1) === han2zen(t2);
@@ -131,7 +133,7 @@ function printRSS(rss, opts){
 				let media = canonicalizeMediaName(d.media);
 				duplicated = Array.from(container.children).find(item => ! item.dataChannel.yahoo && sameTitle(item.dataItem.title, d.title) && getCanonicalizedMediaName(item) === media);
 				if (duplicated){
-					//console.log("# duplicated:", d.title+"\n" + duplicated.dataChannel.title, "/ Yahoo", d.media);
+					console.log("# duplicated:", d.title+"\n" + duplicated.dataChannel.title, "/ Yahoo", d.media);
 					return;
 				}
 			}
