@@ -111,6 +111,15 @@ function isNgItem(item){
 	return settings.isNgTitle(title) || (item.dataChannel.yahoo && settings.isNgYahooMeida(item.dataItem.media)) || (item.dataProfile.id === "afpbb-latest" && settings.isAfpbbNgCategory(item.dataItem.category)); 
 }
 
+const sameTitle = function(){
+	function han2zen(s){
+		return s.replace(/[0-9A-Za-z]/g, c => String.fromCharCode(c.charCodeAt(0) + 0xffe0));
+	}
+	return function(t1, t2){
+		return han2zen(t1) === han2zen(t2);
+	};
+}();
+
 function printRSS(rss, opts){
 	opts = opts || {};
 	const container = document.getElementById('items'), today = new Date();
@@ -120,7 +129,7 @@ function printRSS(rss, opts){
 		if (rss.channel.yahoo){
 			if (d.media){
 				let media = canonicalizeMediaName(d.media);
-				duplicated = Array.from(container.children).find(item => ! item.dataChannel.yahoo && item.dataItem.title === d.title &&  getCanonicalizedMediaName(item) === media);
+				duplicated = Array.from(container.children).find(item => ! item.dataChannel.yahoo && sameTitle(item.dataItem.title, d.title) && getCanonicalizedMediaName(item) === media);
 				if (duplicated){
 					//console.log("# duplicated:", d.title+"\n" + duplicated.dataChannel.title, "/ Yahoo", d.media);
 					return;
@@ -129,7 +138,7 @@ function printRSS(rss, opts){
 		}
 		else {
 			let media = canonicalizeMediaName(rss.channel.title);
-			duplicated = Array.from(container.children).find(item => item.dataChannel.yahoo && item.dataItem.title === d.title &&  getCanonicalizedMediaName(item) === media);
+			duplicated = Array.from(container.children).find(item => item.dataChannel.yahoo && sameTitle(item.dataItem.title, d.title) && getCanonicalizedMediaName(item) === media);
 			if (duplicated){
 				console.log("#### duplicated:", d.title+"\nYahoo", duplicated.dataItem.media, "/", rss.channel.title);
 				duplicated.remove();
