@@ -238,6 +238,40 @@ const profiles = {
 	"BBCトップ": {
 		id: "bbc",
 		url: "https://www.bbc.com/japanese",
+		type: "json",
+		fetch(url, init){
+			return new Promise((resolve, reject)=>{
+				let response;
+				fetch(url, init)
+				.then(res =>{
+					response = res;
+					if (! res.ok){ throw Error(res.status + " " + res.statusText); }
+					return res.text();
+				})
+				.then(text =>{
+					const domParser = new DOMParser();
+					const doc = domParser.parseFromString(text, "text/html");
+					const sig = "window.SIMORGH_DATA=";
+					e = Array.from(doc.getElementsByTagName("script")).find(e => e.textContent.startsWith(sig));
+					if (! e){ throw Error(sig + "が見つかりません"); }
+					const data = JSON.parse(e.textContent.substring(sig.length));
+					logd("SIMORGH_DATA:", data);
+					response.json = function(){ return data; };
+					resolve(response);
+				})
+				.catch(e => reject(e));
+			});
+		},
+		getItems(data){
+			const items = [];
+			let g = data.pageData.content.groups.find(g => g.type === "top-stories");
+			g.items.forEach(item =>{
+				let itemData = {title: item.headlines.headline, link: item.locators.assetUri, date: new Date(item.timestamp).toString(), summary: item.summary};
+				items.push(itemData);
+			});
+			return Promise.resolve(items);
+		},
+		/*
 		type: "html",
 		selector: {
 			item: '[aria-labelledby="Top-stories"] li > div',
@@ -246,6 +280,7 @@ const profiles = {
 			date: "h3 ~ time",
 			description: "",
 		},
+		*/
 	},
 	// ===========================================
 	/*

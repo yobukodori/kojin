@@ -61,7 +61,7 @@ const settings = {
 	<button class="settings-close">閉じる</button>
 	</div>
 	<div id="settings-channels">
-		<b>チャンネル選択</b>
+		<b>チャンネル選択</b><button class="set-all">すべて選択</button><button class="clear-all">すべて解除</button>
 		<div class="container checkbox">
 		</div>
 	</div>
@@ -103,6 +103,16 @@ const settings = {
 			`<div><input type="checkbox" id="ch-${id}" ${checked}><label for="ch-${id}">${prof.name}</label></div>`);
 			c.querySelector("#ch-" + id).addEventListener("change", ev =>{
 				ev.target.checked ? delete this.data.ngChannel[id] : this.data.ngChannel[id] = true;
+			});
+		});
+		dlg.querySelector('#settings-channels button.set-all').addEventListener("click", ev =>{
+			dlg.querySelectorAll('#settings-channels > .container input').forEach(e =>{
+				! e.checked && e.click();
+			});
+		});
+		dlg.querySelector('#settings-channels button.clear-all').addEventListener("click", ev =>{
+			dlg.querySelectorAll('#settings-channels > .container input').forEach(e =>{
+				e.checked && e.click();
 			});
 		});
 		// タイトルフィルタ
