@@ -20,7 +20,7 @@ function parseDate(datestr){
 		datestr += " 0:0";
 		datetime = Date.parse(now.getFullYear() + "/" + datestr);
 		datetime > now && (datetime = Date.parse(now.getFullYear() - 1 + "/" + datestr));
-		return {datetime, exact};
+		return {datetime, exact: false};
 	}
 	else if (r = /^(\d+\/\d+\/\d+\s\d+:\d+)$/.exec(datestr)){ // forbes
 		return {datetime: Date.parse(r[1]), exact};
@@ -117,7 +117,11 @@ function getRSS(prof){
 				logd("xmldoc:", d);
 				logd("xmldoc.documentElement:", doc);
 				const ch = doc.firstElementChild;
-				(ch && ch.tagName === "channel") ? Array.from(ch.children).forEach(e => rss.channel[e.tagName] = e.textContent.trim()) : (ch = null);
+				if (! (ch && ch.tagName === "channel")){
+					console.log("RSS?:", text);
+					throw Error("Channel tag not found in RSS document. Please look at the document output to the console.");
+				}
+				Array.from(ch.children).forEach(e => rss.channel[e.tagName] = e.textContent.trim());
 				logd("channel:", rss.channel);
 				let container;
 				if (doc.tagName === "rdf:RDF"){
@@ -159,7 +163,7 @@ function getRSS(prof){
 						if (prof.first && count++ >= prof.first){ return; }
 						if (prof.max && rss.item.length === prof.max){ return; }
 						let data = {datetime: 0};
-						["title", "link", "date", "media"].forEach(name => {
+						["title", "link", "date", "media", "category", "summary"].forEach(name => {
 							data[name] = (prof.get && prof.get[name]) ? prof.get[name](item) : item[name];
 						});
 						if (data.link){

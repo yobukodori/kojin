@@ -7,12 +7,16 @@ const settings = {
 		yahooGetSource: false,
 		yahooMediaFilter: "",
 		afpbbNgCategory: {},
+		compareDatesOnSameUrl: false,
 	},
 	getActiveChannelCount(){
 		return Object.keys(this.profiles).length - Object.keys(this.data.ngChannel).length;
 	},
 	needsToGetYahooSource(){
 		return this.data.yahooGetSource;
+	},
+	needsToCompareDatesOnSameUrl(){
+		return this.data.compareDatesOnSameUrl;
 	},
 	load(){
 		let v = localStorage.getItem("settings");
@@ -69,9 +73,13 @@ const settings = {
 		<b>タイトルが次のフィルタに一致する記事を除外する</b>
 		<div><textarea rows="5" spellcheck="false"></textarea></div>
 	</div>
-	<div id="settings-yahoo-get-source">
+	<div>
 		<div><input type="checkbox" id="afpbb-exclude-sports">
 			<label for="sy-get-source"><b>AFPBBのスポーツ記事を除外する</b></label></div>
+	</div>
+	<div>
+		<div><input type="checkbox" id="compare-dates-on-same-url">
+			<label for="sy-get-source"><b>記事URLが同じでも日付が新しければ新着とする</b></label></div>
 	</div>
 	<div id="settings-yahoo">
 		<b>Yahoo!ニュース設定</b>
@@ -80,7 +88,7 @@ const settings = {
 			<div class="container checkbox">
 			</div>
 		</div>
-		<div id="settings-yahoo-get-source">
+		<div>
 			<div><input type="checkbox" id="sy-get-source">
 				<label for="sy-get-source"><b>元記事のタイトルとメディア名を取得する</b></label></div>
 		</div>
@@ -135,6 +143,12 @@ const settings = {
 		this.data.afpbbNgCategory.sports && (e.checked = true);
 		e.addEventListener("change", ev =>{
 			this.data.afpbbNgCategory.sports = ev.target.checked ? true : false;
+		});
+		// 同一URLの場合日付を比較
+		e = dlg.querySelector("#compare-dates-on-same-url");
+		this.data.compareDatesOnSameUrl && (e.checked = true);
+		e.addEventListener("change", ev =>{
+			this.data.compareDatesOnSameUrl = ev.target.checked ? true : false;
 		});
 		// Yahoo カテゴリ選択
 		c = dlg.querySelector('#settings-yahoo-categories > .container');

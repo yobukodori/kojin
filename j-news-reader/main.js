@@ -133,7 +133,7 @@ function printRSS(rss, opts){
 				let media = canonicalizeMediaName(d.media);
 				duplicated = Array.from(container.children).find(item => ! item.dataChannel.yahoo && sameTitle(item.dataItem.title, d.title) && getCanonicalizedMediaName(item) === media);
 				if (duplicated){
-					console.log("# duplicated:", d.title+"\n" + duplicated.dataChannel.title, "/ Yahoo", d.media);
+					logd("# title duplicated:", d.title+"\n" + duplicated.dataChannel.title, "/ Yahoo", d.media);
 					return;
 				}
 			}
@@ -142,16 +142,23 @@ function printRSS(rss, opts){
 			let media = canonicalizeMediaName(rss.channel.title);
 			duplicated = Array.from(container.children).find(item => item.dataChannel.yahoo && sameTitle(item.dataItem.title, d.title) && getCanonicalizedMediaName(item) === media);
 			if (duplicated){
-				console.log("#### duplicated:", d.title+"\nYahoo", duplicated.dataItem.media, "/", rss.channel.title);
+				logd("## title duplicated:", d.title+"\nYahoo", duplicated.dataItem.media, "/", rss.channel.title);
 				duplicated.remove();
 			}
 		}
-		if (duplicated = Array.from(container.children).find(item => item.dataItem.link === d.link)){
+		if ((duplicated = Array.from(container.children).find(item => item.dataItem.link === d.link))){
 			logd("duplicated link");
 			if (! d.exact || ! duplicated.dataItem.exact){ return; }
 			let datetime = duplicated.dataItem.datetime2 || duplicated.dataItem.datetime;
 			if (d.datetime <= datetime){ return; }
-			duplicated.remove();
+			if ((rss.profile.id === "nikkei-bar" || settings.needsToCompareDatesOnSameUrl())){
+				logd("# replace url duplicated:", d.title, rss.channel.title + "\nexisting:", duplicated.dataItem.date, "/ new:", d.date);
+				duplicated.remove();
+			}
+			else {
+				logd("# url duplicated:", d.title, rss.channel.title + "\nexisting:", duplicated.dataItem.date, "/ new:", d.date);
+				return;
+			}
 		}
 		const title = document.createElement("a"),
 				description = document.createElement("span"),
