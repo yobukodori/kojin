@@ -60,7 +60,7 @@ const profiles = {
 				i > 0 && (data = JSON.parse(e.split('</script>')[0]));
 			});
 			data.title = data.headline;
-			data.date = data.dateModified || data.datePublished;
+			data.date = data.datePublished; // data.dateModified
 			return data;
 		},
 	},
