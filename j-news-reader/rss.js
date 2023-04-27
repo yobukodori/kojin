@@ -67,6 +67,9 @@ function getRSS(prof){
 						let data = {}, title, link, date;
 						title = item.querySelector(prof.selector.title) || (item.matches(prof.selector.title) && item);
 						data.title = title ? (prof.getTitle ? prof.getTitle(title) : title.textContent.trim()) : "";
+						if (data.payed = prof.getPayed && prof.getPayed(item)){
+							data.title = data.title + "🔒";
+						}
 						link = item.querySelector(prof.selector.link) || (item.matches(prof.selector.link) && item);
 						if (link){
 							const u = new URL(link.getAttribute("href"), prof.url);

@@ -66,7 +66,7 @@ function showStatistics(){
 		e.classList.contains("new") && ++news;
 		e.classList.contains("x-settings-filter") && ++ng;
 	});
-	showStatus("記事総数:" + container.children.length, "新着:" + news, "表示中:" + displaying, "除外:" + ng);
+	showStatus("記事総数:" + container.children.length, "新着:" + news, "除外:" + ng, "表示中:" + displaying );
 }
 
 function showUpdateTime(datetime){
@@ -108,7 +108,7 @@ function updateItemClassByChannel(e){
 
 function isNgItem(item){
 	const title = item.dataItem.title;
-	return settings.isNgTitle(title) || (item.dataChannel.yahoo && settings.isNgYahooMeida(item.dataItem.media)) || (item.dataProfile.id === "afpbb-latest" && settings.isAfpbbNgCategory(item.dataItem.category)); 
+	return settings.isNgTitle(title) || (item.dataChannel.yahoo && settings.isNgYahooMeida(item.dataItem.media)) || (item.dataProfile.id === "afpbb-latest" && settings.isAfpbbNgCategory(item.dataItem.category)) || (settings.needsToExcludePayedArticle() && item.dataItem.payed); 
 }
 
 const sameTitle = function(){
@@ -236,7 +236,7 @@ function update(){
 					e.value = e.textContent = title;
 					let i = sortedIndex(ar, e.value.toLowerCase());
 					i < container.children.length ? container.children[i].before(e) : container.append(e);
-					container.append(container.querySelector('option[value="!filtered"]'));
+					//container.append(container.querySelector('option[value="!filtered"]'));
 				}
 			}
 			showStatus(++read === total ? "取得結果:" : read + "/" + total + " 読み込み中・・・", container.children.length, "件");
@@ -252,9 +252,6 @@ function update(){
 }
 
 document.getElementById("channel-select").addEventListener("change", ()=>{
-	let chtitle = document.getElementById("channel-select").value;
-	//chtitle = canonicalizeMediaName(chtitle);
-	logd("channel-select on change. value:", chtitle);
 	Array.from(document.getElementById('items').children).forEach(e => {
 		updateItemClassByChannel(e);
 	});

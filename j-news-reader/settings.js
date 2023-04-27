@@ -8,9 +8,13 @@ const settings = {
 		yahooMediaFilter: "",
 		afpbbNgCategory: {},
 		compareDatesOnSameUrl: false,
+		excludePayedArticle: false,
 	},
 	getActiveChannelCount(){
 		return Object.keys(this.profiles).length - Object.keys(this.data.ngChannel).length;
+	},
+	needsToExcludePayedArticle(){
+		return this.data.excludePayedArticle;
 	},
 	needsToGetYahooSource(){
 		return this.data.yahooGetSource;
@@ -72,6 +76,10 @@ const settings = {
 	<div id="settings-title-filter">
 		<b>タイトルが次のフィルタに一致する記事を除外する</b>
 		<div><textarea rows="5" spellcheck="false"></textarea></div>
+	</div>
+	<div>
+		<div><input type="checkbox" id="exclude-payed-article">
+			<label for="exclude-payed-article"><b>有料記事を除外する</b></label></div>
 	</div>
 	<div>
 		<div><input type="checkbox" id="afpbb-exclude-sports">
@@ -137,6 +145,12 @@ const settings = {
 		};
 		tfilter.addEventListener("blur", ev =>{
 			updateTitleFilter();
+		});
+		// 有料記事を除外
+		e = dlg.querySelector("#exclude-payed-article");
+		this.data.excludePayedArticle && (e.checked = true);
+		e.addEventListener("change", ev =>{
+			this.data.excludePayedArticle = ev.target.checked ? true : false;
 		});
 		// AFPBBスポーツ記事除外
 		e = dlg.querySelector("#afpbb-exclude-sports");

@@ -109,8 +109,9 @@ const profiles = {
 			date: "time",
 			description: "",
 		},
-		getTitle: function (title/* element */){
-			return title.textContent.trim() + (title.parentElement.querySelector('use') ? "🔒" : "");
+		getPayed(item){
+			let title = item.querySelector(this.selector.title);
+			return title && title.parentElement.querySelector('use');
 		},
 		excludeItem: function (item, data){
 			return item.getElementsByTagName("time").length === 0;
@@ -154,8 +155,9 @@ const profiles = {
 			date: "time",
 			description: "",
 		},
-		getTitle: function (title/* element */){
-			return title.textContent.trim() + (title.parentElement.querySelector('figure.c-icon--keyGold') ? "🔒" : "");
+		getPayed(item){
+			let title = item.querySelector(this.selector.title);
+			return title && title.parentElement.querySelector('figure.c-icon--keyGold');
 		},
 		normarizeLink: function (url){
 			return url.search = "", (new URL(url)).href;
@@ -175,8 +177,9 @@ const profiles = {
 			date: ".articletag-date",
 			description: "",
 		},
-		getTitle: function (title/* element */){
-			return title.textContent.trim() + (title.parentElement.querySelector('.is-limited') ? "🔒" : "");
+		getPayed(item){
+			let title = item.querySelector(this.selector.title);
+			return title && title.parentElement.querySelector('.is-limited');
 		},
 	},
 	"NHKニュース": {
@@ -202,7 +205,7 @@ const profiles = {
 			let datestr = item.getAttribute('title').split(" ").splice(0,2).join(" ");
 			if (/NY(ダウ|原油)/.test(item.textContent)){
 				let r = /(\d+月\d+日 )(\d+)(:\d+)/.exec(datestr);
-				r && (datestr = r[1] + (r[2] * 1 + 14) + r[3]);
+				r && (datestr = r[1] + (r[2] * 1 + 13) + r[3]);
 			}
 			return datestr;
 		},
