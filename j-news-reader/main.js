@@ -148,21 +148,16 @@ function printRSS(rss, opts){
 		}
 		if ((duplicated = Array.from(container.children).find(item => item.dataItem.link === d.link))){
 			logd("### duplicated link");
-			if (rss.profile.id === "jiji-top" && duplicated.dataProfile.id !== "jiji-top" && duplicated.dataProfile.id.startsWith("jiji-")){
+			if (! d.exact || ! duplicated.dataItem.exact){ return; }
+			let datetime = duplicated.dataItem.datetime2 || duplicated.dataItem.datetime;
+			if (d.datetime <= datetime){ return; }
+			if ((rss.profile.id === "nikkei-bar" || settings.needsToCompareDatesOnSameUrl())){
+				logd("# replace url duplicated:", d.title, rss.channel.title + "\nexisting:", duplicated.dataItem.date, "/ new:", d.date);
 				duplicated.remove();
 			}
 			else {
-				if (! d.exact || ! duplicated.dataItem.exact){ return; }
-				let datetime = duplicated.dataItem.datetime2 || duplicated.dataItem.datetime;
-				if (d.datetime <= datetime){ return; }
-				if ((rss.profile.id === "nikkei-bar" || settings.needsToCompareDatesOnSameUrl())){
-					logd("# replace url duplicated:", d.title, rss.channel.title + "\nexisting:", duplicated.dataItem.date, "/ new:", d.date);
-					duplicated.remove();
-				}
-				else {
-					logd("# url duplicated:", d.title, rss.channel.title + "\nexisting:", duplicated.dataItem.date, "/ new:", d.date);
-					return;
-				}
+				logd("# url duplicated:", d.title, rss.channel.title + "\nexisting:", duplicated.dataItem.date, "/ new:", d.date);
+				return;
 			}
 		}
 		const title = document.createElement("a"),

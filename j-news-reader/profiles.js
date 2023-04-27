@@ -1,4 +1,35 @@
 const profiles = {
+	"jiji.comトップ": {
+		id: "jiji-top",
+		url: "https://www.jiji.com/sp/", // pc版はタイトルが省略されている
+		type: "html",
+		access: ["https://www.jiji.com/jc/article?*", "https://www.jiji.com/sp/article?*"],
+		selector: {
+			item: '.HomeTopics .TopicsPhoto, .HomeTopics li, .top5new',
+			title: '.TopicsPhoto > a > span, li > a, dd > p',
+			link: 'a',
+			date: "",
+			description: "",
+		},
+		getTitle: function (title/* element */){
+			return title.firstChild.textContent.trim();
+		},
+		normarizeLink: function (url){
+			url.pathname.startsWith("/sp/") && (url.pathname = "/jc/" + url.pathname.substring(4));
+			url.search.startsWith("?k=") && (url.search = url.search.split("&")[0]);
+			return (new URL(url)).href;
+		},
+		getDataFromArticle: function(text){
+			let data;
+			text.split('<script type="application/ld+json">').forEach((e,i)=>{
+				if (data && data["@type"] === "NewsArticle"){ return; }
+				i > 0 && (data = JSON.parse(e.split('</script>')[0]));
+			});
+			data.title = data.headline;
+			data.date = data.datePublished; // data.dateModified
+			return data;
+		},
+	},
 	"jiji.comアクセスランキング": {
 		id: "jiji-rank",
 		url: "https://www.jiji.com/rss/ranking.rdf",
@@ -31,37 +62,6 @@ const profiles = {
 		},
 		isObsolete: function (datetime){
 			return Date.now() - datetime > 24 * 60 * 60 * 1000;
-		},
-	},
-	"jiji.comトップ": {
-		id: "jiji-top",
-		url: "https://www.jiji.com/sp/", // pc版はタイトルが省略されている
-		type: "html",
-		access: ["https://www.jiji.com/jc/article?*", "https://www.jiji.com/sp/article?*"],
-		selector: {
-			item: '.HomeTopics .TopicsPhoto, .HomeTopics li, .top5new',
-			title: '.TopicsPhoto > a > span, li > a, dd > p',
-			link: 'a',
-			date: "",
-			description: "",
-		},
-		getTitle: function (title/* element */){
-			return title.firstChild.textContent.trim();
-		},
-		normarizeLink: function (url){
-			url.pathname.startsWith("/sp/") && (url.pathname = "/jc/" + url.pathname.substring(4));
-			url.search.startsWith("?k=") && (url.search = url.search.split("&")[0]);
-			return (new URL(url)).href;
-		},
-		getDataFromArticle: function(text){
-			let data;
-			text.split('<script type="application/ld+json">').forEach((e,i)=>{
-				if (data && data["@type"] === "NewsArticle"){ return; }
-				i > 0 && (data = JSON.parse(e.split('</script>')[0]));
-			});
-			data.title = data.headline;
-			data.date = data.datePublished; // data.dateModified
-			return data;
 		},
 	},
 	"47NEWSトップ": {
