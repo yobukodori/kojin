@@ -83,11 +83,11 @@ const settings = {
 	</div>
 	<div>
 		<div><input type="checkbox" id="afpbb-exclude-sports">
-			<label for="sy-get-source"><b>AFPBBのスポーツ記事を除外する</b></label></div>
+			<label for="afpbb-exclude-sports"><b>AFPBBのスポーツ記事を除外する</b></label></div>
 	</div>
 	<div>
 		<div><input type="checkbox" id="compare-dates-on-same-url">
-			<label for="sy-get-source"><b>記事URLが同じでも日付が新しければ新着とする</b></label></div>
+			<label for="compare-dates-on-same-url"><b>記事URLが同じでも日付が新しければ新着とする</b></label></div>
 	</div>
 	<div id="settings-yahoo">
 		<b>Yahoo!ニュース設定</b>
