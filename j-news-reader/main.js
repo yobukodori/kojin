@@ -108,7 +108,7 @@ function updateItemClassByChannel(e){
 
 function isNgItem(item){
 	const title = item.dataItem.title;
-	return settings.isNgTitle(title) || (item.dataChannel.yahoo && settings.isNgYahooMeida(item.dataItem.media)) || (item.dataProfile.id === "afpbb-latest" && settings.isAfpbbNgCategory(item.dataItem.category)) || (settings.needsToExcludePayedArticle() && item.dataItem.payed); 
+	return settings.isNgTitle(title) || (item.dataChannel.yahoo && settings.isYahooNgMeida(item.dataItem.media)) || (item.dataProfile.id === "afpbb-latest" && settings.isAfpbbNgCategory(item.dataItem.category)) || (settings.needsToExcludePayedArticle() && item.dataItem.payed) || (item.dataProfile.id === "yomiuri" && settings.isYomiuriNgTag(item.dataItem.tags)); 
 }
 
 const sameTitle = function(){
@@ -142,12 +142,11 @@ function printRSS(rss, opts){
 			let media = canonicalizeMediaName(rss.channel.title);
 			duplicated = Array.from(container.children).find(item => item.dataChannel.yahoo && sameTitle(item.dataItem.title, d.title) && getCanonicalizedMediaName(item) === media);
 			if (duplicated){
-				logd("## title duplicated:", d.title+"\nYahoo", duplicated.dataItem.media, "/", rss.channel.title);
+				logd("## replace title duplicated:", d.title+"\nYahoo", duplicated.dataItem.media, "/", rss.channel.title);
 				duplicated.remove();
 			}
 		}
 		if ((duplicated = Array.from(container.children).find(item => item.dataItem.link === d.link))){
-			logd("### duplicated link");
 			if (! d.exact || ! duplicated.dataItem.exact){ return; }
 			let datetime = duplicated.dataItem.datetime2 || duplicated.dataItem.datetime;
 			if (d.datetime <= datetime){ return; }

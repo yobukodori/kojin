@@ -89,6 +89,9 @@ function getRSS(prof){
 							if (prof.getCategory){
 								data.category = prof.getCategory(item);
 							}
+							if (prof.getTags){
+								data.tags = prof.getTags(item);
+							}
 							logd(rss.channel.title, "data:", data);
 							rss.itemCount++;
 							if (data.datetime && prof.isObsolete && prof.isObsolete(data.datetime)){ return; }
@@ -122,6 +125,9 @@ function getRSS(prof){
 					});
 				}
 				Promise.allSettled(tasks).then(values => {
+					if (rss.itemCount === 0){
+						console.log("Error: No items in", url + ":\n" + text);
+					}
 					delete rss.error;
 					resolve(rss);
 				});

@@ -9,6 +9,7 @@ const settings = {
 		afpbbNgCategory: {},
 		compareDatesOnSameUrl: false,
 		excludePayedArticle: false,
+		yomiuriTagFilter: "",
 	},
 	getActiveChannelCount(){
 		return Object.keys(this.profiles).length - Object.keys(this.data.ngChannel).length;
@@ -43,13 +44,17 @@ const settings = {
 	isAfpbbNgCategory(name){
 		return this.data.afpbbNgCategory[name];
 	},
-	isNgYahooCategory(id){
+	isYomiuriNgTag(tags){
+		if (this.data.yomiuriTagFilter){
+			tags = tags || [];
+			const f = new Filter(this.data.yomiuriTagFilter);
+			return tags.some(tag => f.match(tag));
+		}
+	},
+	isYahooNgCategory(id){
 		return this.data.ngYahooCategory[id];
 	},
-	isActiveYahooCategory(id){
-		return ! this.isNgYahooCategory(id);
-	},
-	isNgYahooMeida(title){
+	isYahooNgMeida(title){
 		return this.data.yahooMediaFilter ? new Filter(this.data.yahooMediaFilter).match(title) : false;
 	},
 	init(profiles){
@@ -88,6 +93,13 @@ const settings = {
 	<div>
 		<div><input type="checkbox" id="compare-dates-on-same-url">
 			<label for="compare-dates-on-same-url"><b>記事URLが同じでも日付が新しければ新着とする</b></label></div>
+	</div>
+	<div class="channel yomiuri">
+		<b>読売新聞設定</b>
+		<div class="filter tag">
+			<b>タグが次のフィルタに一致する記事を除外する</b>
+			<div><textarea rows="1" spellcheck="false"></textarea></div>
+		</div>
 	</div>
 	<div id="settings-yahoo">
 		<b>Yahoo!ニュース設定</b>
@@ -164,10 +176,25 @@ const settings = {
 		e.addEventListener("change", ev =>{
 			this.data.compareDatesOnSameUrl = ev.target.checked ? true : false;
 		});
+		// 読売新聞タグフィルター
+		let ymfilter = dlg.querySelector(".channel.yomiuri .filter.tag textarea");
+		ymfilter.value = this.data.yomiuriTagFilter || "";
+		const updateYomiuriTagFilter = function(){
+			const v = ymfilter.value.trim(), f = v && new Filter(v);
+			if (f && f.error){
+				alert("読売タグフィルタが不正です。" + f.error);
+				return false;
+			}
+			settings.data.yomiuriTagFilter = v;
+			return true;
+		};
+		ymfilter.addEventListener("blur", ev =>{
+			updateYomiuriTagFilter();
+		});
 		// Yahoo カテゴリ選択
 		c = dlg.querySelector('#settings-yahoo-categories > .container');
 		yahoo.categories.forEach(ca =>{
-			let id = ca.id, checked = this.isActiveYahooCategory(id) ? "checked" : "";
+			let id = ca.id, checked = this.isYahooNgCategory(id) ? "" : "checked";
 			c.insertAdjacentHTML("beforeend", 
 			`<div><input type="checkbox" id="yca-${id}" ${checked}><label for="yca-${id}">${ca.name}</label></div>`);
 			c.querySelector("#yca-" + id).addEventListener("change", ev =>{
@@ -183,7 +210,7 @@ const settings = {
 		// Yahoo メディアフィルタ
 		let yfilter = dlg.querySelector("#settings-yahoo-media-filter textarea");
 		yfilter.value = this.data.yahooMediaFilter || "";
-		const updateYahoFilter = function(){
+		const updateYahooMediaFilter = function(){
 			const v = yfilter.value.trim(), f = v && new Filter(v);
 			if (f && f.error){
 				alert("Yahooメディアフィルタが不正です。" + f.error);
@@ -193,7 +220,7 @@ const settings = {
 			return true;
 		};
 		yfilter.addEventListener("blur", ev =>{
-			updateYahoFilter();
+			updateYahooMediaFilter();
 		});
 		
 		let onkeydown, cleanup, close, resolve;
@@ -209,8 +236,11 @@ const settings = {
 			setTimeout(resolve, 0, true);
 		};
 		close = function(){
-			let t = updateTitleFilter(), y = updateYahoFilter();
-			if (! (t && y)){ return; }
+			let error = 0;
+			[updateTitleFilter, updateYomiuriTagFilter, updateYahooMediaFilter].forEach(update =>{
+				! update() && error++;
+			});
+			if (error){ return; }
 			cleanup();
 		};
 		modal.querySelector('button.settings-close').addEventListener("click", ev => close());

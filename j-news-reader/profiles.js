@@ -109,6 +109,11 @@ const profiles = {
 			date: "time",
 			description: "",
 		},
+		getTags(item){
+			let tags = [];
+			item.querySelectorAll('a.tag, div.tag > a').forEach(a => tags.push(a.textContent.trim()));
+			return tags;
+		},
 		getPayed(item){
 			let title = item.querySelector(this.selector.title);
 			return title && title.parentElement.querySelector('use');
@@ -446,7 +451,7 @@ const profiles = {
 			return new Promise((resolve, reject)=>{
 				data.topicsList.categories.forEach(c =>{
 					c.topicsList.forEach(t =>{
-						if (settings.isNgYahooCategory(c.categoryId)){ return; }
+						if (settings.isYahooNgCategory(c.categoryId)){ return; }
 						let item = {title: t.title, link: t.url, date: t.publishedTime_ISO8601};
 						items.push(item);
 						if (settings.needsToGetYahooSource()){
