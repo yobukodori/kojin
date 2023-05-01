@@ -146,18 +146,14 @@ function printRSS(rss, opts){
 				duplicated.remove();
 			}
 		}
+		let markNew = true;
 		if ((duplicated = Array.from(container.children).find(item => item.dataItem.link === d.link))){
 			if (! d.exact || ! duplicated.dataItem.exact){ return; }
 			let datetime = duplicated.dataItem.datetime2 || duplicated.dataItem.datetime;
 			if (d.datetime <= datetime){ return; }
-			if ((rss.profile.id === "nikkei-bar" || settings.needsToCompareDatesOnSameUrl())){
-				logd("# replace url duplicated:", d.title, rss.channel.title + "\nexisting:", duplicated.dataItem.date, "/ new:", d.date);
-				duplicated.remove();
-			}
-			else {
-				logd("# url duplicated:", d.title, rss.channel.title + "\nexisting:", duplicated.dataItem.date, "/ new:", d.date);
-				return;
-			}
+			markNew = settings.needsToMarkNewOnSameUrl() || rss.profile.id === "nikkei-bar";
+			duplicated.remove();
+			logd("# replace url duplicated:", d.title, rss.channel.title + "\nexisting:", duplicated.dataItem.date, "/ new:", d.date, "/ mark new:", markNew);
 		}
 		const title = document.createElement("a"),
 				description = document.createElement("span"),
@@ -178,7 +174,7 @@ function printRSS(rss, opts){
 			r && (item.dataItem.datetime2 = datetime = Date.parse( (r[2] || today.getFullYear()) + "/" + r[3] + "/" +r [4] + " 00:00"));
 		}
 		isNgItem(item) && item.classList.add("x-settings-filter");
-		opts.markNew && item.classList.add("new");
+		opts.markNew && markNew && item.classList.add("new");
 		updateItemClassByChannel(item);
 		let ar = Array.from(container.children).map(item => item.dataItem.datetime2 || item.dataItem.datetime),  i = sortedIndex(ar, datetime, {descending:true});
 		while (i < ar.length && datetime === ar[i]){ i++; }

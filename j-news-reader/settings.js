@@ -20,7 +20,7 @@ const settings = {
 	needsToGetYahooSource(){
 		return this.data.yahooGetSource;
 	},
-	needsToCompareDatesOnSameUrl(){
+	needsToMarkNewOnSameUrl(){
 		return this.data.compareDatesOnSameUrl;
 	},
 	load(){
