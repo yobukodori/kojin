@@ -160,12 +160,18 @@ const profiles = {
 			date: "time",
 			description: "",
 		},
+		onResponse(res){
+			this.mobile = new URL(res.url).pathname.startsWith("/sp/");
+		},
 		getPayed(item){
 			let title = item.querySelector(this.selector.title);
 			return title && title.parentElement.querySelector('figure.c-icon--keyGold');
 		},
 		normarizeLink: function (url){
-			return url.search = "", (new URL(url)).href;
+			if (this.mobile && url.pathname.startsWith("/articles/")){
+				url.pathname = "/sp/" + url.pathname;
+			}
+			return url.search = "", url.href;
 		},
 		excludeItem: function (item, data){
 			return item.getElementsByTagName("time").length === 0;

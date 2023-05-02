@@ -50,6 +50,7 @@ function getRSS(prof){
 			if (! res.ok){
 				throw Error(res.status + " " + res.statusText);
 			}
+			prof.onResponse && prof.onResponse(res);
 			return prof.type === "json" ? res.json() : res.text();
 		})
 		.then((text)=> {
