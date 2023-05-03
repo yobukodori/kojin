@@ -1,5 +1,5 @@
 const jnr = {
-	appVer: "1.0.8",
+	appVer: "1.0.9",
 	updateInterval: 5 * 60 * 1000,
 };
 
@@ -129,6 +129,9 @@ function printRSS(rss, opts){
 		logd(d);
 		let duplicated;
 		if (rss.channel.yahoo){
+			if (d.articleUrl && (duplicated = Array.from(container.children).find(item => item.dataItem.link === d.pickupUrl))){
+				duplicated.remove();
+			}
 			if (d.media){
 				let media = canonicalizeMediaName(d.media);
 				duplicated = Array.from(container.children).find(item => ! item.dataChannel.yahoo && sameTitle(item.dataItem.title, d.title) && getCanonicalizedMediaName(item) === media);
