@@ -6,8 +6,8 @@
 	if (document.getElementById(id)){ return; }
 	if (e = document.querySelector('nav[aria-label="プロフィールタイムライン"]')){
 		let header = e.previousElementSibling;
-		let userName = document.querySelector('div[data-testid="primaryColumn"] h2');
-		if (userName){
+		let btnPosition = document.querySelector('div[data-testid="primaryColumn"] h2 + div, div[data-testid="TopNavBar"] h2 + div');
+		if (btnPosition){
 			let btn = document.createElement("button");
 			btn.id = id;
 			btn.textContent = "ヘッダ表示";
@@ -21,7 +21,7 @@
 					btn.textContent = "ヘッダ非表示";
 				}
 			});
-			userName.append(btn);
+			btnPosition.append(btn);
 			header.style.display = "none";
 		}
 	}
