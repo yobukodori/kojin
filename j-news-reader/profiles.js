@@ -458,7 +458,7 @@ const profiles = {
 				data.topicsList.categories.forEach(c =>{
 					c.topicsList.forEach(t =>{
 						if (settings.isYahooNgCategory(c.categoryId)){ return; }
-						let item = {title: t.title, link: t.url, pickupUrl: t.url, date: t.publishedTime_ISO8601};
+						let item = {title: t.title, link: t.url, pickupUrl: t.url, date: t.publishedTime_ISO8601, extra: t};
 						items.push(item);
 						if (settings.needsToGetYahooSource()){
 							let task = new Promise((resolve, reject)=>{
@@ -474,7 +474,7 @@ const profiles = {
 										t = a && a.querySelector('p, h2'),
 										m = (a && a.querySelector('p + span > span'))
 											|| (d && d.querySelector('a + div > span'));
-									if (a){ item.link = item.articleUrl = a.href; }
+									if (a){ item.link = item.extra.articleUrl = a.href; }
 									if (t && t.textContent.trim()){ item.title = t.textContent.trim(); };
 									if (m && m.textContent.trim()){ item.media = m.textContent.trim(); }
 									resolve(true);

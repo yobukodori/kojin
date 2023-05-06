@@ -185,7 +185,7 @@ function getRSS(prof){
 						if (prof.first && count++ >= prof.first){ return; }
 						if (prof.max && rss.item.length === prof.max){ return; }
 						let data = {datetime: 0};
-						["title", "link", "date", "media", "category", "summary"].forEach(name => {
+						["title", "link", "date", "media", "category", "summary", "extra"].forEach(name => {
 							data[name] = (prof.get && prof.get[name]) ? prof.get[name](item) : item[name];
 						});
 						if (data.link){
