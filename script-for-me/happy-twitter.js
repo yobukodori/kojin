@@ -1,25 +1,27 @@
+//==========================================================
 //name happy twitter
 //matches https://twitter.com/*, https://mobile.twitter.com/*
-//options
-0,{ "wrapCodeInScriptTag":true }
+//option nonce, start
 //js
 (function(){
-	const log = console.log, appName = "happy twitter", appVer = "v.1.0.1";
-	log("######## start", appName, appVer);
-	window.ptdata = {
-		verbose: false,
-		arg:[],
+	const appName = "happy twitter", appVer = "v.1.0.1";
+	function log(){
+		console.log.apply(console,["["+appName+"]"].concat(Array.from(arguments)));
+	}
+	log("start");
+	window.ht = {
+		jsonData:[],
 		find: function(key){
-			this.arg.forEach((jstr,i) =>{
+			this.jsonData.forEach((jstr,i) =>{
 				jstr && jstr.includes(key) && log("####", i + ":", jstr);
 			});
 		},
 	};
 	function logv(){
-		ptdata.verbose && log.apply(null, arguments);
+		ht.verbose && log.apply(null, arguments);
 	}
 	function logd(){
-		ptdata.debug && log.apply(null, arguments);
+		ht.debug && log.apply(null, arguments);
 	}
 	function optionalChaining(obj, chain){
 		try { return  chain.split(".").reduce((v, e)=> v[e], obj); }
@@ -90,8 +92,10 @@
 		apply: function(target, thisArg, args) {
 			let j = Reflect.apply(target, thisArg, args), d = {};
 			if (! j){ return; }
-			window.ptdata.arg.push(args[0]);
-			log((ptdata.arg.length - 1) + ":", "JSON.parse returned:", j);
+			if (ht.debug){
+				ht.jsonData.push(args[0]);
+				log((ht.jsonData.length - 1) + ":", "JSON.parse returned:", j);
+			}
 			// ホームタイムライン
 			(j?.data?.home?.home_timeline_urt?.instructions || []).forEach(instruction =>{
 				if (instruction.type === "TimelineAddEntries"){
@@ -99,35 +103,35 @@
 					instruction.entries.forEach(entry =>{
 						let ng;
 						if (/^promoted(-tweet|Tweet)-\d/.test(entry.entryId)){
-							log("## removed promoted", entry), removed++, ng = true;
+							logd("## removed promoted", entry), removed++, ng = true;
 						}
 						else if (/^who-to-follow-\d/.test(entry.entryId)){
-							log("## removed who-to-follow", entry), removed++, ng = true;
+							logd("## removed who-to-follow", entry), removed++, ng = true;
 						}
 						else if (/^tweet-\d/.test(entry.entryId)){
 							if (entry.content.itemContent?.socialContext?.functionalityType === "Recommendation"){
-								log("## removed Recommendation", entry), removed++, ng = true;
+								logd("## removed Recommendation", entry), removed++, ng = true;
 							}
 						}
 						if (! ng){
-							log("# entry", entry.entryId, entry);
+							logd("# entry", entry.entryId, entry);
 							entries.push(entry);
 						}
 					});
 					removed > 0 && (instruction.entries = entries);
 				}
 			});
-			// プロフページ /UserTweets primariColumn おすすめユーザー
+			// プロフページ /UserTweets, primariColumn おすすめユーザー
 			(j?.data?.user?.result?.timeline_v2?.timeline?.instructions || []).forEach(instruction =>{
 				if (instruction.type === "TimelineAddEntries"){
 					let entries = [], removed = 0;
 					instruction.entries.forEach(entry =>{
 						let ng;
-						if (/^whoToFollow-\d/.test(entry.entryId)){
-							log("## removed who to follow", entry), removed++, ng = true;
+						if (/^(whoToFollow|who-to-follow)-\d/.test(entry.entryId)){
+							logd("## removed who to follow", entry), removed++, ng = true;
 						}
 						else if (/^promotedTweet-\d/.test(entry.entryId)){
-							log("## removed promoted tweet", entry), removed++, ng = true;
+							logd("## removed promoted tweet", entry), removed++, ng = true;
 						}
 						else if (/^tweet-\d/.test(entry.entryId)){
 							let result = oc(entry, "content.itemContent.tweet_results.result");
@@ -141,7 +145,22 @@
 							}
 						}
 						if (! ng){
-							log("# entry", entry.entryId, entry);
+							logd("# entry", entry.entryId, entry);
+							entries.push(entry);
+						}
+					});
+					removed > 0 && (instruction.entries = entries);
+				}
+			});
+			// リストページ primaryColumn
+			(j?.data?.viewer?.list_management_timeline?.timeline?.instructions || []).forEach(instruction =>{
+				if (instruction.type === "TimelineAddEntries"){
+					let entries = [], removed = 0;
+					instruction.entries.forEach(entry =>{
+						let ng = entry.entryId.startsWith("listToFollowModule-");
+						ng && logd("## removed listToFollowModule-", entry), removed++;
+						if (! ng){
+							logd("# entry", entry.entryId, entry);
 							entries.push(entry);
 						}
 					});
@@ -164,7 +183,7 @@
 						tw.full_text += "【"+user.advertiser_account_type+": " + levels.join(",") + "】";
 						if (! (levels.length === 1 && levels[0] === "analytics")){
 							// removed++, ng = true;
-							log("#### ",  user.advertiser_account_type + "'s tweet:", summary, "\ntweet:", tw, "\nuser:", user);
+							logd("#### ",  user.advertiser_account_type + "'s tweet:", summary, "\ntweet:", tw, "\nuser:", user);
 						}
 					}
 					if (! ng){
@@ -180,17 +199,17 @@
 				if (instruction.addEntries){
 					instruction.addEntries.entries.forEach(entry =>{
 						if (entry.entryId.startsWith("Guide-")){
-							log("# Guide-", entry);
+							logd("# Guide-", entry);
 							if (entry?.content?.timelineModule?.items){
-								log("# items", entry.content.timelineModule.items);
+								logd("# items", entry.content.timelineModule.items);
 								let items = [], removed = 0;
 								entry.content.timelineModule.items.forEach(item =>{
 									let ng;
 									if (item.entryId.startsWith("trends-") && item.item.clientEventInfo.element === "promoted_trend"){
-										log("## removed promoted trend", item), removed++, ng = true;
+										logd("## removed promoted trend", item), removed++, ng = true;
 									}
 									if (! ng){
-										log("# item", item.entryId, item);
+										logd("# item", item.entryId, item);
 										items.push(item);
 									}
 								});
@@ -202,27 +221,27 @@
 			});
 			// users/recommendations.json secondaryColumn おすすめユーザー
 			if (Array.isArray(j) && j.every(e => e.token && e.user && e.user_id)){ 
-				log("## removed array of recommended uses", j);
+				logd("## removed array of recommended uses", j);
 				j = [];
 			}
 			// ログインしたユーザーのIDを使って latestTweetFirst を呼び出す
 			! getCookies().twid && j?.subtasks && j.subtasks.forEach(task =>{
-				log("# task", task);
+				logd("# task", task);
 				if (task.check_logged_in_account){
-				log("# task.check_logged_in_account", task.check_logged_in_account);
+				logd("# task.check_logged_in_account", task.check_logged_in_account);
 					if (task.check_logged_in_account.user_id){
-						log("# check_logged_in_account.user_id:", task.check_logged_in_account.user_id);
-						log("document.cookie",document.cookie);
+						logd("# check_logged_in_account.user_id:", task.check_logged_in_account.user_id);
+						logd("document.cookie",document.cookie);
 						setTimeout(latestTweetFirst, 0, task.check_logged_in_account.user_id, true/*reload*/);
 						let timer = setInterval(function(){
 							if (getCookies().twid){
 								clearInterval(timer);
 								readyToReload = true;
-								log("# ready to reload");
+								logd("# ready to reload");
 								//debugger;location.reload();
 							}
 							else {
-								log("# reload interval");
+								logd("# reload interval");
 							}
 						}, 100);
 					}
@@ -230,7 +249,7 @@
 			});
 			if (readyToReload && j.timeline){
 				setTimeout(()=>{
-					log("#### reloading");
+					logd("#### reloading");
 					debugger;
 					location.reload();
 				}, 0);
@@ -238,37 +257,131 @@
 			return j;
 		},
 	});
-	function removeSearchFilterBlock(e){
-		e = e || document.querySelector('[data-testid="sidebarColumn"] a[href^="/search-advanced"]');
-		while (e = e.parentElement){
-			if (e.textContent.includes("検索フィルター")){
-				e.remove();
-				break;
+	if ("monitor transition"){
+		function shorten(url){
+			if (typeof url !== "string" || ! url instanceof String){ return "" + url; }
+			let u = decodeURIComponent(url);
+			return u.length > 30 ? u.substring(0, 20) + "..." : u;
+		}
+		function state2str(state){
+			if (! state){ return typeof state; }
+			let s = "";
+			Object.keys(state).forEach(k =>{
+				let v = state[k];
+				if (k === "previousPath"){ v = shorten(v); }
+				else if (k === "state" && typeof v === "object"){ v = state2str(v); }
+				s += ", " + k + ":" + v;
+			});
+			return "{" + s.substring(2) + "}";
+		}
+		function onPageTrasition(method, state, title, url){
+			log("## transition ##", method, "state:"+  state2str(state), "title:", title, "url:", shorten(url));
+			listener.forEach(fn => fn(method, state, title, url));
+		}
+		["pushState", "replaceState"].forEach(prop =>{
+			history[prop] = new Proxy(history[prop], {
+				apply: function(target, thisArg, args) {
+					const state = args[0], title = args[1], url = args[2];
+					onPageTrasition(prop, state, title, url);
+					return Reflect.apply(target, thisArg, args);
+				},
+			});
+		});
+		window.addEventListener("popstate", ev =>{
+			let url = location.pathname+location.search;
+			onPageTrasition("popstate", ev.state, null, url);
+		});
+		const listener = new Set();
+		window.twitterPageTransitionMonitor = {
+			addListener(callback){
+				listener.add(callback);
+				return function(){
+					listener.delete(callback);
+				};
+			},
+			removeListener(handle){
+				handle();
+			}
+		};
+	}
+	if ("monitor mutation"){
+		function removeLoginGoogle(){
+			let e;
+			if (e = document.querySelector('body > #react-root ~ div > iframe[src^="https://accounts.google.com/"]')){
+				logd("## removed [Googleでログイン]ダイアログ", e);
+				e.parentElement.remove();
 			}
 		}
-	}
-	const observer = new MutationObserver((mutations, observer)=>{
-		mutations.forEach((m,i)=>{
-			if (m.type !== "childList"){ return; }
-			m.addedNodes.forEach(n =>{
-				if (! (n && n.nodeType === Node.ELEMENT_NODE)){ return; }
-				let e, d = {};
-				if (e = n.querySelector('a[href^="/search-advanced"]')){
-					removeSearchFilterBlock(e);
+		function focusUserNameInput(){
+			let e = document.querySelector('[data-testid="apple_sign_in_button"] + div + div input');
+			e && e.focus();
+		}
+		function removeSearchFilter(){
+			let e;
+			if (e = document.querySelector('[data-testid="sidebarColumn"] a[href^="/search-advanced"]')){
+				while (e = e.parentElement){
+					if (e.textContent.includes("検索フィルター")){
+						e.remove();
+						break;
+					}
 				}
-				else if (e = n.querySelector('iframe[title="[Googleでログイン]ダイアログ"]')){
-					log("## removed [Googleでログイン]ダイアログ", e);
-					e.parentElement.remove();
+			}
+		}
+		function hideListHeader(){
+			function getHeader(){
+				let e = document.querySelector('section h1 + div a[href^="/i/lists/"][href$="/info"]');
+				if (e){
+					while (e = e.parentElement){
+						if (e.dataset.testid === "cellInnerDiv"){ return e; }
+					}
+				}
+			}
+			const header = getHeader();
+			if (! header){ return; }
+			let id = "list-header-display-toggle";
+			if (document.getElementById(id)){ return; }
+			let shareButton = document.querySelector('[data-testid="share-button"');
+			if (! shareButton){ return; }
+			let btn = document.createElement("button");
+			btn.id = id;
+			btn.textContent = "ヘッダ表示";
+			btn.addEventListener("click", ev =>{
+				const header = getHeader();
+				if (header.style.display === ""){
+					header.style.display = "none";
+					btn.textContent = "ヘッダ表示";
+				}
+				else {
+					header.style.display = "";
+					btn.textContent = "ヘッダ非表示";
 				}
 			});
-			// m.removedNodes.forEach(n =>{});
-		});
-	});
-	observer.observe(document.documentElement, {childList: true, subtree: true});
+			shareButton.parentElement.insertBefore(btn, shareButton);
+			header.style.display = "none";
+		}
+		new MutationObserver((mutations, observer)=>{
+			removeLoginGoogle();
+			if (location.pathname === "/i/flow/login"){
+				focusUserNameInput();
+			}
+			else if (location.pathname === "/search"){
+				removeSearchFilter();
+			}
+			else if (location.pathname.startsWith("/i/lists/")){
+				hideListHeader();
+			}
+			0 && mutations.forEach((m,i)=>{
+				if (m.type !== "childList"){ return; }
+				m.addedNodes.forEach(n =>{
+					if (! (n && n.nodeType === Node.ELEMENT_NODE)){ return; }
+				});
+				// m.removedNodes.forEach(n =>{});
+			});
+		}).observe(document.documentElement, {childList: true, subtree: true});
+	}
 	if ("block xhr"){
 		let rex = new RegExp([
 			"/live_pipeline/update_subscriptions$",
-			/* EasyList block /1.1/jot */
 			"/jot/client_event.json",
 			"/jot/error_log.json",
 			"/jot/ces/p2",
