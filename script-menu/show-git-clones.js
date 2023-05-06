@@ -45,7 +45,7 @@
 	Promise.allSettled(tasks).then(values => {
 		const div = document.createElement("div");
 		div.style.cssText = "position:fixed; top:4em; left:50%; transform:translateX(-50%);"
-			+ " background-color: bisque; z-index:10; max-width:90%; overflow-x:scroll;";
+			+ " background-color: bisque; z-index:10; max-width:85%; overflow-x:scroll;";
 		document.addEventListener("click", function handler(ev){
 			div.remove();
 			document.removeEventListener("click", handler);
