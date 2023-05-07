@@ -129,18 +129,11 @@ function printRSS(rss, opts){
 		logd(d);
 		let duplicated;
 		if (rss.channel.yahoo){
-			Array.from(container.children).forEach(item =>{
-				if (item.dataChannel.yahoo && item.dataItem.extra.id === d.extra.id){
-					if (item.dataItem.link != d.link){
-						if (d.extra.articleUrl){
-							item.remove();
-						}
-						else {
-							return;
-						}
-					}
-				}
-			});
+			duplicated = Array.from(container.children).find(item => item.dataChannel.yahoo && item.dataItem.extra.id === d.extra.id && item.dataItem.link != d.link);
+			if (duplicated){
+				if (d.extra.articleUrl){ duplicated.remove(); }
+				else { return; }
+			}
 			if (d.media){
 				let media = canonicalizeMediaName(d.media);
 				duplicated = Array.from(container.children).find(item => ! item.dataChannel.yahoo && sameTitle(item.dataItem.title, d.title) && getCanonicalizedMediaName(item) === media);
