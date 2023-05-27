@@ -246,3 +246,6 @@ jma.go.jp##.ad-sp
 
 ! 2022-10-17 https://fx.minkabu.jp
 fx.minkabu.jp##.gpt-ad
+
+! googleでログイン
+||accounts.google.com^$subdocument,domain=reddit.com

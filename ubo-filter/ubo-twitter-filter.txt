@@ -91,4 +91,7 @@ twitter.com##div[aria-label="タイムライン: Carousel"]
 ! Twitterアプリをおすすめしますを非表示
 twitter.com###layers > div:has(div:has-text(Twitterアプリをおすすめ))
 
+! googleでログイン
+||accounts.google.com^$subdocument,domain=twitter.com
+
 !#endif
