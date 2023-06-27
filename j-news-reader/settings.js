@@ -30,7 +30,6 @@ const settings = {
 		}
 	},
 	save(){
-		//localStorage.removeItem("settings");
 		localStorage.setItem("settings", JSON.stringify(this.data));
 	},
 	isNgChannel(id){
