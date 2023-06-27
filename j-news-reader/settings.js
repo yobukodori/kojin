@@ -159,7 +159,6 @@ const settings = {
 			let t = updateTitleFilter(), y = updateYahoFilter();
 			if (! (t && y)){ return; }
 			cleanup();
-			this.save();
 		};
 		modal.querySelector('button.settings-close').addEventListener("click", ev => close());
 		modal.addEventListener("click", ev => close());
