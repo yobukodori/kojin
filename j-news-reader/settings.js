@@ -30,7 +30,7 @@ const settings = {
 		}
 	},
 	save(){
-		localStorage.removeItem("settings");
+		//localStorage.removeItem("settings");
 		localStorage.setItem("settings", JSON.stringify(this.data));
 	},
 	isNgChannel(id){
@@ -243,6 +243,7 @@ const settings = {
 			});
 			if (error){ return; }
 			cleanup();
+			this.save();
 		};
 		modal.querySelector('button.settings-close').addEventListener("click", ev => close());
 		modal.addEventListener("click", ev => close());
