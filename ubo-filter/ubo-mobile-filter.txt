@@ -165,7 +165,8 @@ www.bloomberg.co.jp##.page-ad
 ! 2022-11-21 https://forbesjapan.com
 forbesjapan.com##.ad_header
 ! 続きを読む - スマホのみ
-forbesjapan.com##^style:has-text(#btn-next-)
+forbesjapan.com##.article-wall-wrap.active:remove-class(active)
+forbesjapan.com##.article-wall:remove-class(article-wall)
 ! 無料会員に登録すると、続きをお読みいただけます - スマホのみ
 forbesjapan.com##.auth-box
 forbesjapan.com##.auth-contents:style(height:auto !important)
