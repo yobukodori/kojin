@@ -225,6 +225,30 @@ reddit.com##body.scroll-disabled:style(overflow: visible!important; position: st
 reddit.com##.XPromoPopup
 reddit.com##.xPromoAppStoreFooter
 
+! https://www.reddit.com/r/uBlockOrigin/wiki/solutions/#wiki_application_spam_on_mobile
+! Reddit app ad
+www.reddit.com##.XPromoPopupRpl
+www.reddit.com##xpromo-new-app-selector
+www.reddit.com##.bottom-bar, .XPromoBottomBar
+www.reddit.com##.useApp,.TopNav__promoButton
+www.reddit.com##body:style(pointer-events:auto!important;)
+
+! uBO Annoyances has also this:
+! https://github.com/uBlockOrigin/uAssets/issues/6826
+reddit.com##.XPromoPopup
+reddit.com##body.scroll-disabled:style(overflow: visible!important; position: static!important;)
+reddit.com##.XPromoInFeed
+amp.reddit.com##.AppSelectorModal__body
+amp.reddit.com##.upsell_banner
+
+! 2022-11-11 20:20:47 CET:
+www.reddit.com##xpromo-app-selector
+www.reddit.com##body.scroll-is-blocked:style(overflow: visible!important; position: static!important;)
+www.reddit.com##+js(aeld, touchmove)
+
+! 2022-11-12 10:11:02 CET
+www.reddit.com##.XPromoPopupRplNew
+
 ! itest.5ch.net
 itest.5ch.net##li.ad
 itest.5ch.net##.ad-native-comment
