@@ -221,10 +221,30 @@ const profiles = {
 			return datestr;
 		},
 	},
+	/*
 	"ロイター トップニュース": {
 		id: "reuter",
 		url: "https://assets.wor.jp/rss/rdf/reuters/top.rdf",
 		type: "rss",
+	},
+	*/
+	"ロイター トップニュース": {
+		id: "reuter",
+		url: "https://jp.reuters.com/",
+		type: "html",
+		selector: {
+			item: '[class^="home-page-grid__wrapper__"] [data-testid$="StoryCard"]',
+			title: 'a[class*="-story-card__"',
+			link: 'a[class*="-story-card__"',
+			date: null, // "time" の textContent はスクリプトでセットしている
+			description: "",
+		},
+		getDateFromItem(item){
+			let time, datetime;
+			if ((time = item.querySelector('time')) && (datetime = time.getAttribute("datetime"))){
+				return datetime;
+			}
+		},
 	},
 	/*
 	"CNN国際ニュース(RSS)": {
@@ -472,8 +492,16 @@ const profiles = {
 									let d = doc.querySelector('[data-ual-view-type="digest"]'),
 										a = d && d.querySelector('a'),
 										t = a && a.querySelector('p, h2'),
-										m = (a && a.querySelector('p + span > span'))
-											|| (d && d.querySelector('a + div > span'));
+										m;
+									if (t){
+										if (t.tagName === "P"){ // pc
+											m = a.querySelector('p + span')
+												|| d.querySelector('span + div > div > a');
+										}
+										else { // if (t.tagName === "H2"){ // mobile
+											m = d.querySelector('a + div > span');
+										}
+									}
 									if (a){ item.link = item.extra.articleUrl = a.href; }
 									if (t && t.textContent.trim()){ item.title = t.textContent.trim(); };
 									if (m && m.textContent.trim()){ item.media = m.textContent.trim(); }
