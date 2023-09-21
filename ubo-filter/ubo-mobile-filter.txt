@@ -130,8 +130,9 @@ mainichi.jp###series-btn
 ||evidon.com^$script,domain=reuters.com
 reuters.com##div.GetTheAppBanner_get-the-app-banner
 ! 信頼できるグローバルニュースを支援してください
-jp.reuters.com##+js(set, adblockDetector, undefined)
-jp.reuters.com##+js(set, admrlWpJsonP, [])
+jp.reuters.com##.fEy1Z2XT
+jp.reuters.com##body:style(overflow:scroll !important)
+jp.reuters.com##html:style(overflow:scroll !important)
 
 ! www.cnn.co.jp
 www.cnn.co.jp###gdpr_area
