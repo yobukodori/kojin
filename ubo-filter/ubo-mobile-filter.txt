@@ -129,6 +129,9 @@ mainichi.jp###series-btn
 ||www.youtube.com^$subdocument,script,important,domain=reuters.com
 ||evidon.com^$script,domain=reuters.com
 reuters.com##div.GetTheAppBanner_get-the-app-banner
+! 信頼できるグローバルニュースを支援してください
+jp.reuters.com##+js(set, adblockDetector, undefined)
+jp.reuters.com##+js(set, admrlWpJsonP, [])
 
 ! www.cnn.co.jp
 www.cnn.co.jp###gdpr_area
