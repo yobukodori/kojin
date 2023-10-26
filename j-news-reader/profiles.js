@@ -234,8 +234,8 @@ const profiles = {
 		type: "html",
 		selector: {
 			item: '[class^="home-page-grid__wrapper__"] [data-testid$="StoryCard"]',
-			title: 'a[class*="-story-card__"',
-			link: 'a[class*="-story-card__"',
+			title: 'a[class*="-story-card__"], h3[data-testid="Heading"]',
+			link: 'a[class*="-story-card__"], h3[data-testid="Heading"] > a',
 			date: null, // "time" の textContent はスクリプトでセットしている
 			description: "",
 		},
@@ -262,7 +262,7 @@ const profiles = {
 		url: "https://www.cnn.co.jp/archives/",
 		type: "html",
 		selector: {
-			item: '.list-news-line > li',
+			item: '.pg-container-main > section:first-of-type .list-news-line > li',
 			title: 'a + a[href$=".html"]',
 			link: 'a',
 			date: "span",
