@@ -242,7 +242,7 @@ const settings = {
 			});
 			if (error){ return; }
 			cleanup();
-			this.save();
+			settings.save();
 		};
 		modal.querySelector('button.settings-close').addEventListener("click", ev => close());
 		modal.addEventListener("click", ev => close());
