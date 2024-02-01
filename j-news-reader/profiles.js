@@ -103,7 +103,7 @@ const profiles = {
 		url: "https://www.yomiuri.co.jp/",
 		type: "html",
 		selector: {
-			item: '.headline article',
+			item: '.home-headline__contents .item',
 			title: '.title',
 			link: 'a',
 			date: "time",
