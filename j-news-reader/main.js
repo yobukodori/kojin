@@ -1,5 +1,5 @@
 const jnr = {
-	appVer: "1.0.10 (2024/2/2 7:52)",
+	appVer: "1.0.11 (2024/2/3 13:42)",
 	updateInterval: 5 * 60 * 1000,
 };
 

@@ -300,7 +300,7 @@ const profiles = {
 			const items = [];
 			let g = data.pageData.content.groups.find(g => g.type === "top-stories");
 			g.items.forEach(item =>{
-				let itemData = {title: item.headlines.headline, link: item.locators.assetUri, date: new Date(item.timestamp).toString(), summary: item.summary};
+				let itemData = {title: item?.headlines?.headline || item.name, link: item?.locators?.assetUri || item.uri, date: new Date(item.timestamp).toString(), summary: item.summary};
 				items.push(itemData);
 			});
 			return Promise.resolve(items);
