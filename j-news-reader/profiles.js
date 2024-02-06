@@ -298,11 +298,21 @@ const profiles = {
 		},
 		getItems(data){
 			const items = [];
+			data.pageData.curations.forEach(curation =>{
+				if (curation.title === "トップ記事"){
+					curation.summaries.forEach(s =>{
+						let itemData = {title: s.title, link: s.link, date: s.firstPublished, summary: s.description};
+						items.push(itemData);
+					});
+				}
+			});
+			/*
 			let g = data.pageData.content.groups.find(g => g.type === "top-stories");
 			g.items.forEach(item =>{
 				let itemData = {title: item?.headlines?.headline || item.name, link: item?.locators?.assetUri || item.uri, date: new Date(item.timestamp).toString(), summary: item.summary};
 				items.push(itemData);
 			});
+			*/
 			return Promise.resolve(items);
 		},
 		/*
