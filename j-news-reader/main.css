@@ -1,3 +1,9 @@
+body {
+	background-color: Canvas;
+	color: CanvasText;
+	color-scheme: light dark;
+}
+
 .clear {
 	clear: both;
 }
