@@ -30,6 +30,12 @@
 		html.classList.add("toggle-dark-mode-ready");
 		elem.style.backgroundColor = "Canvas";
 		elem.style.color = "CanvasText";
+		var e = document.createElement("style");
+		e.textContent = `body.ex-dark-mode *{
+				background-color: Canvas !important;
+				color: CanvasText !important;
+			}`;
+		document.getElementsByTagName("head")[0].append(e);
 		if (window.matchMedia('(prefers-color-scheme: dark)').matches){
 			elem.style.colorScheme = "dark";
 			elem.classList.add(dark);
