@@ -34,7 +34,14 @@
 		e.textContent = `body.ex-dark-mode *{
 				background-color: Canvas !important;
 				color: CanvasText !important;
-			}`;
+			}
+			body.ex-dark-mode a:link {
+				color: LinkText !important;
+			}
+			body.ex-dark-mode a:visited {
+				color: VisitedText !important;
+			}
+			`;
 		document.getElementsByTagName("head")[0].append(e);
 		const bc = getComputedStyle(document.body).backgroundColor;
 		let m = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(bc);
