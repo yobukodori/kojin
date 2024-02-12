@@ -30,7 +30,7 @@
 		html.classList.add("toggle-dark-mode-ready");
 		elem.style.backgroundColor = "Canvas";
 		elem.style.color = "CanvasText";
-		var e = document.createElement("style");
+		let e = document.createElement("style");
 		e.textContent = `body.ex-dark-mode *{
 				background-color: Canvas !important;
 				color: CanvasText !important;
