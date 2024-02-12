@@ -30,13 +30,19 @@
 		html.classList.add("toggle-dark-mode-ready");
 		elem.style.backgroundColor = "Canvas";
 		elem.style.color = "CanvasText";
-		let e = document.createElement("style");
+		var e = document.createElement("style");
 		e.textContent = `body.ex-dark-mode *{
 				background-color: Canvas !important;
 				color: CanvasText !important;
 			}`;
 		document.getElementsByTagName("head")[0].append(e);
-		if (window.matchMedia('(prefers-color-scheme: dark)').matches){
+		var bc = getComputedStyle(document.body).backgroundColor;
+		console.log("background-color:", bc);
+		var m = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(bc);
+		var darkMode = m && [m[1], m[2], m[3]].every(n => n*1 < 50);
+		console.log("darkMode:", darkMode);
+		// window.matchMedia('(prefers-color-scheme: dark)').matches){
+		if (darkMode){
 			elem.style.colorScheme = "dark";
 			elem.classList.add(dark);
 		}
