@@ -49,6 +49,10 @@ body {
 	background-color: bisque;
 }
 
+.dark-mode #items > .new {
+	background-color: #003800;
+}
+
 #items > .item:nth-child(2n) {
 	/* background-color: whitesmoke; */
 }

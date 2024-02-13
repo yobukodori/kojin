@@ -1,5 +1,5 @@
 const jnr = {
-	appVer: "1.0.13 (2024/2/12 8:14)",
+	appVer: "1.0.14 beta",
 	updateInterval: 5 * 60 * 1000,
 };
 
@@ -370,5 +370,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
 		name && (opts[name] = val);
 	});
 	settings.init(profiles);
+	if (window.matchMedia('(prefers-color-scheme: dark)').matches){
+		document.body.classList.add("dark-mode");
+	}
 	! opts.hasOwnProperty("m") && update();
 });
