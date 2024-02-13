@@ -1,6 +1,6 @@
 //==========================================================
 //name dark mode news
-//matches https://www.jiji.com/*, https://www.47news.jp/*, https://www.yomiuri.co.jp/*, https://www.asahi.com/*, https://mainichi.jp/*, https://*.nhk.or.jp/*, https://www.nikkei.com/*, https://www.cnn.co.jp/*, https://www.bbc.com/*, https://www.afpbb.com/*, https://forbesjapan.com/*, https://news.yahoo.co.jp/*, https://www.bloomberg.co.jp/*
+//matches https://www.jiji.com/*, https://www.47news.jp/*, https://www.yomiuri.co.jp/*, https://www.asahi.com/*, https://mainichi.jp/*, https://*.nhk.or.jp/*, https://www.nikkei.com/*, https://jp.reuters.com/*, https://www.cnn.co.jp/*, https://www.bbc.com/*, https://www.afpbb.com/*, https://forbesjapan.com/*, https://news.yahoo.co.jp/*, https://www.bloomberg.co.jp/*
 //option start
 //js
 (function(){
@@ -40,6 +40,11 @@
 					`;
 				document.getElementsByTagName("head")[0].append(e);
 				document.body.classList.add(className);
+				e = document.getElementById("fusion-app");
+				if (e) {
+					e.id = "disabled-fusion-app";
+					log("disabled react fusion-app");
+				}
 				new MutationObserver((mutations, observer)=>{
 					mutations.forEach((m,i)=>{
 						if (m.type === "attributes"){
