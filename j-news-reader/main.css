@@ -45,15 +45,15 @@ body {
 	padding: 0.2em 0 0.2em 0.3em;
 }
 
-#items > .new .title::after {
+#items > .new .title::before {
 	content: "新着";
 	border-style: solid;
 	border-width: thin;
 	background-color: yellow;
 	color: black;
-	font-size: 0.9em;
+	font-size: small;
 	padding: 0 0.3em;
-	margin-left: 0.5em;
+	margin-right: 0.3em;
 }
 
 #items > .item:nth-child(2n) {
