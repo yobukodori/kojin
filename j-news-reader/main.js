@@ -1,5 +1,5 @@
 const jnr = {
-	appVer: "1.0.14 beta",
+	appVer: "1.0.15 beta",
 	updateInterval: 5 * 60 * 1000,
 };
 
@@ -343,6 +343,7 @@ document.getElementById("settings").addEventListener("click", ()=>{
 			updateItemClassByChannel(item);
 		});
 		showStatistics();
+		document.body.style.colorScheme = settings.colorScheme === "auto" ? "light dark" : settings.colorScheme;
 	});
 });
 
@@ -370,8 +371,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
 		name && (opts[name] = val);
 	});
 	settings.init(profiles);
-	if (window.matchMedia('(prefers-color-scheme: dark)').matches){
-		document.body.classList.add("dark-mode");
+	if (settings.colorScheme === "auto"){
+		// デフォルト body {color-scheme: dark light;} で両方に対応できるので何もする必要はない
+	}
+	else {
+		document.body.style.colorScheme = settings.colorScheme;
 	}
 	! opts.hasOwnProperty("m") && update();
 });

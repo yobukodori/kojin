@@ -45,12 +45,15 @@ body {
 	padding: 0.2em 0 0.2em 0.3em;
 }
 
-#items > .new {
-	background-color: bisque;
-}
-
-.dark-mode #items > .new {
-	background-color: #003800;
+#items > .new .title::after {
+	content: "新着";
+	border-style: solid;
+	border-width: thin;
+	background-color: yellow;
+	color: black;
+	font-size: 0.9em;
+	padding: 0 0.3em;
+	margin-left: 0.5em;
 }
 
 #items > .item:nth-child(2n) {

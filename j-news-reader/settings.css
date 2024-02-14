@@ -12,8 +12,9 @@
 	width: 90%;
 	margin-top: 10px;
 	margin-bottom: 10px;
+	padding-left: 0.5em;
 	overflow-y: scroll;
-	background-color: ivory;
+	background-color: Canvas;
 }
 
 #settings-bar {
@@ -32,6 +33,14 @@
 #settings-channels .container.checkbox > div {
 	margin-left: 0.5em;
 	min-width: 30%;
+}
+
+#settings-color-scheme {
+	margin: 0 0.2em 0.5em
+}
+
+#settings-color-scheme > label {
+	font-weight: bold;
 }
 
 #settings-channels button {

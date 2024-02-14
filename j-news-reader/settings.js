@@ -1,6 +1,7 @@
 const settings = {
 	profiles: null,
 	data: {
+		colorScheme: "auto",
 		ngChannel: {},
 		titleFilter: "",
 		ngYahooCategory: {},
@@ -13,6 +14,9 @@ const settings = {
 	},
 	getActiveChannelCount(){
 		return Object.keys(this.profiles).length - Object.keys(this.data.ngChannel).length;
+	},
+	get colorScheme(){
+		return this.data.colorScheme;
 	},
 	needsToExcludePayedArticle(){
 		return this.data.excludePayedArticle;
@@ -73,6 +77,14 @@ const settings = {
 	<div id="settings-bar">
 	<button class="settings-close">閉じる</button>
 	</div>
+	<div id="settings-color-scheme">
+		<label for="color-scheme">カラースキーム:</label>
+		<select id="color-scheme">
+		<option value="auto">システム設定に従う</option>
+		<option value="light">ライトモード</option>
+		<option value="dark">ダークモード</option>
+		</select>
+	</div>
 	<div id="settings-channels">
 		<b>チャンネル選択</b><button class="set-all">すべて選択</button><button class="clear-all">すべて解除</button>
 		<div class="container checkbox">
@@ -121,8 +133,20 @@ const settings = {
 `
 		);
 		const dlg = modal.querySelector('#settings-content');
+		// カラースキーム
+		let e = dlg.querySelector("#color-scheme"), colorScheme = e;
+		for (let i = 0 ; i < e.options.length ; i++){
+			if (e.options[i].value === this.data.colorScheme){
+				e.options[i].selected = true;
+				break;
+			}
+		}
+		e.addEventListener("change", ev =>{
+			// ng: = e.value 呼ばれるときには e には別の値が入っている
+			this.data.colorScheme = colorScheme.value;
+		});
 		// チャンネル選択
-		let e, c = dlg.querySelector('#settings-channels > .container'), yahoo;
+		let c = dlg.querySelector('#settings-channels > .container'), yahoo;
 		Object.keys(this.profiles).forEach(k =>{
 			const prof = this.profiles[k], id = prof.id;
 			if (id === "yahoo"){ yahoo = prof; }
