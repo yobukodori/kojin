@@ -2,6 +2,7 @@ const settings = {
 	profiles: null,
 	data: {
 		colorScheme: "auto",
+		workWithDarkModeNews: false,
 		ngChannel: {},
 		titleFilter: "",
 		ngYahooCategory: {},
@@ -17,6 +18,9 @@ const settings = {
 	},
 	get colorScheme(){
 		return this.data.colorScheme;
+	},
+	get workWithDarkModeNews(){
+		return this.data.workWithDarkModeNews;
 	},
 	needsToExcludePayedArticle(){
 		return this.data.excludePayedArticle;
@@ -84,6 +88,8 @@ const settings = {
 		<option value="light">ライトモード</option>
 		<option value="dark">ダークモード</option>
 		</select>
+		<div><input type="checkbox" id="work-with-dark-mode-news">
+			<label for="work-with-dark-mode-news"><b>URL に dark mode news 用パラメータを付加する</b></label></div>
 	</div>
 	<div id="settings-channels">
 		<b>チャンネル選択</b><button class="set-all">すべて選択</button><button class="clear-all">すべて解除</button>
@@ -144,6 +150,12 @@ const settings = {
 		e.addEventListener("change", ev =>{
 			// ng: = e.value 呼ばれるときには e には別の値が入っている
 			this.data.colorScheme = colorScheme.value;
+		});
+		// URL に dark mode new 用パラメータを付加
+		e = dlg.querySelector("#work-with-dark-mode-news");
+		this.data.workWithDarkModeNews && (e.checked = true);
+		e.addEventListener("change", ev =>{
+			this.data.workWithDarkModeNews = ev.target.checked ? true : false;
 		});
 		// チャンネル選択
 		let c = dlg.querySelector('#settings-channels > .container'), yahoo;

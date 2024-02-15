@@ -1,5 +1,5 @@
 const jnr = {
-	appVer: "1.0.16 (2024/2/14 16:27)",
+	appVer: "1.0.17 beta",
 	updateInterval: 5 * 60 * 1000,
 };
 
@@ -122,6 +122,18 @@ const sameTitle = function(){
 	};
 }();
 
+function workWithDarkModeNews(link){
+	if (settings.workWithDarkModeNews){
+		if (settings.colorScheme === "dark" || settings.colorScheme === "light"){
+			const url = new URL(link), params = new URLSearchParams(url.search);
+			params.append("dmn-color-scheme", settings.colorScheme);
+			url.search = params.toString(); // params.toString() は先頭に ? を付けないがそのままでOK
+			return url.href;
+		}
+	}
+	return link;
+}
+
 function printRSS(rss, opts){
 	opts = opts || {};
 	const container = document.getElementById('items'), today = new Date();
@@ -166,7 +178,7 @@ function printRSS(rss, opts){
 				date = document.createElement("span"),
 				item = document.createElement("div");
 		title.textContent = (d.title || "(無題)"), title.className = "title";
-		d.link && (title.href = d.link), title.target = "_blank";
+		d.link && (title.href = workWithDarkModeNews(d.link)), title.target = "_blank";
 		item.appendChild(title), item.className = "item";
 		description.textContent = d.description || "", description.className = "description";
 		channel.append(rss.channel.title + (d.media ? " " + d.media : "")), channel.href = rss.channel.link, channel.className = "channel", channel.target = "_blank";
@@ -341,6 +353,8 @@ document.getElementById("settings").addEventListener("click", ()=>{
 		Array.from(document.getElementById('items').children).forEach(item =>{
 			isNgItem(item) ? item.classList.add("x-settings-filter") : item.classList.remove("x-settings-filter");
 			updateItemClassByChannel(item);
+			item.querySelectorAll('a.title').forEach(a => a.href = workWithDarkModeNews(item.dataItem.link));
+			item.querySelectorAll('a.channel').forEach(a => a.href = workWithDarkModeNews(item.dataChannel.link));
 		});
 		showStatistics();
 		document.body.style.colorScheme = settings.colorScheme === "auto" ? "light dark" : settings.colorScheme;
