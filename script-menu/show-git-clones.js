@@ -14,7 +14,7 @@
 	thead.append(thr);
 	table.append(thead, tbody);
 	let rows = 0, tasks = [];
-	["j-news-reader", "csp-for-me", "cors-for-me", "script-for-me", "script-menu"].forEach((repo, i) =>{
+	["dark-mode-news", "j-news-reader", "csp-for-me", "cors-for-me", "script-for-me", "script-menu"].forEach((repo, i) =>{
 		tasks.push(new Promise((resolve, reject)=>{
 			const url = "https://github.com/yobukodori/" + repo + "/graphs/clone-activity-data";
 			const headers = { Accept: "application/json" }, opts = {headers};
@@ -45,7 +45,8 @@
 	Promise.allSettled(tasks).then(values => {
 		const div = document.createElement("div");
 		div.style.cssText = "position:fixed; top:4em; left:50%; transform:translateX(-50%);"
-			+ " background-color: bisque; z-index:10; max-width:85%; overflow-x:scroll;";
+			+ " background-color: Canvas; color: CanvasText;"
+			+ " border: solid; z-index:10; max-width:85%; overflow-x:scroll;";
 		document.addEventListener("click", function handler(ev){
 			div.remove();
 			document.removeEventListener("click", handler);
