@@ -19,13 +19,10 @@
 	function darken(){
 		const params = new URLSearchParams(location.search);
 		let paramColorScheme = params.get("dmn-color-scheme");
-		if (! (paramColorScheme === "dark" || paramColorScheme === "light")){
-			paramColorScheme = "auto";
-		}
 		log("paramColorScheme:", paramColorScheme);
 		const systemColorScheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? "dark" : "light";
 		log("systemColorScheme:", systemColorScheme);
-		const requiredColorScheme = paramColorScheme === "auto" ? systemColorScheme : paramColorScheme;
+		const requiredColorScheme = (paramColorScheme === "dark" || paramColorScheme === "light") ? paramColorScheme : systemColorScheme;
 		log("requiredColorScheme:", requiredColorScheme);
 		const detectedColorScheme = detectColorScheme(document.body);
 		log("detetedColorScheme:", detectedColorScheme);
@@ -108,6 +105,27 @@
 			observer.observe(document.body, {attributes: true});
 			setTimeout(function(){ observer.disconnect(); }, 1000);
 			log("monitoring document.body attributes");
+			if (paramColorScheme){
+				const fixLinks = function(){
+					Array.from(document.links).forEach(a =>{
+						const url = new URL(a.href);
+						if (url.hostname == location.hostname){
+							const params = new URLSearchParams(url.search);
+							params.append("dmn-color-scheme", paramColorScheme);
+							url.search = params.toString();
+							a.href = url.href;
+						}
+					});
+					log("fixed links");
+				};
+				if (document.readyState === "loading"){
+					document.addEventListener("DOMContentLoaded", ev => fixLinks());
+					log("waiting DOMContentLoaded event");
+				}
+				else {
+					fixLinks();
+				}
+			}
 		}
 	}
 	if (document.body){ darken(); }
