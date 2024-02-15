@@ -1,5 +1,5 @@
 const jnr = {
-	appVer: "1.0.17 (2024/2/15 10:44)",
+	appVer: "1.0.18 beta",
 	updateInterval: 5 * 60 * 1000,
 };
 
@@ -353,8 +353,8 @@ document.getElementById("settings").addEventListener("click", ()=>{
 		Array.from(document.getElementById('items').children).forEach(item =>{
 			isNgItem(item) ? item.classList.add("x-settings-filter") : item.classList.remove("x-settings-filter");
 			updateItemClassByChannel(item);
-			item.querySelectorAll('a.title').forEach(a => a.href = workWithDarkModeNews(item.dataItem.link));
-			item.querySelectorAll('a.channel').forEach(a => a.href = workWithDarkModeNews(item.dataChannel.link));
+			item.querySelector('a.title').href = workWithDarkModeNews(item.dataItem.link);
+			item.querySelector('a.channel').href = workWithDarkModeNews(item.dataChannel.link);
 		});
 		showStatistics();
 		document.body.style.colorScheme = settings.colorScheme === "auto" ? "light dark" : settings.colorScheme;
