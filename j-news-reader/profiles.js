@@ -192,6 +192,10 @@ const profiles = {
 			let title = item.querySelector(this.selector.title);
 			return title && title.parentElement.querySelector('.is-limited');
 		},
+		getCategory(item){
+			let link = item.querySelector(this.selector.link);
+			return link.href.includes("/spp/") ? "sponichi" : "";
+		},
 	},
 	"NHKニュース": {
 		id: "nhk",

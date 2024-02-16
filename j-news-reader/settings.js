@@ -9,6 +9,7 @@ const settings = {
 		yahooGetSource: false,
 		yahooMediaFilter: "",
 		afpbbNgCategory: {},
+		mainichiExcludeSponichi: false,
 		compareDatesOnSameUrl: false,
 		excludePayedArticle: false,
 		yomiuriTagFilter: "",
@@ -21,6 +22,9 @@ const settings = {
 	},
 	get workWithDarkModeNews(){
 		return this.data.workWithDarkModeNews;
+	},
+	get mainichiExcludeSponichi(){
+		return this.data.mainichiExcludeSponichi;
 	},
 	needsToExcludePayedArticle(){
 		return this.data.excludePayedArticle;
@@ -107,6 +111,10 @@ const settings = {
 	<div>
 		<div><input type="checkbox" id="afpbb-exclude-sports">
 			<label for="afpbb-exclude-sports"><b>AFPBBのスポーツ記事を除外する</b></label></div>
+	</div>
+	<div>
+		<div><input type="checkbox" id="mainichi-exclude-sponichi">
+			<label for="mainichi-exclude-sponichi"><b>毎日新聞のスポニチ提供記事を除外する</b></label></div>
 	</div>
 	<div>
 		<div><input type="checkbox" id="compare-dates-on-same-url">
@@ -205,6 +213,12 @@ const settings = {
 		this.data.afpbbNgCategory.sports && (e.checked = true);
 		e.addEventListener("change", ev =>{
 			this.data.afpbbNgCategory.sports = ev.target.checked ? true : false;
+		});
+		// 毎日のスポニチ提供記事除外
+		e = dlg.querySelector("#mainichi-exclude-sponichi");
+		this.data.mainichiExcludeSponichi && (e.checked = true);
+		e.addEventListener("change", ev =>{
+			this.data.mainichiExcludeSponichi = ev.target.checked ? true : false;
 		});
 		// 同一URLの場合日付を比較
 		e = dlg.querySelector("#compare-dates-on-same-url");
