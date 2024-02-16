@@ -21,44 +21,6 @@
 	document.body.appendChild(a);
 })();
 //==========================================================
-//name ダーク／ライト モード切替
-//js
-(function(){
-	"use strict";
-	const html = document.documentElement, elem = document.body, dark = "ex-dark-mode";
-	if (! html.classList.contains("toggle-dark-mode-ready")){
-		html.classList.add("toggle-dark-mode-ready");
-		elem.style.backgroundColor = "Canvas";
-		elem.style.color = "CanvasText";
-		let e = document.createElement("style");
-		e.textContent = `body.ex-dark-mode *{
-				background-color: Canvas !important;
-				color: CanvasText !important;
-			}
-			body.ex-dark-mode a:link {
-				color: LinkText !important;
-			}
-			body.ex-dark-mode a:visited {
-				color: VisitedText !important;
-			}
-			`;
-		document.getElementsByTagName("head")[0].append(e);
-		const bc = getComputedStyle(document.body).backgroundColor;
-		let m = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(bc);
-		const darkMode = m && [m[1], m[2], m[3]].every(n => n*1 < 50);
-		// window.matchMedia('(prefers-color-scheme: dark)').matches){
-		if (darkMode){
-			elem.style.colorScheme = "dark";
-			elem.classList.add(dark);
-		}
-		else {
-			elem.style.colorScheme = "light";
-		}
-	}
-	elem.classList.toggle(dark)
-	elem.style.colorScheme = elem.classList.contains(dark) ? "dark" : "light";
-})();
-//==========================================================
 //name 自由を！
 //js
 https://yobukodori.github.io/freedom/enable_disabled.user.js
