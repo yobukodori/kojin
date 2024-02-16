@@ -1,5 +1,5 @@
 //name dark mode news
-//; v.1.0.1 (2024/2/16)
+//; v.1.0.2 beta
 //matches https://www.jiji.com/*, https://www.47news.jp/*, https://www.yomiuri.co.jp/*, https://www.asahi.com/*, https://mainichi.jp/*, https://*.nhk.or.jp/*, https://www.nikkei.com/*, https://jp.reuters.com/*, https://www.cnn.co.jp/*, https://www.bbc.com/*, https://www.afpbb.com/*, https://forbesjapan.com/*, https://news.yahoo.co.jp/*, https://www.bloomberg.co.jp/*
 //option start
 //js
@@ -49,9 +49,12 @@
 					color: CanvasText;
 					color-scheme: ${requiredColorScheme};
 				}
-				.${className} * {
+				.${className} *:not(img, svg) {
 					background-color: Canvas !important;
 					color: CanvasText !important;
+				}
+				.${className} img, .${className} svg {
+					background-color: #808080;
 				}
 				.${className} a:link {
 					color: LinkText !important;
@@ -60,10 +63,10 @@
 					color: VisitedText !important;
 				}
 				#${buttonId} {
-					border: solid;
+					border: solid 1px;
 					width: 32px;
 					height: 32px;
-					background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="5 5 505 505" preserveAspectRatio="xMinYMin meet" ><rect x="0" y="0" width="500" height="500" style="fill:none;stroke:none;"/><path d="M0,499l499,-499l0,499Z"  style="fill:black;stroke:black;stroke-width:5px"/><path d="M0,0l499,0l-499,499Z" style="fill:white;stroke:black;stroke-width:10px"/></svg>');
+					background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500" preserveAspectRatio="xMinYMin meet" ><rect x="0" y="0" width="500" height="500" style="fill:none;stroke:none;"/><path d="M0,499l499,-499l0,499Z"  style="fill:black;stroke:black;stroke-width:5px"/><path d="M0,0l499,0l-499,499Z" style="fill:white;stroke:black;stroke-width:10px"/></svg>');
 					padding: initial;
 					position: fixed;
 					bottom: 10px;
@@ -106,7 +109,14 @@
 			setTimeout(function(){ observer.disconnect(); }, 1000);
 			log("monitoring document.body attributes");
 			if (paramColorScheme){
-				const fixLinks = function(){
+				const fixLinks = function(recured){
+					if (! recured){
+						if (location.hostname === "forbesjapan.com"){
+							// forbesjapan.com dynamically adds a parameter with a slight delay.
+							setTimeout(fixLinks, 1000, true);
+							return;
+						}
+					}
 					Array.from(document.links).forEach(a =>{
 						const url = new URL(a.href);
 						if (url.hostname == location.hostname){
