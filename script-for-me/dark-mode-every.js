@@ -82,7 +82,12 @@
 					log("body.classList.remove", darkClassName);
 				}
 				else {
-					document.body.classList.add(darkClassName);
+					if (/\b5ch\.net$/.test(location.hostname) && /android/i.test(navigator.userAgent)){
+						setTimeout(function(){ document.body.classList.add(darkClassName); }, 0);
+					}
+					else {
+						document.body.classList.add(darkClassName);
+					}
 					log("body.classList.add", darkClassName);
 				}
 			}
