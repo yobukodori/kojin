@@ -17,6 +17,7 @@
 		return [m[1], m[2], m[3]].some(n => n > 50) || m[4] === "0" ? "light" : "dark";
 	}
 	function darken(){
+		log("start darkening");
 		const params = new URLSearchParams(location.search);
 		let paramColorScheme = params.get("dmn-color-scheme");
 		log("paramColorScheme:", paramColorScheme);
@@ -109,23 +110,24 @@
 			setTimeout(function(){ observer.disconnect(); }, 1000);
 			log("monitoring document.body attributes");
 			if (paramColorScheme){
+				const fixLink = function (a){
+					const url = new URL(a.href);
+					if ((url.hostname === location.hostname) || [url.hostname, location.hostname].every(e => /\.nhk\.or\.jp$/.test(e))){
+						const params = new URLSearchParams(url.search);
+						params.append("dmn-color-scheme", paramColorScheme);
+						url.search = params.toString();
+						a.href = url.href;
+					}
+				};
 				const fixLinks = function(recured){
 					if (! recured){
-						if (location.hostname === "forbesjapan.com"){
+						if (/forbesjapan\.com|\.nhk\.or\.jp/.test(location.hostname)){
 							// forbesjapan.com dynamically adds a parameter with a slight delay.
-							setTimeout(fixLinks, 1000, true);
+							setTimeout(fixLinks, 500, true);
 							return;
 						}
 					}
-					Array.from(document.links).forEach(a =>{
-						const url = new URL(a.href);
-						if (url.hostname == location.hostname){
-							const params = new URLSearchParams(url.search);
-							params.append("dmn-color-scheme", paramColorScheme);
-							url.search = params.toString();
-							a.href = url.href;
-						}
-					});
+					Array.from(document.links).forEach(a => fixLink(a));
 					log("fixed links");
 				};
 				if (document.readyState === "loading"){
@@ -148,7 +150,14 @@
 					if (n.tagName === "BODY"){
 						log("got body");
 						observer.disconnect();
-						document.body ? darken() : setTimeout(darken, 0);
+						if (document.body){
+							darken();
+						}
+						else { // nhk.or.jp
+							let timer = setInterval(function(){
+								document.body && (clearInterval(timer), darken());
+							}, 10);
+						}
 					}
 				});
 			});
