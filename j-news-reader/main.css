@@ -20,7 +20,7 @@ body {
 
 #alert-modal > div {
 	border: solid;
-	background-color: #ffff88;
+	background-color: Canvas; /*#ffff88;*/
 	min-width: 200px;
 	max-width: 90%;
 	max-height: 90%;
