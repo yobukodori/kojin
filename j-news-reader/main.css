@@ -57,6 +57,10 @@ body {
 	margin-right: 0.3em;
 }
 
+.display-unvisited-article-titles-in-canvas-text a.title:link {
+	color: CanvasText;
+}
+
 #items > .item:nth-child(2n) {
 	/* background-color: whitesmoke; */
 }

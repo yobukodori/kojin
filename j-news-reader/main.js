@@ -1,5 +1,5 @@
 const jnr = {
-	appVer: "1.0.19 (2024/2/19 06:08)",
+	appVer: "1.0.20 (beta)",
 	updateInterval: 5 * 60 * 1000,
 };
 
@@ -358,6 +358,7 @@ document.getElementById("settings").addEventListener("click", ()=>{
 		});
 		showStatistics();
 		document.body.style.colorScheme = settings.colorScheme === "auto" ? "light dark" : settings.colorScheme;
+		document.body.classList[settings.displayUnvisitedArticleTitlesInCanvasText ? "add" : "remove"]("display-unvisited-article-titles-in-canvas-text");
 	});
 });
 
@@ -391,5 +392,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
 	else {
 		document.body.style.colorScheme = settings.colorScheme;
 	}
+	settings.displayUnvisitedArticleTitlesInCanvasText && document.body.classList.add("display-unvisited-article-titles-in-canvas-text");
 	! opts.hasOwnProperty("m") && update();
 });

@@ -2,6 +2,7 @@ const settings = {
 	profiles: null,
 	data: {
 		colorScheme: "auto",
+		displayUnvisitedArticleTitlesInCanvasText: false,
 		workWithDarkModeNews: false,
 		ngChannel: {},
 		titleFilter: "",
@@ -19,6 +20,9 @@ const settings = {
 	},
 	get colorScheme(){
 		return this.data.colorScheme;
+	},
+	get displayUnvisitedArticleTitlesInCanvasText(){
+		return this.data.displayUnvisitedArticleTitlesInCanvasText;
 	},
 	get workWithDarkModeNews(){
 		return this.data.workWithDarkModeNews;
@@ -92,6 +96,8 @@ const settings = {
 		<option value="light">ライトモード</option>
 		<option value="dark">ダークモード</option>
 		</select>
+		<div><input type="checkbox" id="display-unvisited-article-titles-in-canvas-text">
+			<label for="display-unvisited-article-titles-in-canvas-text"><b>未訪問の記事タイトルをリンクを表す文字色ではなく通常の文字色で表示する</b></label></div>
 		<div><input type="checkbox" id="work-with-dark-mode-news">
 			<label for="work-with-dark-mode-news"><b>URL に dark mode news 用パラメータを付加する</b></label></div>
 	</div>
@@ -158,6 +164,12 @@ const settings = {
 		e.addEventListener("change", ev =>{
 			// ng: = e.value 呼ばれるときには e には別の値が入っている
 			this.data.colorScheme = colorScheme.value;
+		});
+		// 未訪問の記事タイトルをリンクを表す文字色ではなく通常の文字色で表示
+		e = dlg.querySelector("#display-unvisited-article-titles-in-canvas-text");
+		this.data.displayUnvisitedArticleTitlesInCanvasText && (e.checked = true);
+		e.addEventListener("change", ev =>{
+			this.data.displayUnvisitedArticleTitlesInCanvasText = ev.target.checked ? true : false;
 		});
 		// URL に dark mode new 用パラメータを付加
 		e = dlg.querySelector("#work-with-dark-mode-news");
