@@ -2,7 +2,8 @@ const settings = {
 	profiles: null,
 	data: {
 		colorScheme: "auto",
-		displayUnvisitedArticleTitlesInCanvasText: false,
+		displayUnvisitedArticleTitlesInCanvasTextInLightMode: false,
+		displayUnvisitedArticleTitlesInCanvasTextInDarkMode: false,
 		workWithDarkModeNews: false,
 		ngChannel: {},
 		titleFilter: "",
@@ -21,8 +22,11 @@ const settings = {
 	get colorScheme(){
 		return this.data.colorScheme;
 	},
-	get displayUnvisitedArticleTitlesInCanvasText(){
-		return this.data.displayUnvisitedArticleTitlesInCanvasText;
+	get displayUnvisitedArticleTitlesInCanvasTextInLightMode(){
+		return this.data.displayUnvisitedArticleTitlesInCanvasTextInLightMode;
+	},
+	get displayUnvisitedArticleTitlesInCanvasTextInDarkMode(){
+		return this.data.displayUnvisitedArticleTitlesInCanvasTextInDarkMode;
 	},
 	get workWithDarkModeNews(){
 		return this.data.workWithDarkModeNews;
@@ -96,8 +100,10 @@ const settings = {
 		<option value="light">ライトモード</option>
 		<option value="dark">ダークモード</option>
 		</select>
-		<div><input type="checkbox" id="display-unvisited-article-titles-in-canvas-text">
-			<label for="display-unvisited-article-titles-in-canvas-text"><b>未訪問の記事タイトルをリンクを表す文字色ではなく通常の文字色で表示する</b></label></div>
+		<div><input type="checkbox" id="display-unvisited-article-titles-in-canvas-text-in-light-mode">
+			<label for="display-unvisited-article-titles-in-canvas-text-in-light-mode"><b>ライトモード時未訪問の記事タイトルを通常の文字色（黒）で表示する</b></label></div>
+		<div><input type="checkbox" id="display-unvisited-article-titles-in-canvas-text-in-dark-mode">
+			<label for="display-unvisited-article-titles-in-canvas-text-in-dark-mode"><b>ダークモード時未訪問の記事タイトルを通常の文字色（白）で表示する</b></label></div>
 		<div><input type="checkbox" id="work-with-dark-mode-news">
 			<label for="work-with-dark-mode-news"><b>URL に dark mode news 用パラメータを付加する</b></label></div>
 	</div>
@@ -165,11 +171,17 @@ const settings = {
 			// ng: = e.value 呼ばれるときには e には別の値が入っている
 			this.data.colorScheme = colorScheme.value;
 		});
-		// 未訪問の記事タイトルをリンクを表す文字色ではなく通常の文字色で表示
-		e = dlg.querySelector("#display-unvisited-article-titles-in-canvas-text");
-		this.data.displayUnvisitedArticleTitlesInCanvasText && (e.checked = true);
+		// ライトモード時未訪問の記事タイトルをリンクを表す文字色ではなく通常の文字色で表示
+		e = dlg.querySelector("#display-unvisited-article-titles-in-canvas-text-in-light-mode");
+		this.data.displayUnvisitedArticleTitlesInCanvasTextInLightMode && (e.checked = true);
 		e.addEventListener("change", ev =>{
-			this.data.displayUnvisitedArticleTitlesInCanvasText = ev.target.checked ? true : false;
+			this.data.displayUnvisitedArticleTitlesInCanvasTextInLightMode = ev.target.checked ? true : false;
+		});
+		// ダークモード時未訪問の記事タイトルをリンクを表す文字色ではなく通常の文字色で表示
+		e = dlg.querySelector("#display-unvisited-article-titles-in-canvas-text-in-dark-mode");
+		this.data.displayUnvisitedArticleTitlesInCanvasTextInDarkMode && (e.checked = true);
+		e.addEventListener("change", ev =>{
+			this.data.displayUnvisitedArticleTitlesInCanvasTextInDarkMode = ev.target.checked ? true : false;
 		});
 		// URL に dark mode new 用パラメータを付加
 		e = dlg.querySelector("#work-with-dark-mode-news");

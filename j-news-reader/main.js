@@ -347,6 +347,25 @@ document.getElementById("clear-filter").addEventListener("click", ()=>{
 	showStatistics();
 });
 
+function onPrefersColorSchemeDarkChange(ev){
+	if (settings.colorScheme === "auto"){
+		document.body.classList[ev.matches ? "add" : "remove"]("dark-mode");
+	}
+}
+
+function setupColorScheme(){
+	if (settings.colorScheme === "auto"){
+		document.body.style.colorScheme = "light dark";
+		document.body.classList[window.matchMedia("(prefers-color-scheme: dark)").matches ? "add" : "remove"]("dark-mode");
+	}
+	else {
+		document.body.style.colorScheme = settings.colorScheme;
+		document.body.classList[settings.colorScheme === "dark" ? "add" : "remove"]("dark-mode");
+	}
+	document.body.classList[settings.displayUnvisitedArticleTitlesInCanvasTextInLightMode ? "add" : "remove"]("display-unvisited-article-titles-in-canvas-text-in-light-mode");
+	document.body.classList[settings.displayUnvisitedArticleTitlesInCanvasTextInDarkMode ? "add" : "remove"]("display-unvisited-article-titles-in-canvas-text-in-dark-mode");
+}
+
 document.getElementById("settings").addEventListener("click", ()=>{
 	settings.open()
 	.then(()=>{
@@ -357,8 +376,7 @@ document.getElementById("settings").addEventListener("click", ()=>{
 			item.querySelector('a.channel').href = workWithDarkModeNews(item.dataChannel.link);
 		});
 		showStatistics();
-		document.body.style.colorScheme = settings.colorScheme === "auto" ? "light dark" : settings.colorScheme;
-		document.body.classList[settings.displayUnvisitedArticleTitlesInCanvasText ? "add" : "remove"]("display-unvisited-article-titles-in-canvas-text");
+		setupColorScheme();
 	});
 });
 
@@ -386,12 +404,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 		name && (opts[name] = val);
 	});
 	settings.init(profiles);
-	if (settings.colorScheme === "auto"){
-		// デフォルト body {color-scheme: dark light;} で両方に対応できるので何もする必要はない
-	}
-	else {
-		document.body.style.colorScheme = settings.colorScheme;
-	}
-	settings.displayUnvisitedArticleTitlesInCanvasText && document.body.classList.add("display-unvisited-article-titles-in-canvas-text");
+	window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ev=> onPrefersColorSchemeDarkChange(ev));
+	setupColorScheme();
 	! opts.hasOwnProperty("m") && update();
 });

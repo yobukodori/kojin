@@ -57,7 +57,11 @@ body {
 	margin-right: 0.3em;
 }
 
-.display-unvisited-article-titles-in-canvas-text a.title:link {
+.display-unvisited-article-titles-in-canvas-text-in-light-mode:not(.dark-mode) a.title:link {
+	color: CanvasText;
+}
+
+.display-unvisited-article-titles-in-canvas-text-in-dark-mode.dark-mode a.title:link {
 	color: CanvasText;
 }
 
