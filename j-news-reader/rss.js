@@ -144,6 +144,7 @@ function getRSS(prof){
 				}
 				Array.from(ch.children).forEach(e => rss.channel[e.tagName] = e.textContent.trim());
 				logd("channel:", rss.channel);
+				prof.fixChannel && prof.fixChannel(rss.channel);
 				let container;
 				if (doc.tagName === "rdf:RDF"){
 					rss.version = 1;

@@ -604,10 +604,13 @@ const profiles = {
 		type: "rss",
 	},
 	*/
-	"Wedge ONLINE(ウェッジ・オンライン)　最新記事": {
+	"Wedge ONLINE 最新記事": {
 		id: "wedge",
 		url: "https://wedge.ismedia.jp/list/feed/rss",
 		type: "rss",
+		fixChannel: function (channel){
+			channel.title = this.name;
+		},
 		isObsolete: function (datetime){
 			let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
 			return yesterday.setHours(0, 0, 0, 0), datetime <  yesterday.getTime();
