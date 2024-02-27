@@ -15,6 +15,7 @@ const settings = {
 		compareDatesOnSameUrl: false,
 		excludePayedArticle: false,
 		yomiuriTagFilter: "",
+		wedgeAuthorFilter: "",
 	},
 	getActiveChannelCount(){
 		return Object.keys(this.profiles).length - Object.keys(this.data.ngChannel).length;
@@ -76,6 +77,9 @@ const settings = {
 	},
 	isYahooNgMeida(title){
 		return this.data.yahooMediaFilter ? new Filter(this.data.yahooMediaFilter).match(title) : false;
+	},
+	isWedgeNgAuthor(author){
+		return this.data.wedgeAuthorFilter ? new Filter(this.data.wedgeAuthorFilter).match(author||"") : false;
 	},
 	init(profiles){
 		this.profiles = profiles;
@@ -153,6 +157,13 @@ const settings = {
 		<div id="settings-yahoo-media-filter">
 			<b>メディア名が次のフィルタに一致する記事を除外する</b>
 			<div><textarea rows="5" spellcheck="false"></textarea></div>
+		</div>
+	</div>
+	<div class="channel wedge">
+		<b>Wedge ONLINE 設定</b>
+		<div class="filter author">
+			<b>執筆者が次のフィルタに一致する記事を除外する</b>
+			<div><textarea rows="1" spellcheck="false"></textarea></div>
 		</div>
 	</div>
 </div>
@@ -296,6 +307,21 @@ const settings = {
 		yfilter.addEventListener("blur", ev =>{
 			updateYahooMediaFilter();
 		});
+		// Wedge執筆者フィルタ
+		let wdFilter = dlg.querySelector(".channel.wedge .filter.author textarea");
+		wdFilter.value = this.data.wedgeAuthorFilter || "";
+		const updateWedgeAuthorFilter = function(){
+			const v = wdFilter.value.trim(), f = v && new Filter(v);
+			if (f && f.error){
+				alert("Wedge 執筆者フィルタが不正です。" + f.error);
+				return false;
+			}
+			settings.data.wedgeAuthorFilter = v;
+			return true;
+		};
+		wdFilter.addEventListener("blur", ev =>{
+			updateWedgeAuthorFilter();
+		});
 		
 		let onkeydown, cleanup, close, resolve;
 		onkeydown = function(ev){
@@ -311,7 +337,7 @@ const settings = {
 		};
 		close = function(){
 			let error = 0;
-			[updateTitleFilter, updateYomiuriTagFilter, updateYahooMediaFilter].forEach(update =>{
+			[updateTitleFilter, updateYomiuriTagFilter, updateYahooMediaFilter, updateWedgeAuthorFilter].forEach(update =>{
 				! update() && error++;
 			});
 			if (error){ return; }

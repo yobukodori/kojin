@@ -160,7 +160,7 @@ function getRSS(prof){
 						if (prof.first && count++ >= prof.first){ return; }
 						if (prof.max && rss.item.length === prof.max){ return; }
 						let tag, data = {};
-						[{tag: "title", name: "title"}, {tag: "link", name: "link"}, {tag: "dc:date", name: "date"}, {tag: "pubDate", name: "pubDate"}].forEach(d => {
+						[{tag: "title", name: "title"}, {tag: "link", name: "link"}, {tag: "dc:date", name: "date"}, {tag: "pubDate", name: "pubDate"}, {tag: "dc:author", name: "author"}].forEach(d => {
 							data[d.name] = (tag = item.getElementsByTagName(d.tag)).length > 0 && tag[0].textContent;
 						});
 						if (data.link){

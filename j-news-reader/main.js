@@ -108,7 +108,7 @@ function updateItemClassByChannel(e){
 
 function isNgItem(item){
 	const title = item.dataItem.title;
-	return settings.isNgTitle(title) || (item.dataChannel.yahoo && settings.isYahooNgMeida(item.dataItem.media)) || (item.dataProfile.id === "afpbb-latest" && settings.isAfpbbNgCategory(item.dataItem.category)) || (settings.needsToExcludePayedArticle() && item.dataItem.payed) || (item.dataProfile.id === "yomiuri" && settings.isYomiuriNgTag(item.dataItem.tags)) || (item.dataProfile.id === "mainichi" && settings.mainichiExcludeSponichi && item.dataItem.category === "sponichi"); 
+	return settings.isNgTitle(title) || (item.dataChannel.yahoo && settings.isYahooNgMeida(item.dataItem.media)) || (item.dataProfile.id === "afpbb-latest" && settings.isAfpbbNgCategory(item.dataItem.category)) || (settings.needsToExcludePayedArticle() && item.dataItem.payed) || (item.dataProfile.id === "yomiuri" && settings.isYomiuriNgTag(item.dataItem.tags)) || (item.dataProfile.id === "mainichi" && settings.mainichiExcludeSponichi && item.dataItem.category === "sponichi" || (item.dataProfile.id === "wedge" && settings.isWedgeNgAuthor(item.dataItem.author))); 
 }
 
 const sameTitle = function(){
