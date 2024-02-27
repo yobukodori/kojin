@@ -473,9 +473,6 @@ const profiles = {
 			return url.search = "", (new URL(url)).href;
 		},
 		isObsolete: function (datetime){
-			return Date.now() - datetime > 24 * 60 * 60 * 1000;
-		},
-		isObsolete: function (datetime){
 			let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
 			return yesterday.setHours(0, 0, 0, 0), datetime <  yesterday.getTime();
 		},
@@ -607,6 +604,15 @@ const profiles = {
 		type: "rss",
 	},
 	*/
+	"Wedge ONLINE(ウェッジ・オンライン)　最新記事": {
+		id: "wedge",
+		url: "https://wedge.ismedia.jp/list/feed/rss",
+		type: "rss",
+		isObsolete: function (datetime){
+			let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
+			return yesterday.setHours(0, 0, 0, 0), datetime <  yesterday.getTime();
+		},
+	},
 };
 
 Object.keys(profiles).forEach(k =>{
