@@ -46,6 +46,9 @@
 			if (location.hostname === "www.afpbb.com"){
 				ng += ", .next-btn, .prev-btn, .num-main, .thumbtitle";
 			}
+			else if (location.hostname === "www.bloomberg.co.jp"){
+				ng += ", .navi-search";
+			}
 			let e = document.createElement("style");
 			e.id = id;
 			e.textContent = `
