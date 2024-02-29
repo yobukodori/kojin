@@ -144,7 +144,9 @@
 					if (n.tagName === "BODY"){
 						log("got body");
 						observer.disconnect();
-						document.body ? darken() : setTimeout(darken, 0);
+						(function checkBody(){
+							document.body ? darken() : setTimeout(checkBody, 0);
+						})();
 					}
 				});
 			});
