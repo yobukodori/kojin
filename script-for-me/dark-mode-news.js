@@ -157,14 +157,9 @@
 					if (n.tagName === "BODY"){
 						log("got body");
 						observer.disconnect();
-						if (document.body){
-							darken();
-						}
-						else { // nhk.or.jp
-							let timer = setInterval(function(){
-								document.body && (clearInterval(timer), darken());
-							}, 10);
-						}
+						(function checkBody(){
+							document.body ? darken() : setTimeout(checkBody, 0);
+						})();
 					}
 				});
 			});
