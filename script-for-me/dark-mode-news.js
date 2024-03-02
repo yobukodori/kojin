@@ -135,8 +135,8 @@
 				};
 				const fixLinks = function(recured){
 					if (! recured){
-						if (/forbesjapan\.com|\.nhk\.or\.jp|jp\.reuters\.com/.test(location.hostname)){
-							// forbesjapan.com dynamically adds a parameter with a slight delay.
+						// Some sites add links or change link parameters later
+						if (/forbesjapan\.com|\.nhk\.or\.jp|jp\.reuters\.com|www\.yomiuri\.co\.jp/.test(location.hostname)){
 							setTimeout(fixLinks, 1000, true);
 							return;
 						}
