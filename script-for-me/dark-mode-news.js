@@ -42,16 +42,27 @@
 			const className = "dark-mode-news-dark-mode",
 				id = className + "-style",
 				buttonId = "dark-mode-news-recovery-button";
-			let ng = "img, svg";
+			let ng = "img, svg", extraCss = "";
 			if (location.hostname === "www.afpbb.com"){
 				ng += ", .next-btn, .prev-btn, .num-main, .thumbtitle";
 			}
 			else if (location.hostname === "www.bloomberg.co.jp"){
 				ng += ", .navi-search";
 			}
-			let e = document.createElement("style");
-			e.id = id;
-			e.textContent = `
+			else if (/\breuters.com$/.test(location.hostname)){
+				ng += ", #fusion-app *";
+				extraCss = `
+				.dark-mode-news-dark-mode #fusion-app, .dark-mode-news-dark-mode [class^="site-header__main-bar"], .dark-mode-news-dark-mode [class^="nav-dropdown__inner"]{
+					background-color: Canvas;
+					color: CanvasText;
+					color-scheme: dark;
+				}
+				.dark-mode-news-dark-mode [class*="text__dark-grey"], .dark-mode-news-dark-mode [class*="text__inherit-color"], .dark-mode-news-dark-mode [class*="text__black"], .dark-mode-news-dark-mode [class*="text__light"] {
+					color:CanvasText;
+				}
+				`;
+			}
+			let cssText = `
 				 body.${className} {
 					background-color: Canvas;
 					color: CanvasText;
@@ -80,8 +91,10 @@
 					bottom: 10px;
 					right: 10px;
 					z-index:2147483647;
-				}
-				`;
+				}` + extraCss;
+			let e = document.createElement("style");
+			e.id = id;
+			e.textContent = cssText;
 			document.getElementsByTagName("head")[0].append(e);
 			document.body.classList.add(className);
 			log("changed color scheme. okay?");
@@ -91,14 +104,6 @@
 				document.body.classList.toggle(className);
 			});
 			document.body.append(e);
-			if (/\breuters.com$/.test(location.hostname)){
-				// react prevents changing to dark mode. so disable react.
-				const e = document.getElementById("fusion-app");
-				if (e) {
-					e.id = "disabled-fusion-app";
-					log("disabled react fusion-app");
-				}
-			}
 			// some page sets class attribute later.
 			const observer = new MutationObserver((mutations, observer)=>{
 				mutations.forEach((m,i)=>{
@@ -120,17 +125,19 @@
 				const fixLink = function (a){
 					const url = new URL(a.href);
 					if ((url.hostname === location.hostname) || [url.hostname, location.hostname].every(e => /\.nhk\.or\.jp$/.test(e))){
-						const params = new URLSearchParams(url.search);
-						params.append("dmn-color-scheme", paramColorScheme);
-						url.search = params.toString();
-						a.href = url.href;
+						const params = new URLSearchParams(url.search), name = "dmn-color-scheme";
+						if (! params.has(name)){
+							params.append(name, paramColorScheme);
+							url.search = params.toString();
+							a.href = url.href;
+						}
 					}
 				};
 				const fixLinks = function(recured){
 					if (! recured){
-						if (/forbesjapan\.com|\.nhk\.or\.jp/.test(location.hostname)){
+						if (/forbesjapan\.com|\.nhk\.or\.jp|jp\.reuters\.com/.test(location.hostname)){
 							// forbesjapan.com dynamically adds a parameter with a slight delay.
-							setTimeout(fixLinks, 500, true);
+							setTimeout(fixLinks, 1000, true);
 							return;
 						}
 					}
