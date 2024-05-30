@@ -109,11 +109,6 @@ const profiles = {
 			date: "time",
 			description: "",
 		},
-		getTags(item){
-			let tags = [];
-			item.querySelectorAll('a.tag, div.tag > a').forEach(a => tags.push(a.textContent.trim()));
-			return tags;
-		},
 		getPayed(item){
 			let title = item.querySelector(this.selector.title);
 			return title && title.parentElement.querySelector('use');

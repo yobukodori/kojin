@@ -33,12 +33,22 @@ Lexer = class {
 				this.token.push({punc: c, pos: start, str: c});
 			}
 			else if (c === '/'){
-				while (i < str.length && (c = str[i]) !== '/'){ ++i; }
-				if (c !== '/'){
+				let closed;
+				while (i < str.length){
+					c = str[i++];
+					if (c === "/"){
+						closed = true;
+						break;
+					}
+					else if (c === "\\"){
+						if (i === str.length){ break; }
+						c = str[i++];
+					}
+				}
+				if (! closed){
 					this.error = {message: "no closing '/'", pos: start, str: str.substring(start)};
 					return;
 				}
-				++i;
 				let rexStr = str.substring(start, i);
 				let {rex, error} = Lexer.createRegExp(rexStr);
 				if (error){
@@ -153,4 +163,3 @@ Filter = class {
 		return this.eval(this.parser.node);
 	}
 };
-

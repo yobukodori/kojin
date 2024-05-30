@@ -14,7 +14,7 @@ const settings = {
 		mainichiExcludeSponichi: false,
 		compareDatesOnSameUrl: false,
 		excludePayedArticle: false,
-		yomiuriTagFilter: "",
+		yomiuriUrlFilter: "",
 		wedgeAuthorFilter: "",
 	},
 	getActiveChannelCount(){
@@ -65,11 +65,9 @@ const settings = {
 	isAfpbbNgCategory(name){
 		return this.data.afpbbNgCategory[name];
 	},
-	isYomiuriNgTag(tags){
-		if (this.data.yomiuriTagFilter){
-			tags = tags || [];
-			const f = new Filter(this.data.yomiuriTagFilter);
-			return tags.some(tag => f.match(tag));
+	isYomiuriNgUrl(url){
+		if (this.data.yomiuriUrlFilter){
+			return new Filter(this.data.yomiuriUrlFilter).match(url);
 		}
 	},
 	isYahooNgCategory(id){
@@ -138,8 +136,8 @@ const settings = {
 	</div>
 	<div class="channel yomiuri">
 		<b>読売新聞設定</b>
-		<div class="filter tag">
-			<b>タグが次のフィルタに一致する記事を除外する</b>
+		<div class="filter url">
+			<b>記事 URL が次のフィルタに一致する記事を除外する</b>
 			<div><textarea rows="1" spellcheck="false"></textarea></div>
 		</div>
 	</div>
@@ -261,20 +259,20 @@ const settings = {
 		e.addEventListener("change", ev =>{
 			this.data.compareDatesOnSameUrl = ev.target.checked ? true : false;
 		});
-		// 読売新聞タグフィルター
-		let ymfilter = dlg.querySelector(".channel.yomiuri .filter.tag textarea");
-		ymfilter.value = this.data.yomiuriTagFilter || "";
-		const updateYomiuriTagFilter = function(){
+		// 読売新聞記事URLフィルター
+		let ymfilter = dlg.querySelector(".channel.yomiuri .filter.url textarea");
+		ymfilter.value = this.data.yomiuriUrlFilter || "";
+		const updateYomiuriUrlFilter = function(){
 			const v = ymfilter.value.trim(), f = v && new Filter(v);
 			if (f && f.error){
-				alert("読売タグフィルタが不正です。" + f.error);
+				alert("読売記事 URL フィルタが不正です。" + f.error);
 				return false;
 			}
-			settings.data.yomiuriTagFilter = v;
+			settings.data.yomiuriUrlFilter = v;
 			return true;
 		};
 		ymfilter.addEventListener("blur", ev =>{
-			updateYomiuriTagFilter();
+			updateYomiuriUrlFilter();
 		});
 		// Yahoo カテゴリ選択
 		c = dlg.querySelector('#settings-yahoo-categories > .container');
@@ -337,7 +335,7 @@ const settings = {
 		};
 		close = function(){
 			let error = 0;
-			[updateTitleFilter, updateYomiuriTagFilter, updateYahooMediaFilter, updateWedgeAuthorFilter].forEach(update =>{
+			[updateTitleFilter, updateYomiuriUrlFilter, updateYahooMediaFilter, updateWedgeAuthorFilter].forEach(update =>{
 				! update() && error++;
 			});
 			if (error){ return; }
