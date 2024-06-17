@@ -111,7 +111,7 @@ const profiles = {
 		},
 		getPayed(item){
 			let title = item.querySelector(this.selector.title);
-			return title && title.parentElement.querySelector('use');
+			return title && title.parentElement.querySelector('[data-icon-type="key-locked"]');
 		},
 		excludeItem: function (item, data){
 			return item.getElementsByTagName("time").length === 0;
