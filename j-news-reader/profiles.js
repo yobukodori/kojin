@@ -505,7 +505,8 @@ const profiles = {
 												|| d.querySelector('span + div > div > a');
 										}
 										else { // if (t.tagName === "H2"){ // mobile
-											m = d.querySelector('a + div > span');
+											m = d.querySelector('a + div > span')
+												|| a.querySelector('h2 + span');
 										}
 									}
 									if (a){ item.link = item.extra.articleUrl = a.href; }
