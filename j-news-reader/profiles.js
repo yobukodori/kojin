@@ -69,7 +69,7 @@ const profiles = {
 		url: "https://www.47news.jp/",
 		type: "html",
 		selector: {
-			item: 'main > div.page_layout:nth-child(1) .post_items > a.post_item',
+			item: 'main > div.page_layout:nth-child(2) .post_items > a.post_item',
 			title: '.item_ttl',
 			link: 'a.post_item',
 			date: ".item_time",
