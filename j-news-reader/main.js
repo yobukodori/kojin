@@ -1,5 +1,5 @@
 const jnr = {
-	appVer: "1.0.25 beta (2024/10/09 19:27)",
+	appVer: "1.0.26 beta (2024/11/06 15:55)",
 	updateInterval: 5 * 60 * 1000,
 };
 
@@ -275,9 +275,18 @@ document.getElementById("update").addEventListener("click", ()=>{
 	update();
 });
 
+function sec2hms(n){
+	let  t = { h:0, m:0, s:0, n };
+	t.s = n % 60, n = (n - t.s) / 60;
+	t.m = n % 60, n = (n - t.m) / 60
+	t.h = n;
+	t.hmsString = t.h > 0 ? t.h + "時間" : "" +`${("0"+t.m).slice(-2)}分${("0"+t.s).slice(-2)}秒`;
+	return t;
+}
+
 function onUpdateTimer(ev){
 	--jnr.updateCounter;
-	document.getElementById("update-counter").textContent = jnr.updateCounter;
+	document.getElementById("update-counter").textContent = sec2hms(jnr.updateCounter).hmsString;
 	if (jnr.updateCounter === 0){
 		clearInterval(jnr.updateTimer);
 		jnr.updateTimer = null;
@@ -293,7 +302,7 @@ function setUpdateTimer(){
 		au.checked = false;
 		return;
 	}
-	document.getElementById("update-counter").textContent = jnr.updateCounter = intr * 60;
+	document.getElementById("update-counter").textContent = sec2hms(jnr.updateCounter = intr * 60).hmsString;
 	jnr.updateTimer = setInterval(onUpdateTimer, 1000);
 }
 
