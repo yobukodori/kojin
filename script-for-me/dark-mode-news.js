@@ -1,5 +1,5 @@
 //name dark mode news
-//; v.1.0.4 (beta)
+//; v.1.0.5 (2025/7/3 8:15)
 //matches https://www.jiji.com/*, https://www.47news.jp/*, https://www.yomiuri.co.jp/*, https://www.asahi.com/*, https://mainichi.jp/*, https://*.nhk.or.jp/*, https://www.nikkei.com/*, https://jp.reuters.com/*, https://www.cnn.co.jp/*, https://www.bbc.com/*, https://www.afpbb.com/*, https://forbesjapan.com/*, https://news.yahoo.co.jp/*, https://www.bloomberg.co.jp/*, https://wedge.ismedia.jp/*
 //option start
 //js
@@ -57,7 +57,7 @@
 					color: CanvasText;
 					color-scheme: dark;
 				}
-				.dark-mode-news-dark-mode [class*="text__dark-grey"], .dark-mode-news-dark-mode [class*="text__inherit-color"], .dark-mode-news-dark-mode [class*="text__black"], .dark-mode-news-dark-mode [class*="text__light"] {
+				.dark-mode-news-dark-mode [class*="text-module__dark-grey"], .dark-mode-news-dark-mode [class*="text-module__inherit-color"], .dark-mode-news-dark-mode [class*="text-module__black"], .dark-mode-news-dark-mode [class*="text-module__light"] {
 					color:CanvasText;
 				}
 				`;
