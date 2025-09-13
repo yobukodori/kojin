@@ -232,7 +232,7 @@ const profiles = {
 		url: "https://jp.reuters.com/",
 		type: "html",
 		selector: {
-			item: '[class^="home-page-grid__"][class*="story__"]',
+			item: '[class^="home-page-grid-module__"][class*="story__"]',
 			title: 'h3[data-testid="Heading"]',
 			link: 'a[data-testid="Title"]',
 			date: null, // "time" の textContent はスクリプトでセットしている
