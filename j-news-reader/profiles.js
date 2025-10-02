@@ -192,11 +192,13 @@ const profiles = {
 			return link.href.includes("/spp/") ? "sponichi" : "";
 		},
 	},
+	/*
 	"NHKニュース": {
 		id: "nhk",
 		url: "https://www.nhk.or.jp/rss/news/cat0.xml",
 		type: "rss",
 	},
+	*/
 	"日経新聞マーケットバー": {
 		id: "nikkei-bar",
 		url: "https://www.nikkei.com/",
