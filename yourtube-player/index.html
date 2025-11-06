@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube検索と埋め込み</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    #results, #relatedList { margin-top: 20px; }
+    li { margin-bottom: 12px; }
+
+    #modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
+    }
+    #modalContent {
+      position: relative;
+      margin: 5% auto;
+      width: 90%;
+      height: 90%;
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    #closeBtn {
+      position: absolute;
+      top: 10px; right: 20px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    #modalLayout {
+      display: flex;
+      height: 100%;
+    }
+    #modalLeft {
+      flex: 2;
+      padding: 10px;
+    }
+    #modalRight {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      border-left: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h2>YouTube検索（HTML解析＋ポップアップ表示）</h2>
+  <input type="text" id="searchKeyword" placeholder="検索キーワード" size="50">
+  <button onclick="searchYouTube()">Search</button>
+
+  <ul id="results"></ul>
+
+  <!-- モーダル -->
+  <div id="modal">
+    <div id="modalContent">
+      <span id="closeBtn" onclick="closeModal()">×</span>
+      <div id="modalLayout">
+        <div id="modalLeft">
+          <div id="modalPlayer"></div>
+        </div>
+        <div id="modalRight">
+          <h3>関連動画</h3>
+          <ul id="relatedList"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('searchKeyword').addEventListener('keydown', event => {
+        if (event.key === 'Enter') searchYouTube();
+      });
+    });
+
+    async function searchYouTube() {
+      const keyword = document.getElementById('searchKeyword').value;
+      if (!keyword) return;
+
+      const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(keyword)}`;
+      const response = await fetch(searchUrl);
+      const htmlText = await response.text();
+
+      const jsonMatch = htmlText.match(/var ytInitialData = (.*?);<\/script>/);
+      if (!jsonMatch) return;
+
+      let jsonText = jsonMatch[1].trim();
+      if (jsonText.endsWith(';')) jsonText = jsonText.slice(0, -1);
+      const ytData = JSON.parse(jsonText);
+
+      const items = extractSearchResults(ytData);
+      const resultsList = document.getElementById('results');
+      resultsList.innerHTML = '';
+
+      items.forEach(item => {
+        const li = document.createElement('li');
+
+        const titleLink = document.createElement('a');
+        titleLink.href = "#";
+        titleLink.textContent = item.title;
+        titleLink.style.display = "block";
+        titleLink.onclick = () => showModal(item.videoId);
+
+        const channelText = document.createElement('span');
+        channelText.textContent = `チャンネル: ${item.channel}`;
+        channelText.style.display = "block";
+        channelText.style.fontSize = "0.9em";
+        channelText.style.color = "#555";
+
+        li.appendChild(titleLink);
+        li.appendChild(channelText);
+        resultsList.appendChild(li);
+      });
+    }
+
+    function extractSearchResults(data) {
+      const results = [];
+      const contents = data.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents || [];
+      for (const section of contents) {
+        const items = section.itemSectionRenderer?.contents || [];
+        for (const item of items) {
+          const video = item.videoRenderer;
+          if (video) {
+            const title = video.title?.runs?.map(r => r.text).join("") || "タイトル不明";
+            const channel = video.ownerText?.runs?.[0]?.text || "チャンネル不明";
+            results.push({ videoId: video.videoId, title, channel });
+          }
+        }
+      }
+      return results;
+    }
+
+    function showModal(videoId) {
+      const modal = document.getElementById('modal');
+      const modalPlayer = document.getElementById('modalPlayer');
+      modalPlayer.innerHTML = `
+        <iframe width="100%" height="315"
+          src="https://www.youtube.com/embed/${videoId}?autoplay=1"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      `;
+      modal.style.display = 'block';
+      fetchRelatedVideos(videoId);
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+      document.getElementById('modalPlayer').innerHTML = '';
+      document.getElementById('relatedList').innerHTML = '';
+    }
+
+function tracePropertyPaths(obj, targetKey = "shortBylineText", path = "ytData") {
+  if (typeof obj !== "object" || obj === null) return;
+
+  for (const key in obj) {
+    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
+
+    const newPath = `${path}.${key}`;
+
+    if (key === targetKey) {
+      console.log(`🔍 [trace] 見つかりました: ${newPath}`);
+    }
+
+    tracePropertyPaths(obj[key], targetKey, newPath);
+  }
+}
+
+async function fetchRelatedVideos(videoId) {
+  const url = `https://www.youtube.com/watch?v=${videoId}`;
+  console.log(`🔍 [fetchRelatedVideos] 開始: ${url}`);
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.error(`❌ HTTPエラー: ${response.status} ${response.statusText}`);
+      return;
+    }
+
+    const htmlText = await response.text();
+    console.log(`✅ HTML取得成功 (${htmlText.length}文字)`);
+
+    const jsonMatch = htmlText.match(/var ytInitialData = (.*?);<\/script>/);
+    if (!jsonMatch || jsonMatch.length < 2) {
+      console.error("❌ ytInitialData の抽出に失敗");
+      return;
+    }
+
+    let jsonText = jsonMatch[1].trim();
+    if (jsonText.endsWith(';')) jsonText = jsonText.slice(0, -1);
+
+    let ytData;
+    try {
+      ytData = JSON.parse(jsonText);
+      console.log("✅ JSON パース成功");
+    } catch (err) {
+      console.error("❌ JSON.parse エラー:", err);
+      console.log("🔎 JSONテキスト（先頭500文字）:", jsonText.slice(0, 500));
+      return;
+    }
+
+    // 🔍 shortBylineText の探索ログ出力
+    console.log("🔎 [trace] shortBylineText の探索開始");
+    tracePropertyPaths(ytData, "shortBylineText", "ytData");
+
+    const secondary = ytData.playerOverlays?.playerOverlayRenderer?.endScreen?.watchNextEndScreenRenderer?.results;
+    if (!Array.isArray(secondary)) {
+      console.error("❌ endScreen.results が見つかりません");
+      console.log("🔎 ytData.playerOverlays:", ytData.playerOverlays);
+      return;
+    }
+
+    console.log(`✅ 関連動画セクション取得成功（${secondary.length}件）`);
+
+    const relatedList = document.getElementById('relatedList');
+    if (!relatedList) {
+      console.error("❌ DOM要素 #relatedList が見つかりません");
+      return;
+    }
+
+    relatedList.innerHTML = '';
+    const seen = new Set();
+    let addedCount = 0;
+
+    for (const item of secondary) {
+      const video = item.endScreenVideoRenderer;
+      if (!video) {
+        console.warn("⚠️ endScreenVideoRenderer が存在しない項目をスキップ");
+        continue;
+      }
+
+      const id = video.videoId;
+      if (!id || seen.has(id)) {
+        console.warn(`⚠️ videoId が無効または重複: ${id}`);
+        continue;
+      }
+      seen.add(id);
+
+      let title = "";
+      if (video.title?.simpleText) {
+        title = video.title.simpleText;
+      } else if (Array.isArray(video.title?.runs)) {
+        title = video.title.runs.map(run => run.text).join("");
+      } else {
+        console.warn(`⚠️ タイトル取得失敗: videoId=${id}`);
+        continue;
+      }
+
+      const channel = video.shortBylineText?.runs?.[0]?.text || "チャンネル不明";
+
+      const li = document.createElement('li');
+
+      const titleLink = document.createElement('a');
+      titleLink.href = "#";
+      titleLink.textContent = title;
+      titleLink.style.display = "block";
+      titleLink.onclick = () => showModal(id);
+
+      const channelText = document.createElement('span');
+      channelText.textContent = `チャンネル: ${channel}`;
+      channelText.style.display = "block";
+      channelText.style.fontSize = "0.9em";
+      channelText.style.color = "#555";
+
+      li.appendChild(titleLink);
+      li.appendChild(channelText);
+      relatedList.appendChild(li);
+      addedCount++;
+    }
+
+    console.log(`✅ 関連動画リストに ${addedCount} 件追加しました`);
+    if (addedCount === 0) {
+      console.warn("⚠️ 表示可能な関連動画が見つかりませんでした");
+    }
+
+  } catch (error) {
+    console.error("❌ fetchRelatedVideos 全体の例外:", error);
+  }
+}
+  </script>
+</body>
+</html>
