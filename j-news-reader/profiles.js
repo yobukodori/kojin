@@ -413,8 +413,80 @@ const profiles = {
 	// ===========================================
 	"ブルームバーグ トップニュース": {
 		id: "bloomberg",
-		url: "https://assets.wor.jp/rss/rdf/bloomberg/top.rdf",
-		type: "rss",
+		url: "https://www.bloomberg.com/jp",
+		type: "html",
+		selector: {
+			item: 'a[class^="StoryBlock_storyLink__"], [class^="LineupContentLede_storyBlock__"] > a[data-link-type="Story"], a[class^="ItemsWithHeadshots_link__"]',
+			title: '[data-testid="headline"]',
+			link: 'a',
+			//date: ".date",
+			description: "",
+		},
+		getTitle: function (title/* element */){
+			let text = title.textContent;
+			if (title.parentElement.querySelector('[data-component="opinion-byline"]')){
+				text = "オピニオン：" + text;
+			}
+			return text;
+		},
+		getDataFromArticle_: function(text){
+			let sig = 'name="parsely-pub-date" content="', i = text.indexOf(sig), start = i > -1 && i + sig.length, end = start && text.indexOf('"', start), date = end ?  text.substring(start, end) : "";
+			return {date};
+		},
+		latestNews: new Map(),
+		requesting: false,
+		queue: [],
+		fetchQueued(){
+			let { url, init, resolve, reject } = this.queue.shift();
+			logd("fetch", url);
+			fetch(url, init)
+			.then(res =>{
+				logd("resolved", url);
+				resolve(res);
+				if (this.queue.length > 0){
+					setTimeout(this.fetchQueued.bind(this), 300);
+				}
+				else {
+					this.requesting = false;
+				}
+			})
+			.catch(e => reject(e));
+		},
+		fetchSequential(url, init){
+			return new Promise((resolve, reject)=>{
+				let data = {url, init, resolve, reject};
+				this.queue.push(data);
+				if (! this.requesting){
+					this.requesting = true;
+					this.fetchQueued();
+				}
+			});
+		},
+		fetch(url, init){
+			const limit = 50; // 最大で50
+			for (let i = 0 ; i < 2 ; i++){
+				let page = i + 1,
+					apiUrl = `https://www.bloomberg.com/lineup-next/api/stories?types=ARTICLE,FEATURE,INTERACTIVE,LETTER,EXPLAINERS,VIDEO&locale=ja&limit=${limit}&pageNumber=${page}`;
+				this.fetchSequential(apiUrl, {})
+				.then(res =>{
+					return res.json();
+				})
+				.then(data =>{
+					data.forEach((d, i)=>{
+						logd((page - 1)*limit + i, d.headline, d.publishedAt, d);
+						this.latestNews.set(d.id, d);
+					});
+				});
+			}
+			return this.fetchSequential(url, init);
+		},
+		getDateFromItem: function (item/* element */){
+			if (this.latestNews && item.href){
+				let id = new URL(item.href).pathname.split("/").at(-1),
+					d = this.latestNews.get(id);
+				return d && d.publishedAt;
+			}
+		},
 	},
 	"Forbes政治経済": {
 		id: "forbes-economics",
@@ -496,7 +568,9 @@ const profiles = {
 									return res.text();
 								})
 								.then(text =>{
-									const doc = domParser.parseFromString(text, "text/html");
+									const doc = domParser.parseFromString(text, "text/html"),
+										scr = doc.querySelector('script[type="application/ld+json"]'),
+										ld = scr && JSON.parse(scr.textContent);
 									let d = doc.querySelector('[data-ual-view-type="digest"]'),
 										a = d && d.querySelector('a'),
 										t = a && a.querySelector('p, h2'),
@@ -512,8 +586,13 @@ const profiles = {
 										}
 									}
 									if (a){ item.link = item.extra.articleUrl = a.href; }
-									if (t && t.textContent.trim()){ item.title = t.textContent.trim(); };
+									if (t && t.textContent.trim()){ item.title = t.textContent.trim(); }
+									else if (ld?.headline){
+										item.title = ld.headline.replace(" - エキスパート - Yahoo!ニュース", "")
+											.replace(/ #エキスパートトピ（\S+?）/, "");
+									}
 									if (m && m.textContent.trim()){ item.media = m.textContent.trim(); }
+									else if (ld?.author?.name){ item.media = ld.author.name }
 									resolve(true);
 								})
 								.catch(e => reject(e));
