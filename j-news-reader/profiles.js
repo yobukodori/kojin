@@ -429,10 +429,6 @@ const profiles = {
 			}
 			return text;
 		},
-		getDataFromArticle_: function(text){
-			let sig = 'name="parsely-pub-date" content="', i = text.indexOf(sig), start = i > -1 && i + sig.length, end = start && text.indexOf('"', start), date = end ?  text.substring(start, end) : "";
-			return {date};
-		},
 		latestNews: new Map(),
 		requesting: false,
 		queue: [],
@@ -463,27 +459,34 @@ const profiles = {
 			});
 		},
 		fetch(url, init){
-			const limit = 50; // 最大で50
-			for (let i = 0 ; i < 2 ; i++){
-				let page = i + 1,
-					apiUrl = `https://www.bloomberg.com/lineup-next/api/stories?types=ARTICLE,FEATURE,INTERACTIVE,LETTER,EXPLAINERS,VIDEO&locale=ja&limit=${limit}&pageNumber=${page}`;
-				this.fetchSequential(apiUrl, {})
-				.then(res =>{
-					return res.json();
-				})
-				.then(data =>{
-					data.forEach((d, i)=>{
-						logd((page - 1)*limit + i, d.headline, d.publishedAt, d);
-						this.latestNews.set(d.id, d);
+			if (window.location.protocol === "file:"){
+				const pages = this.latestNews.size > 0 ? 1 : 2,
+					limit = 50; // 最大で50
+				for (let i = 0 ; i < pages ; i++){
+					let page = i + 1,
+						apiUrl = `https://www.bloomberg.com/lineup-next/api/stories?types=ARTICLE,FEATURE,INTERACTIVE,LETTER,EXPLAINERS,VIDEO,GRAPHIC&locale=ja&limit=${limit}&pageNumber=${page}`;
+					this.fetchSequential(apiUrl, {})
+					.then(res =>{
+						return res.json();
+					})
+					.then(data =>{
+						data.forEach((d, i)=>{
+							let u = new URL(d.url, this.url),
+								absoluteUrl = u.href;
+							logd((page - 1)*limit + i, d.headline, d.publishedAt, d.url, absoluteUrl, d);
+							this.latestNews.set(absoluteUrl, d);
+						});
 					});
-				});
+				}
 			}
 			return this.fetchSequential(url, init);
 		},
 		getDateFromItem: function (item/* element */){
 			if (this.latestNews && item.href){
-				let id = new URL(item.href).pathname.split("/").at(-1),
-					d = this.latestNews.get(id);
+				let u = new URL(item.getAttribute("href"), this.url),
+					absoluteUrl = (u.search = "", u.href),
+					d = this.latestNews.get(absoluteUrl);
+				logd("getDateFromItem:", absoluteUrl);
 				return d && d.publishedAt;
 			}
 		},
