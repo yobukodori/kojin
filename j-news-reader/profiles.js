@@ -290,11 +290,11 @@ const profiles = {
 				.then(text =>{
 					const domParser = new DOMParser();
 					const doc = domParser.parseFromString(text, "text/html");
-					const sig = "window.SIMORGH_DATA=";
-					e = Array.from(doc.getElementsByTagName("script")).find(e => e.textContent.startsWith(sig));
+					const sig = 'script#__NEXT_DATA__[type="application/json"]';
+					let e = doc.querySelector(sig);
 					if (! e){ throw Error(sig + "が見つかりません"); }
-					const data = JSON.parse(e.textContent.substring(sig.length));
-					logd("SIMORGH_DATA:", data);
+					const data = JSON.parse(e.textContent);
+					logd("__NEXT_DATA__:", data);
 					response.json = function(){ return data; };
 					resolve(response);
 				})
@@ -303,7 +303,7 @@ const profiles = {
 		},
 		getItems(data){
 			const items = [];
-			data.pageData.curations.forEach(curation =>{
+			data.props.pageProps.pageData.curations.forEach(curation =>{
 				if (curation.title === "トップ記事"){
 					curation.summaries.forEach(s =>{
 						let itemData = {title: s.title, link: s.link, date: s.firstPublished, summary: s.description};

@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="settings.css" type="text/css" />
 </head>
 <body>
+<div id="control-bar">
 <button id="update">更新</button><input type="checkbox" id="auto-update"><input type="text" id="update-interval"  value="10"><label for="auto-update">分間隔で自動更新</label>
 <button id="clear-new-mark">既読</button>
 <button id="clear-new-mark-then-upate">既読更新</button>
@@ -20,7 +21,8 @@
 </select>
 <label for="filter-text">フィルタ:</label><input type="text" id="filter-text"  value=""><label for="filter-text"><button id="apply-filter">適用</button><button id="clear-filter">解除</button></label>
 | <button id="settings">設定</button>
-<div>更新時刻:<span id="update-time"></span><span class="hide" id="auto-update-info"> (更新まで <span id="update-counter">∞</span>)</span> 　 <span id="status"></span></div>
+</div>
+<div id="status-bar">更新時刻:<span id="update-time"></span><span class="hide" id="auto-update-info"> (更新まで <span id="update-counter">∞</span>)</span> 　 <span id="status"></span></div>
 <div id="items">
 </div>
 <p>
