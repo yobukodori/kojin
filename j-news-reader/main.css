@@ -10,11 +10,11 @@ body {
 }
 
 #control-bar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background-color: Canvas; /* 背景を付けて下の文字が透けないように */
-  padding: 8px 0 8px;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	background-color: Canvas; /* 背景を付けて下の文字が透けないように */
+	padding: 8px 0 8px;
 }
 
 #alert-modal {
