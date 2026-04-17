@@ -238,15 +238,15 @@ const profiles = {
 		url: "https://jp.reuters.com/",
 		type: "html",
 		selector: {
-			item: '[class^="home-page-grid-module__"][class*="story__"]',
-			title: 'h3[data-testid="Heading"]',
-			link: 'a[data-testid="Title"]',
-			date: null, // "time" の textContent はスクリプトでセットしている
+			item: '[class^="story-card-module__tpl-common"], [class^="story-collection-module__list-item"]',
+			title: '[data-testid="TitleHeading"], a[data-testid="Heading"]',
+			link: 'a[data-testid="TitleLink"], a[data-testid="Heading"]',
+			date: null,
 			description: "",
 		},
 		getDateFromItem(item){
 			let time, datetime;
-			if ((time = item.querySelector('time')) && (datetime = time.getAttribute("datetime"))){
+			if ((time = item.querySelector('time')) && (datetime = time.getAttribute("dateTime"))){
 				return datetime;
 			}
 		},
@@ -416,7 +416,7 @@ const profiles = {
 				for (let i = 0 ; i < pages ; i++){
 					let page = i + 1,
 						apiUrl = `https://www.bloomberg.com/lineup-next/api/stories?types=ARTICLE,FEATURE,INTERACTIVE,LETTER,EXPLAINERS,VIDEO,GRAPHIC&locale=ja&limit=${limit}&pageNumber=${page}`;
-					this.fetchSequential(apiUrl, {})
+					this.fetchSequential(apiUrl, {delay: i === 0 ? 300 : 500})
 					.then(res =>{
 						return res.json();
 					})
