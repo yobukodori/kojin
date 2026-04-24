@@ -410,7 +410,7 @@ const profiles = {
 			});
 		},
 		fetch(url, init){
-			if (window.location.protocol === "file:"){
+			if (settings.needsToFetchBloombergDate()){
 				const pages = this.latestNews.size > 0 ? 1 : 2,
 					limit = this.latestNews.size > 0 ? 25 : 50; // 最大で50
 				for (let i = 0 ; i < pages ; i++){
