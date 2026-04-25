@@ -435,10 +435,7 @@ const profiles = {
 					seen.add(key);
 					const headline = item.headline,
 						text = typeof headline === "string" ? headline: (headline.text ?? "");
-					item.title = text;
-					item.date = item.updatedAt ?? "";
-					item.link = item.url ?? "";
-					result.push(item);
+					result.push({ title: text, date: item.updatedAt ?? "", link: item.url ?? "" });
 					if (item.relatedStories){
 						result.push(...parseItems(item.relatedStories));
 					}
