@@ -1,5 +1,5 @@
 const jnr = {
-	appVer: "1.0.28 beta (2026/01/12 18:07)",
+	appVer: "1.0.28 beta (2026/04/25 15:31)",
 	updateInterval: 5 * 60 * 1000,
 };
 
@@ -215,7 +215,6 @@ function update(){
 	Object.keys(profiles).forEach(k => {
 		const prof = profiles[k];
 		if (settings.isNgChannel(prof.id)){ return; }
-		//if (prof.id !== "bloomberg") return;
 		logd("channel:", prof);
 		let pr = getRSS(prof);
 		jnr.tasks.push(pr);

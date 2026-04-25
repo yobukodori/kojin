@@ -217,7 +217,9 @@ function getRSS(prof){
 			}
 		})
 		.catch(err => {
-			logd("error on fetching", url + ":" + err);
+			if (err.message !== "NetworkError when attempting to fetch resource."){
+				console.log("error on fetching", url + ":", err);
+			}
 			rss.error = err.message;
 			resolve(rss);
 		});

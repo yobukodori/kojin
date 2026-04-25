@@ -369,18 +369,7 @@ const profiles = {
 	"ブルームバーグ トップニュース": {
 		id: "bloomberg",
 		url: "https://www.bloomberg.com/jp",
-		type: "html",
-		selector: {
-			//item: 'div[class^="LineupContentLede_primaryStory_"], div[class^="LineupContentOpinion_primaryStory_"], div[class^="LineupContentBasic_container_"], div[class^="LineupContent2Up_story_"],  div[class^="LineupContent4Up_item_"], div[class^="LineupContentTopic_primaryStory_"]',
-			// , a[data-link-type="Story"]
-			// オピニオン div[class^="ItemsWithHeadshots_item_"]
-			item: 'a[data-component="story-link"], a[data-link-type="Story"]',
-			title: '[data-testid="headline"]',
-			link: 'a',
-			//date: ".date",
-			description: "",
-		},
-		latestNews: new Map(),
+		type: "json",
 		requesting: false,
 		queue: [],
 		fetchQueued(){
@@ -410,40 +399,72 @@ const profiles = {
 			});
 		},
 		fetch(url, init){
-			if (settings.needsToFetchBloombergDate()){
-				const pages = this.latestNews.size > 0 ? 1 : 2,
-					limit = this.latestNews.size > 0 ? 25 : 50; // 最大で50
-				for (let i = 0 ; i < pages ; i++){
-					let page = i + 1,
-						apiUrl = `https://www.bloomberg.com/lineup-next/api/stories?types=ARTICLE,FEATURE,INTERACTIVE,LETTER,EXPLAINERS,VIDEO,GRAPHIC&locale=ja&limit=${limit}&pageNumber=${page}`;
-					this.fetchSequential(apiUrl, {delay: i === 0 ? 300 : 500})
-					.then(res =>{
-						return res.json();
-					})
-					.then(data =>{
-						data.forEach((d, i)=>{
-							let u = new URL(d.url, this.url),
-								key = u.href;
-							logd((page - 1)*limit + i, d.headline, d.publishedAt, d.url, key, d);
-							this.latestNews.set(key, d);
-						});
-					});
-				}
-			}
-			return this.fetchSequential(url, init);
+			return new Promise((resolve, reject)=>{
+				let response;
+				this.fetchSequential(url, init)
+				.then(res =>{
+					response = res;
+					if (! res.ok){ throw Error(res.status + " " + res.statusText); }
+					return res.text();
+				})
+				.then(text =>{
+					const domParser = new DOMParser();
+					const doc = domParser.parseFromString(text, "text/html");
+					const sig = 'script#__NEXT_DATA__[type="application/json"]';
+					let e = doc.querySelector(sig);
+					if (! e){ throw Error(sig + "が見つかりません"); }
+					const data = JSON.parse(e.textContent);
+					//console.log("__NEXT_DATA__", data);
+					response.json = function(){ return data; };
+					resolve(response);
+				})
+				.catch(e => reject(e));
+			});
 		},
-		getDateFromItem: function (item/* element */){
-			if (this.latestNews.size > 0){
-				let title = item.querySelector(this.selector.title).textContent,
-					a =  item.tagName === "A" ? item : item.querySelector('a'),
-					u = new URL(a.getAttribute("href"), this.url),
-					url = u.href,
-					key = (u.search = "", u.href),
-					d = this.latestNews.get(key);
-					if (d){
-						return d.publishedAt;
+		getItems(data){
+			const seen = new Set();
+			function parseItems(items){
+				const result = [];
+				for (const item of items) {
+					if (! item.id){
+						console.log("bloomberg item has no id. item:", item);
+						throw Error("bloomberg item has no id. item");
 					}
+					const key = item.id;
+					if (seen.has(key)) continue;
+					seen.add(key);
+					const headline = item.headline,
+						text = typeof headline === "string" ? headline: (headline.text ?? "");
+					item.title = text;
+					item.date = item.updatedAt ?? "";
+					item.link = item.url ?? "";
+					result.push(item);
+					if (item.relatedStories){
+						result.push(...parseItems(item.relatedStories));
+					}
+				}
+				return result;
 			}
+			const initialState = data.props.pageProps.initialState;
+			const modules = initialState.modulesById;
+			//console.log("modules:", modules);
+			window.data = data;
+			const result = [];
+			for (const moduleId of Object.keys(modules)) {
+				const mod = modules[moduleId];
+				if (!mod || !mod.items) continue;
+				if (/^vertical-video$/.test(moduleId)){
+					//console.log("bloomberg 除外した", moduleId, ":", mod.items.length);
+					continue;
+				}
+				const max = /^flex-module-\d+$/.test(moduleId) ? 6 : mod.items.length;
+				if (max < mod.items.length){
+					//console.log("bloomberg 除外した", moduleId, ":", mod.items.length - max);
+				}
+				const items = mod.items.slice(0, max);
+				result.push(...parseItems(items));
+			}
+			return Promise.resolve(result);
 		},
 	},
 	"Forbes政治経済": {
