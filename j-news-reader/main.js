@@ -1,7 +1,13 @@
 const jnr = {
-	appVer: "1.0.28 beta (2026/04/25 15:31)",
+	appVer: "1.0.29 beta (2026/04/27 10:27)",
 	updateInterval: 5 * 60 * 1000,
 };
+
+function formatElapsed(ms) {
+    const s = Math.floor(ms / 1000);
+    const ms2 = ms % 1000;
+    return `${String(s)}.${String(ms2).padStart(3, '0')}`;
+}
 
 function alert(msg){
 	const id = "alert-modal";
@@ -71,6 +77,11 @@ function showStatistics(){
 
 function showUpdateTime(datetime){
 	document.getElementById("update-time").textContent = new Date(datetime).toLocaleTimeString();
+}
+
+function showElapsedTime(ms){
+	const text = typeof ms === "string" ? ms : isNaN(ms) ? "-" : formatElapsed(ms);
+	document.getElementById("elapsed-time").textContent = text;
 }
 
 function canonicalizeMediaName(name){
@@ -207,18 +218,27 @@ function update(){
 	jnr.updating = true;
 	const container = document.getElementById('items');
 	//Array.from(container.children).forEach(item => item.classList.remove("new"));
-	showUpdateTime(jnr.lastUpdateStart = Date.now());
-	showStatus("読み込み中・・・");
+	jnr.lastUpdateStart = Date.now();
+	showUpdateTime(jnr.lastUpdateStart);
+	const timer = setInterval(function(){
+			showElapsedTime(Date.now() - jnr.lastUpdateStart)
+		}, 1000);
+	showElapsedTime("0.000");
+	showStatus("更新中...");
 	//Object.keys(profiles).length
+	const updatingProf = new Set();
 	let total = settings.getActiveChannelCount(),  read = 0;
 	jnr.tasks = [];
 	Object.keys(profiles).forEach(k => {
 		const prof = profiles[k];
 		if (settings.isNgChannel(prof.id)){ return; }
+		updatingProf.add(prof.name);
 		logd("channel:", prof);
 		let pr = getRSS(prof);
 		jnr.tasks.push(pr);
 		pr.then(rss => {
+			++read;
+			updatingProf.delete(prof.name);
 			rss.profile = prof, rss.channel.id = prof.id, rss.channel[prof.id] = true;
 			if (rss.error){
 				alert(`${prof.url} の読み込みに失敗しました：${rss.error}`);
@@ -250,13 +270,16 @@ function update(){
 					//container.append(container.querySelector('option[value="!filtered"]'));
 				}
 			}
-			showStatus(++read === total ? "取得結果:" : read + "/" + total + " 読み込み中・・・", container.children.length, "件");
+			const text = `${read}/${total}終了 取得中:${Array.from(updatingProf).join(", ")}`;
+			showStatus(text);
 		});
 	});
 	Promise.allSettled(jnr.tasks).then(values => {
+		clearInterval(timer);
+		jnr.lastUpdateEnd = Date.now();
+		showElapsedTime(jnr.lastUpdateEnd - jnr.lastUpdateStart);
 		showStatistics();
 		notify({"new": container.querySelectorAll('.item.new').length});
-		jnr.lastUpdateEnd = Date.now();
 		jnr.updating = false;
 		document.getElementById("auto-update").checked && setUpdateTimer();
 	});

@@ -22,11 +22,16 @@
 <label for="filter-text">フィルタ:</label><input type="text" id="filter-text"  value=""><label for="filter-text"><button id="apply-filter">適用</button><button id="clear-filter">解除</button></label>
 | <button id="settings">設定</button>
 </div>
-<div id="status-bar">更新時刻:<span id="update-time"></span><span class="hide" id="auto-update-info"> (更新まで <span id="update-counter">∞</span>)</span> 　 <span id="status"></span></div>
+<div id="status-bar">
+<label class="status">更新時刻:<span id="update-time">-</span></label>
+<label class="status">所要時間:<span id="elapsed-time">-</span>秒</label>
+<span class="status hide" id="auto-update-info"> (更新まで <span id="update-counter">∞</span>)</span>
+<span id="status" class="status"></span>
+</div>
 <div id="items">
 </div>
 <p>
-<h4>【注意】このニュースリーダーをフルに機能させるにはクロスドメインリクエストの制限をバイパスする拡張機能（例えば Firefox 用では自作 <a href="https://addons.mozilla.org/ja/firefox/addon/cors-for-me/">CORS for Me</a>）をブラウザに登録し、下記のURLの読み込みを許可する必要があります</h4>
+<h4>【注意】このニュースリーダーを機能させるにはクロスドメインリクエストの制限をバイパスする拡張機能（例えば Firefox 用では自作 <a href="https://addons.mozilla.org/ja/firefox/addon/cors-unbound/">CORS Unbound</a>）をブラウザに登録し、下記のURLの読み込みを許可する必要があります</h4>
 </p>
 <p id="cors-urls"></p>
 <p>
@@ -36,6 +41,7 @@
 <p id="app-info">日本語ニュースリーダー version <span id="app-ver">0.0.0</span> by <a href="https://github.com/yobukodori/j-news-reader">yobukodori</a></p>
 <script src="filter.js"></script>
 <script src="log.js"></script>
+<script src="fetch.js"></script>
 <script src="rss.js"></script>
 <script src="profiles.js"></script>
 <script src="settings.js"></script>

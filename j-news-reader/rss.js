@@ -44,7 +44,7 @@ function getRSS(prof){
 	const rss = {error: "unexpected response text", channel: {title: prof.name, link: url}, itemCount:0, item: []};
 	logd("# loading", prof.type, "from", url);
 	return new Promise((resolve,reject)=>{
-		(prof.fetch ? prof.fetch.bind(prof) : fetch)(url, {})
+		(prof.fetch ? prof.fetch.bind(prof) : fetchSequential)(url, {})
 		.then(res => {
 			logd("# got res:", res);
 			if (! res.ok){
@@ -106,7 +106,7 @@ function getRSS(prof){
 						};
 						if (! data.date  && prof.getDataFromArticle){
 							let task = new Promise((resolve, reject)=>{
-								fetch(data.link)
+								fetchSequential(data.link, {}, {delay: settings.fetchDelay, cache: true})
 								.then(res =>{
 									if (! res.ok){ throw Error(res.status + " " + res.statusText); }
 									return res.text();

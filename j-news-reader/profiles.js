@@ -281,7 +281,7 @@ const profiles = {
 		fetch(url, init){
 			return new Promise((resolve, reject)=>{
 				let response;
-				fetch(url, init)
+				fetchSequential(url, init)
 				.then(res =>{
 					response = res;
 					if (! res.ok){ throw Error(res.status + " " + res.statusText); }
@@ -370,38 +370,10 @@ const profiles = {
 		id: "bloomberg",
 		url: "https://www.bloomberg.com/jp",
 		type: "json",
-		requesting: false,
-		queue: [],
-		fetchQueued(){
-			let { url, init, resolve, reject, opts } = this.queue.shift();
-			fetch(url, init)
-			.then(res =>{
-				resolve(res);
-				if (this.queue.length > 0){
-					const delay = opts.delay || 300;
-					setTimeout(this.fetchQueued.bind(this), delay);
-				}
-				else {
-					this.requesting = false;
-				}
-			})
-			.catch(e => reject(e));
-		},
-		fetchSequential(url, init, opts){
-			opts = opts || {};
-			return new Promise((resolve, reject)=>{
-				let data = {url, init, resolve, reject, opts};
-				this.queue.push(data);
-				if (! this.requesting){
-					this.requesting = true;
-					this.fetchQueued();
-				}
-			});
-		},
 		fetch(url, init){
 			return new Promise((resolve, reject)=>{
 				let response;
-				this.fetchSequential(url, init)
+				fetchSequential(url, init)
 				.then(res =>{
 					response = res;
 					if (! res.ok){ throw Error(res.status + " " + res.statusText); }
@@ -538,7 +510,7 @@ const profiles = {
 						items.push(item);
 						if (settings.needsToGetYahooSource()){
 							let task = new Promise((resolve, reject)=>{
-								fetch(item.link)
+								fetchSequential(item.link, {}, {delay: settings.fetchDelay, cache: true})
 								.then(res =>{
 									if (! res.ok){ throw Error(res.status + " " + res.statusText); }
 									return res.text();
@@ -585,7 +557,7 @@ const profiles = {
 		},
 		promisedFetch(url, init, resolve, reject, recur){
 			let response;
-			fetch(url, init)
+			fetchSequential(url, init)
 			.then(res =>{
 				response = res;
 				if (! res.ok){ throw Error(res.status + " " + res.statusText); }

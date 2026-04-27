@@ -32,6 +32,9 @@ const settings = {
 	get workWithDarkModeNews(){
 		return this.data.workWithDarkModeNews;
 	},
+	get fetchDelay(){
+		return 200;
+	},
 	get mainichiExcludeSponichi(){
 		return this.data.mainichiExcludeSponichi;
 	},
@@ -43,9 +46,6 @@ const settings = {
 	},
 	needsToMarkNewOnSameUrl(){
 		return this.data.compareDatesOnSameUrl;
-	},
-	needsToFetchBloombergDate(){
-		return this.data.attemptBloombergDateFetch;
 	},
 	load(){
 		let v = localStorage.getItem("settings");
@@ -124,9 +124,6 @@ const settings = {
 	<div>
 		<div><input type="checkbox" id="exclude-payed-article">
 			<label for="exclude-payed-article"><b>有料記事を除外する</b></label></div>
-	</div>
-	<div>
-			<label><input type="checkbox" id="attempt-bloomberg-date-fetch"> <b>ブルームバーグ記事の日付取得を試みる</b></label>
 	</div>
 	<div>
 		<div><input type="checkbox" id="afpbb-exclude-sports">
@@ -246,12 +243,6 @@ const settings = {
 		this.data.excludePayedArticle && (e.checked = true);
 		e.addEventListener("change", ev =>{
 			this.data.excludePayedArticle = ev.target.checked ? true : false;
-		});
-		// ブルームバーグ記事日付取得
-		e = dlg.querySelector("#attempt-bloomberg-date-fetch");
-		this.data.attemptBloombergDateFetch && (e.checked = true);
-		e.addEventListener("change", ev =>{
-			this.data.attemptBloombergDateFetch = ev.target.checked ? true : false;
 		});
 		// AFPBBスポーツ記事除外
 		e = dlg.querySelector("#afpbb-exclude-sports");

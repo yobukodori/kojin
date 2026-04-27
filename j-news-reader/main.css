@@ -17,6 +17,10 @@ body {
 	padding: 8px 0 8px;
 }
 
+#status-bar .status + .status {
+	margin-left: 0.5em;
+}
+
 #alert-modal {
 	position: fixed;
 	inset: 0;
