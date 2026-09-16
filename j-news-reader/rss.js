@@ -39,12 +39,13 @@ function parseDate(datestr){
 	return {datetime: 0, exact: false};
 }
 
-function getRSS(prof){
+function getRSS(prof, opts = {}){
 	const url = (document.location.protocol === "https:" && (new URL(prof.url)).protocol === "http:") ? corsAnyWhere(prof.url) : prof.url;
 	const rss = {error: "unexpected response text", channel: {title: prof.name, link: url}, itemCount:0, item: []};
 	logd("# loading", prof.type, "from", url);
+	const fetchInit = { signal: opts.signal };
 	return new Promise((resolve,reject)=>{
-		(prof.fetch ? prof.fetch.bind(prof) : fetchSequential)(url, {})
+		(prof.fetch ? prof.fetch.bind(prof) : fetchSequential)(url, fetchInit)
 		.then(res => {
 			logd("# got res:", res);
 			if (! res.ok){
@@ -106,7 +107,7 @@ function getRSS(prof){
 						};
 						if (! data.date  && prof.getDataFromArticle){
 							let task = new Promise((resolve, reject)=>{
-								fetchSequential(data.link, {}, {delay: settings.fetchDelay, cache: true})
+								fetchSequential(data.link, fetchInit, {delay: settings.fetchDelay, cache: true})
 								.then(res =>{
 									if (! res.ok){ throw Error(res.status + " " + res.statusText); }
 									return res.text();
@@ -186,7 +187,7 @@ function getRSS(prof){
 				resolve(rss);
 			}
 			else if (prof.type === "json"){
-				prof.getItems(text).then(items =>{
+				prof.getItems(text, fetchInit).then(items =>{
 					items.forEach(item => {
 						if (prof.first && count++ >= prof.first){ return; }
 						if (prof.max && rss.item.length === prof.max){ return; }

@@ -1,5 +1,5 @@
 const jnr = {
-	appVer: "1.0.29 beta (2026/04/27 10:27)",
+	appVer: "1.0.30 beta (2026/09/16 18:52)",
 	updateInterval: 5 * 60 * 1000,
 };
 
@@ -216,6 +216,9 @@ function update(){
 		return;
 	}
 	jnr.updating = true;
+	jnr.abortController = new AbortController();
+	const abortUpdateBtn = document.getElementById("abort-update");
+	abortUpdateBtn.disabled = false;
 	const container = document.getElementById('items');
 	//Array.from(container.children).forEach(item => item.classList.remove("new"));
 	jnr.lastUpdateStart = Date.now();
@@ -234,7 +237,7 @@ function update(){
 		if (settings.isNgChannel(prof.id)){ return; }
 		updatingProf.add(prof.name);
 		logd("channel:", prof);
-		let pr = getRSS(prof);
+		let pr = getRSS(prof, { signal: jnr.abortController.signal });
 		jnr.tasks.push(pr);
 		pr.then(rss => {
 			++read;
@@ -280,6 +283,8 @@ function update(){
 		showElapsedTime(jnr.lastUpdateEnd - jnr.lastUpdateStart);
 		showStatistics();
 		notify({"new": container.querySelectorAll('.item.new').length});
+		abortUpdateBtn.disabled = true;
+		delete jnr.abortController;
 		jnr.updating = false;
 		document.getElementById("auto-update").checked && setUpdateTimer();
 	});
@@ -295,6 +300,10 @@ document.getElementById("channel-select").addEventListener("change", ()=>{
 document.getElementById("update").addEventListener("click", ()=>{
 	clearUpdateTimer();
 	update();
+});
+
+document.getElementById("abort-update").addEventListener("click", ()=>{
+	jnr.abortController.abort();
 });
 
 function sec2hms(n){

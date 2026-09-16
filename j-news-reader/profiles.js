@@ -235,7 +235,7 @@ const profiles = {
 	},
 	"ロイター トップニュース": {
 		id: "reuter",
-		url: "https://jp.reuters.com/",
+		url: "https://www.reuters.com/jp/",
 		type: "html",
 		selector: {
 			item: '[class^="story-card-module__tpl-common"], [class^="story-collection-module__list-item"]',
@@ -301,7 +301,7 @@ const profiles = {
 				.catch(e => reject(e));
 			});
 		},
-		getItems(data){
+		getItems(data, fetchInit){
 			const items = [];
 			data.props.pageProps.pageData.curations.forEach(curation =>{
 				if (curation.title === "トップ記事"){
@@ -393,7 +393,7 @@ const profiles = {
 				.catch(e => reject(e));
 			});
 		},
-		getItems(data){
+		getItems(data, fetchInit){
 			const seen = new Set();
 			function parseItems(items){
 				const result = [];
@@ -499,7 +499,7 @@ const profiles = {
 		url: "https://news.yahoo.co.jp/",
 		type: "json",
 		categories: [{name: "主要", id: "major"}, {name: "国内", id: "domestic"}, {name: "国際", id: "world"}, {name: "経済", id: "business"}, {name: "エンタメ", id: "entertainment"}, {name: "スポーツ", id: "sports"}, {name: "IT", id: "it"}, {name: "科学", id: "science"}, {name: "地域", id: "local"}],
-		getItems(data){
+		getItems(data, fetchInit){
 			const domParser = new DOMParser();
 			const items = [], tasks = [];
 			return new Promise((resolve, reject)=>{
@@ -510,7 +510,7 @@ const profiles = {
 						items.push(item);
 						if (settings.needsToGetYahooSource()){
 							let task = new Promise((resolve, reject)=>{
-								fetchSequential(item.link, {}, {delay: settings.fetchDelay, cache: true})
+								fetchSequential(item.link, fetchInit, {delay: settings.fetchDelay, cache: true})
 								.then(res =>{
 									if (! res.ok){ throw Error(res.status + " " + res.statusText); }
 									return res.text();
