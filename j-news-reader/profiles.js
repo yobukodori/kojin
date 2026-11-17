@@ -215,7 +215,7 @@ const profiles = {
 		url: "https://www.nikkei.com/",
 		type: "html",
 		selector: {
-			item: 'k2-market-bar li[class^="index_"] a',
+			item: '[data-k2-component-name="k2-market-bar"] li[class^="index_"] a',
 			title: 'a',
 			link: 'a',
 			date: '',
